@@ -28,11 +28,9 @@ popRaster <- function(buildings_path, urban_path,
   rural[is.na(rural)] <- F
   
   # rasterize urban population
-  print('urban population...')
   pop_raster[urban] <- buildings[urban] * prob_urb * units_urb * people_urb
   
   # rasterize rural population
-  print('rural population...')
   pop_raster[rural] <- buildings[rural] * prob_rur * units_rur * people_rur
   
   return(pop_raster)
