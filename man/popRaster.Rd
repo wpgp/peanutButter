@@ -5,8 +5,8 @@
 \title{popRaster}
 \usage{
 popRaster(
-  country,
-  srcdir,
+  buildings_path,
+  urban_path,
   people_urb = 5,
   units_urb = 1,
   prob_urb = 0.5,
@@ -16,9 +16,9 @@ popRaster(
 )
 }
 \arguments{
-\item{country}{Country selection (ISO3)}
+\item{buildings_path}{Path to a raster (.tif) with building counts per pixel}
 
-\item{srcdir}{Source directory}
+\item{urban_path}{Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1)}
 
 \item{people_urb}{Average number of people per housing unit}
 
@@ -33,5 +33,5 @@ popRaster(
 \item{units_rur}{Average number of housing units per building}
 }
 \description{
-Create population raster for sansModel
+Create population raster using the peanut butter method.
 }

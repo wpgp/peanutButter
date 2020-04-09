@@ -1,7 +1,7 @@
 #' popRaster
-#' @description Create population raster for sansModel
-#' @param country Country selection (ISO3)
-#' @param srcdir Source directory
+#' @description Create population raster using the peanut butter method.
+#' @param buildings_path Path to a raster (.tif) with building counts per pixel
+#' @param urban_path Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1) 
 #' @param people_urb Average number of people per housing unit
 #' @param units_urb Average number of housing units per building
 #' @param prob_urb Probability of residential building
@@ -10,13 +10,13 @@
 #' @param prob_rur Probability of residential building
 #' @export
 
-popRaster <- function(country, srcdir, 
+popRaster <- function(buildings_path, urban_path, 
                       people_urb=5, units_urb=1, prob_urb=0.5, 
                       people_rur=5, prob_rur=0.5, units_rur=1){
   
   # load rasters
-  buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings.tif')))
-  urban <- raster::raster(file.path(srcdir,paste0(country,'_urban.tif')))
+  buildings <- raster::raster(buildings_path)
+  urban <- raster::raster(urban_path)
   pop_raster <- raster::raster(buildings)
   
   # vectorize rasters
