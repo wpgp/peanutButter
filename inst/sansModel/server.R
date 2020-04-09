@@ -18,20 +18,20 @@ function(input, output, session){
     
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
-    rv$table <- data.frame(matrix(c(prettyNum(round(rv$pop_total), big.mark=','), 
-                                    prettyNum(round(rv$pop_urb), big.mark=','), 
-                                    prettyNum(round(rv$pop_rur), big.mark=','), 
-                                    prettyNum(round(rv$bld_count), big.mark=','), 
-                                    prettyNum(round(rv$urb_count), big.mark=','), 
-                                    prettyNum(round(rv$rur_count), big.mark=','), 
-                                    prettyNum(round(input$people_urb,1), big.mark=','), 
-                                    prettyNum(round(input$units_urb,1), big.mark=','), 
-                                    paste0(round(input$prob_urb,1)*100,'%'),
-                                    prettyNum(round(input$people_rur,1), big.mark=','), 
-                                    prettyNum(round(input$units_rur,1), big.mark=','), 
-                                    paste0(round(input$prob_rur*100,1),'%')
-                                    ), 
-                                  ncol=1),
+    rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','), 
+                                             prettyNum(round(rv$pop_urb), big.mark=','), 
+                                             prettyNum(round(rv$pop_rur), big.mark=','), 
+                                             prettyNum(round(rv$bld_count), big.mark=','), 
+                                             prettyNum(round(rv$urb_count), big.mark=','), 
+                                             prettyNum(round(rv$rur_count), big.mark=','), 
+                                             prettyNum(round(input$people_urb,1), big.mark=','), 
+                                             prettyNum(round(input$units_urb,1), big.mark=','), 
+                                             paste0(round(input$prob_urb,1)*100,'%'),
+                                             prettyNum(round(input$people_rur,1), big.mark=','), 
+                                             prettyNum(round(input$units_rur,1), big.mark=','), 
+                                             paste0(round(input$prob_rur*100,1),'%')
+                                             ), 
+                                           ncol=1),
                            row.names=c('Population Total',
                                        'Population Urban',
                                        'Population Rural',
@@ -58,8 +58,7 @@ function(input, output, session){
   # download settings button
   output$table_button <- downloadHandler(filename = paste0(input$data_select,'_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
                                           content = function(file) {
-                                            write.csv(rv$table, file, row.names=T), 
-                                            file)
+                                            write.csv(rv$table, file, row.names=T) 
                                           })
   
   # download raster button

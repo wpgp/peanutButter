@@ -76,14 +76,7 @@ column(
         max = 1,
         value = 0.5,
         step = 0.01)
-    ),
-    
-    
-    # download settings button
-    downloadButton('table_button', 'Download Settings')
-    
-    # download raster button
-    downloadButton('raster_button', 'Download Raster')
+    )
   )
 )
 
@@ -110,7 +103,10 @@ navbarPage(
       column(
         width = 10,
         style='height: calc(98vh - 75px)',
-        tableOutput('table')
+        tableOutput('table'),
+        br(),
+        downloadButton('table_button', 'Save Settings'),
+        downloadButton('raster_button', 'Save Population Raster')
         )
       )
     ),
