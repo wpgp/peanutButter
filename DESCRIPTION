@@ -1,0 +1,11 @@
+Package: sansModel
+Title: sansModel
+Version: 0.1.0
+Date: 2020-04-08
+Author: WorldPop Research Group, University of Southampton
+Maintainer: Doug Leasure <D.R.Leasure@soton.ac.uk>
+License: None
+Imports: raster, shiny
+Suggest: 
+Description: An R package to generate deterministic gridded population estimates from building footprints.
+RoxygenNote: 7.1.0
