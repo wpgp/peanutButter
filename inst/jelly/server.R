@@ -9,12 +9,21 @@ function(input, output, session){
     rv$bld_count <- sansModel:::country_info[input$data_select,'bld_count']
     rv$urb_count <- sansModel:::country_info[input$data_select,'urb_count']
     rv$rur_count <- sansModel:::country_info[input$data_select,'rur_count']
+    
+    updateSliderInput(session, 'people_urb', value=country_info[input$data_select,'people_urb'])
+    updateSliderInput(session, 'units_urb', value=country_info[input$data_select,'units_urb'])
+    updateSliderInput(session, 'residential_urb', value=country_info[input$data_select,'residential_urb'])
+    
+    updateSliderInput(session, 'people_rur', value=country_info[input$data_select,'people_rur'])
+    updateSliderInput(session, 'units_rur', value=country_info[input$data_select,'units_rur'])
+    updateSliderInput(session, 'residential_rur', value=country_info[input$data_select,'residential_rur'])
+    
   })
   
   # population total
   observe({
-    rv$pop_urb <- rv$urb_count*input$prob_urb*input$units_urb*input$people_urb
-    rv$pop_rur <- rv$rur_count*input$prob_rur*input$units_rur*input$people_rur
+    rv$pop_urb <- rv$urb_count*input$residential_urb*input$units_urb*input$people_urb
+    rv$pop_rur <- rv$rur_count*input$residential_rur*input$units_rur*input$people_rur
     
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
@@ -26,10 +35,10 @@ function(input, output, session){
                                              prettyNum(round(rv$rur_count), big.mark=','), 
                                              prettyNum(round(input$people_urb,1), big.mark=','), 
                                              prettyNum(round(input$units_urb,1), big.mark=','), 
-                                             paste0(round(input$prob_urb,1)*100,'%'),
+                                             paste0(round(input$residential_urb,1)*100,'%'),
                                              prettyNum(round(input$people_rur,1), big.mark=','), 
                                              prettyNum(round(input$units_rur,1), big.mark=','), 
-                                             paste0(round(input$prob_rur*100,1),'%')
+                                             paste0(round(input$residential_rur*100,1),'%')
                                              ), 
                                            ncol=1),
                            row.names=c('Population Total',
@@ -66,12 +75,12 @@ function(input, output, session){
                                         content = function(file) {
                                           raster::writeRaster(popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
                                                                         urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
-                                                                        prob_urb = input$prob_urb,
-                                                                        units_urb = input$units_urb,
                                                                         people_urb = input$people_urb,
-                                                                        prob_rur = input$prob_rur,
+                                                                        units_urb = input$units_urb,
+                                                                        residential_urb = input$residential_urb,
+                                                                        people_rur = input$people_rur,
                                                                         units_rur = input$units_rur,
-                                                                        people_rur = input$people_rur
+                                                                        residential_rur = input$residential_rur
                                                                         ), 
                                                               file)
                                           })

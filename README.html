@@ -182,8 +182,63 @@ summary {
 
 <div id="peanutbutterjelly" class="section level1">
 <h1>peanutButter::jelly</h1>
+</div>
+<div id="a-tool-to-produce-quick-gridded-population-estimates-using-the-peanut-butter-method" class="section level1">
+<h1>A tool to produce quick gridded population estimates using the peanut butter method</h1>
 <p>WorldPop Research Group, University of Southampton</p>
-<p>Deterministic gridded population estimates from building footprints</p>
+<div id="overview" class="section level4">
+<h4>Overview</h4>
+<p>The <em>peanutButter::jelly</em> application allows you to produce gridded population estimates from building footprints using the “peanut butter” method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across the landscape in each settlement type. High resolution maps of building footprints (Maxar Technologies &amp; Ecopia.AI 2020) are used to map where households are likely to occur.</p>
+<p><em>peanutButter</em> is an R package that provides this functionality from the R statistical programming console and <em>jelly</em> is a shiny web application that provides a web-based graphical user interface. Code for the <em>peanutButter</em> R package and the <em>peanutButter::jelly</em> web application are openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" class="uri">https://github.com/wpgp/peanutButter</a>.</p>
+</div>
+<div id="steps" class="section level4">
+<h4>Steps</h4>
+<ol style="list-style-type: decimal">
+<li><p>Explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.</p></li>
+<li><p>Use the “Save Population Raster” button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.</p></li>
+<li><p>Use the “Save Settings” button to save a .csv spreadsheet with your population parameters.</p></li>
+</ol>
+</div>
+<div id="method" class="section level4">
+<h4>Method</h4>
+<p>The peanutButter::jelly method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:</p>
+<ol style="list-style-type: decimal">
+<li>Mean number of people per housing unit<br />
+</li>
+<li>Mean number of housing units per building<br />
+</li>
+<li>Proportion of buildings that are residential</li>
+</ol>
+<p>The population is estimated using the following formula:</p>
+<p><code>Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit</code></p>
+<p>There are two datasets working behind the scenes in the application (WorldPop et al. 2020):</p>
+<ol style="list-style-type: decimal">
+<li>The count of buildings in each ~100 m grid cell across the country,<br />
+</li>
+<li>A classification of each ~100 m grid cell as urban or rural.</li>
+</ol>
+</div>
+<div id="advantages" class="section level4">
+<h4>Advantages</h4>
+<ul>
+<li>This method is quick and easy to implement in situations where suitable population estimates are not currently available.<br />
+</li>
+<li>High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.</li>
+</ul>
+</div>
+<div id="disadvantages" class="section level4">
+<h4>Disadvantages</h4>
+<ul>
+<li>This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.<br />
+</li>
+<li>There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.</li>
+</ul>
+</div>
+<div id="citations" class="section level4">
+<h4>Citations</h4>
+<p>Maxar Technologies and Ecopia.AI. 2020. Digitize Africa Data, Building Footprints.<br />
+WorldPop, Maxar Technologies, and Ecopia.AI. 2020. Gridded maps of building patterns throughout sub-Saharan Africa.</p>
+</div>
 </div>
 
 

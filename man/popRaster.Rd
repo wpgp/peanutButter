@@ -9,9 +9,9 @@ popRaster(
   urban_path,
   people_urb = 5,
   units_urb = 1,
-  prob_urb = 0.5,
+  residential_urb = 0.5,
   people_rur = 5,
-  prob_rur = 0.5,
+  residential_rur = 0.5,
   units_rur = 1
 )
 }
@@ -24,11 +24,11 @@ popRaster(
 
 \item{units_urb}{Average number of housing units per building}
 
-\item{prob_urb}{Probability of residential building}
+\item{residential_urb}{Probability of residential building}
 
 \item{people_rur}{Average number of people per housing unit}
 
-\item{prob_rur}{Probability of residential building}
+\item{residential_rur}{Probability of residential building}
 
 \item{units_rur}{Average number of housing units per building}
 }

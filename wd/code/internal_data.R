@@ -29,9 +29,12 @@ for(country in country_list){
 }
 
 # setup country info data frame
-country_info <- data.frame(country=country_list, 
-                           bld_count=NA, urb_count=NA, rur_count=NA)
+country_info <- data.frame(country=country_list)
 row.names(country_info) <- country_list
+
+# default values spreadsheet
+defaults <- read.csv('in/defaults.csv',stringsAsFactors=F)
+row.names(defaults) <- defaults$country
 
 # calculate country info
 for(country in country_list){
@@ -41,15 +44,23 @@ for(country in country_list){
   buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings.tif')))
   urban <- raster::raster(file.path(srcdir,paste0(country,'_urban.tif')))
   
-  # total building count
+  # building counts
   country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
-  
-  # urban building count
   country_info[country,'urb_count'] <- sum(buildings[urban==1], na.rm=T)
-  
-  # rural building count
   country_info[country,'rur_count'] <- country_info[country,'bld_count'] - country_info[country,'urb_count']
+  
+  # default settings
+  if(country %in% defaults$country){
+    i <- country
+  } else {
+    i <- 'DEF'
+  }
+  for(parm in c('people_urb','units_urb','residential_urb','people_rur','units_rur','residential_rur')){
+    country_info[i,parm] <- defaults[i,parm]      
+  }
 }
+country_info <- country_info[order(country_info$country),]
 
 # save as internal R package file
-usethis::use_data(country_info, internal=T, overwrite=T)
+setwd('C:/RESEARCH/git/wpgp/peanutButter')
+usethis::use_data(country_info, internal=T, overwrite=F)
