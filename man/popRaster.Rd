@@ -20,17 +20,17 @@ popRaster(
 
 \item{urban_path}{Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1)}
 
-\item{people_urb}{Average number of people per housing unit}
+\item{people_urb}{Average number of people per housing unit in urban areas}
 
-\item{units_urb}{Average number of housing units per building}
+\item{units_urb}{Average number of housing units per building in urban areas}
 
-\item{residential_urb}{Probability of residential building}
+\item{residential_urb}{Probability of residential building in urban areas}
 
-\item{people_rur}{Average number of people per housing unit}
+\item{people_rur}{Average number of people per housing unit in rural areas}
 
-\item{residential_rur}{Probability of residential building}
+\item{residential_rur}{Probability of residential building in rural areas}
 
-\item{units_rur}{Average number of housing units per building}
+\item{units_rur}{Average number of housing units per building in rural areas}
 }
 \description{
 Create population raster using the peanut butter method.

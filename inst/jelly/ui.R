@@ -107,9 +107,9 @@ navbarPage(
         tableOutput('table_results'),
         h4('Settings'),
         tableOutput('table_settings'),
-        downloadButton('raster_button', 'Save Population Raster', style='width:405px'),br(),br(),
-        downloadButton('table_button', 'Save Settings', style='width:200px'),
-        downloadButton('source_button', 'Save Source Files', style='width:200px')
+        downloadButton('raster_button', 'Gridded Population Estimates', style='width:405px'),br(),br(),
+        downloadButton('table_button', 'Settings', style='width:200px'),
+        downloadButton('source_button', 'Source Files', style='width:200px')
         )
       )
     ),

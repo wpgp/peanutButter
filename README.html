@@ -194,28 +194,9 @@ summary {
 <div id="steps" class="section level4">
 <h4>Steps</h4>
 <ol style="list-style-type: decimal">
-<li><p>Explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.</p></li>
-<li><p>Use the “Save Population Raster” button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.</p></li>
-<li><p>Use the “Save Settings” button to save a .csv spreadsheet with your population parameters.</p></li>
-</ol>
-</div>
-<div id="method" class="section level4">
-<h4>Method</h4>
-<p>The peanutButter::jelly method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:</p>
-<ol style="list-style-type: decimal">
-<li>Mean number of people per housing unit<br />
-</li>
-<li>Mean number of housing units per building<br />
-</li>
-<li>Proportion of buildings that are residential</li>
-</ol>
-<p>The population is estimated using the following formula:</p>
-<p><code>Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit</code></p>
-<p>There are two datasets working behind the scenes in the application (WorldPop et al. 2020):</p>
-<ol style="list-style-type: decimal">
-<li>The count of buildings in each ~100 m grid cell across the country,<br />
-</li>
-<li>A classification of each ~100 m grid cell as urban or rural.</li>
+<li><p>Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.</p></li>
+<li><p>Use the “Gridded Population Estimates” button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.</p></li>
+<li><p>Use the “Settings” and/or “Source Files” button(s) to save the input data.</p></li>
 </ol>
 </div>
 <div id="advantages" class="section level4">
@@ -233,6 +214,26 @@ summary {
 </li>
 <li>There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.</li>
 </ul>
+</div>
+<div id="method" class="section level4">
+<h4>Method</h4>
+<p>The peanutButter::jelly method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:</p>
+<ol style="list-style-type: decimal">
+<li>Mean number of people per housing unit<br />
+</li>
+<li>Mean number of housing units per building<br />
+</li>
+<li>Proportion of buildings that are residential</li>
+</ol>
+<p>The population is estimated using the following formula:</p>
+<p><code>Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit</code></p>
+<p>There are two source datasets working behind the scenes in the application:</p>
+<ol style="list-style-type: decimal">
+<li>The count of buildings in each ~100 m grid cell across the country,<br />
+</li>
+<li>A classification of each ~100 m grid cell as urban or rural.</li>
+</ol>
+<p>Use the “Source Files” button to download these rasters. Use the <em>peanutButter</em> R package if you want to provide your own building counts and/or map of urban areas (see ?peanutButter::popRaster).</p>
 </div>
 <div id="citations" class="section level4">
 <h4>Citations</h4>

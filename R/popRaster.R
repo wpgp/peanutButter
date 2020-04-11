@@ -2,12 +2,12 @@
 #' @description Create population raster using the peanut butter method.
 #' @param buildings_path Path to a raster (.tif) with building counts per pixel
 #' @param urban_path Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1) 
-#' @param people_urb Average number of people per housing unit
-#' @param units_urb Average number of housing units per building
-#' @param residential_urb Probability of residential building
-#' @param people_rur Average number of people per housing unit
-#' @param units_rur Average number of housing units per building
-#' @param residential_rur Probability of residential building
+#' @param people_urb Average number of people per housing unit in urban areas
+#' @param units_urb Average number of housing units per building in urban areas
+#' @param residential_urb Probability of residential building in urban areas
+#' @param people_rur Average number of people per housing unit in rural areas
+#' @param units_rur Average number of housing units per building in rural areas
+#' @param residential_rur Probability of residential building in rural areas
 #' @export
 
 popRaster <- function(buildings_path, urban_path, 

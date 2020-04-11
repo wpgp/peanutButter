@@ -6,7 +6,6 @@ function(input, output, session){
 
   # load data
   observeEvent(input$data_select, {
-    rv$bld_count <- peanutButter:::country_info[input$data_select,'bld_count']
     rv$urb_count <- peanutButter:::country_info[input$data_select,'urb_count']
     rv$rur_count <- peanutButter:::country_info[input$data_select,'rur_count']
     
@@ -33,11 +32,10 @@ function(input, output, session){
                                              prettyNum(round(input$people_urb,1), big.mark=','), 
                                              prettyNum(round(input$units_urb,1), big.mark=','), 
                                              paste0(round(input$residential_urb,1)*100,'%'),
+                                             prettyNum(round(rv$urb_count), big.mark=','), 
                                              prettyNum(round(input$people_rur,1), big.mark=','), 
                                              prettyNum(round(input$units_rur,1), big.mark=','), 
                                              paste0(round(input$residential_rur*100,1),'%'),
-                                             prettyNum(round(rv$bld_count), big.mark=','), 
-                                             prettyNum(round(rv$urb_count), big.mark=','), 
                                              prettyNum(round(rv$rur_count), big.mark=',')
                                              ), 
                                            ncol=1),
@@ -47,11 +45,10 @@ function(input, output, session){
                                        'People per housing unit (urban)',
                                        'Housing units per building (urban)',
                                        'Proportion residential buildings (urban)',
+                                       'Buildings Urban',
                                        'People per housing unit (rural)',
                                        'Housing units per building (rural)',
                                        'Proportion residential buildings (rural)',
-                                       'Buildings Total',
-                                       'Buildings Urban',
                                        'Buildings Rural'
                                        ))
     })

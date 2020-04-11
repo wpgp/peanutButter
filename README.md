@@ -9,11 +9,19 @@ The *peanutButter::jelly* web application allows you to produce gridded populati
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: https://github.com/wpgp/peanutButter.
 
 #### Steps
-1. Explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.  
+1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole. 
 
-2. Use the "Save Population Raster" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
+2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
 
-3. Use the "Save Settings" button to save a .csv spreadsheet with your population parameters.
+3. Use the "Settings" and/or "Source Files" button(s) to save the input data.
+
+#### Advantages  
+- This method is quick and easy to implement in situations where suitable population estimates are not currently available.  
+- High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.
+
+#### Disadvantages
+- This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
+- There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.  
 
 #### Method
 
@@ -27,20 +35,12 @@ The population is estimated using the following formula:
 
 `Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit`
 
-There are two datasets working behind the scenes in the application (WorldPop et al. 2020):  
+There are two source datasets working behind the scenes in the application:  
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
 
-
-
-#### Advantages  
-- This method is quick and easy to implement in situations where suitable population estimates are not currently available.  
-- High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.
-
-#### Disadvantages
-- This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
-- There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.  
+Use the "Source Files" button to download these rasters. Use the *peanutButter* R package if you want to provide your own building counts and/or map of urban areas (see ?peanutButter::popRaster).
 
 #### Citations
 Maxar Technologies and Ecopia.AI. 2020. Digitize Africa Data, Building Footprints.  
