@@ -4,9 +4,9 @@ WorldPop Research Group, University of Southampton
 
 #### Overview
 
-The *peanutButter::jelly* application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across the landscape in each settlement type. High resolution maps of building footprints (Maxar Technologies & Ecopia.AI 2020) are used to map where households are likely to occur.
+The *peanutButter::jelly* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across the landscape in each settlement type. High resolution maps of building footprints (Maxar Technologies & Ecopia.AI 2020) are used to map where households are likely to occur.
 
-*peanutButter* is an R package that provides this functionality from the R statistical programming console and *jelly* is a shiny web application that provides a web-based graphical user interface. Code for the *peanutButter* R package and the *peanutButter::jelly* web application are openly available from WorldPop on GitHub: https://github.com/wpgp/peanutButter.
+Code for the *peanutButter* R package is openly available from WorldPop on GitHub: https://github.com/wpgp/peanutButter.
 
 #### Steps
 1. Explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.  
@@ -31,6 +31,8 @@ There are two datasets working behind the scenes in the application (WorldPop et
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
+
+
 
 #### Advantages  
 - This method is quick and easy to implement in situations where suitable population estimates are not currently available.  

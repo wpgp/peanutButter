@@ -11,8 +11,8 @@ column(
     selectInput(
       inputId = 'data_select', 
       label = HTML('Select Country<br><small>(see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">country codes</a>)</small>'),
-      choices = row.names(sansModel:::country_info), 
-      selected = sample(row.names(sansModel:::country_info),1)),
+      choices = row.names(peanutButter:::country_info), 
+      selected = sample(row.names(peanutButter:::country_info),1)),
     
     wellPanel(
       
@@ -103,10 +103,13 @@ navbarPage(
       column(
         width = 9,
         style='height: calc(98vh - 75px)',
-        tableOutput('table'),
-        br(),
-        downloadButton('table_button', 'Save Settings'),
-        downloadButton('raster_button', 'Save Population Raster')
+        h4('Results'),
+        tableOutput('table_results'),
+        h4('Settings'),
+        tableOutput('table_settings'),
+        downloadButton('raster_button', 'Save Population Raster', style='width:405px'),br(),br(),
+        downloadButton('table_button', 'Save Settings', style='width:200px'),
+        downloadButton('source_button', 'Save Source Files', style='width:200px')
         )
       )
     ),
