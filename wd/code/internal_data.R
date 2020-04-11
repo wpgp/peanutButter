@@ -5,8 +5,8 @@ rm(list=ls()); gc(); cat("\014"); try(dev.off(), silent=T)
 setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 
 # source directory
-srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/sansModel'
-srcdir <- 'in'
+srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
+# srcdir <- 'in'
 
 # country list
 files <- list.files(srcdir)
@@ -37,6 +37,8 @@ defaults <- read.csv('in/defaults.csv',stringsAsFactors=F)
 row.names(defaults) <- defaults$country
 
 # calculate country info
+
+# building counts
 for(country in country_list){
   print(country)
     
@@ -48,19 +50,19 @@ for(country in country_list){
   country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
   country_info[country,'urb_count'] <- sum(buildings[urban==1], na.rm=T)
   country_info[country,'rur_count'] <- country_info[country,'bld_count'] - country_info[country,'urb_count']
-  
-  # default settings
-  if(country %in% defaults$country){
-    i <- country
-  } else {
-    i <- 'DEF'
-  }
+}
+
+# default settings
+for(country in country_list){
+  i <- ifelse(country %in% defaults$country, country, 'DEF')
   for(parm in c('people_urb','units_urb','residential_urb','people_rur','units_rur','residential_rur')){
-    country_info[i,parm] <- defaults[i,parm]      
+    country_info[country,parm] <- defaults[i,parm]      
   }
 }
-country_info <- country_info[order(country_info$country),]
+
+# wopr
+country_info$wopr <- country_info$country %in% unique(wopr::getCatalogue()$country)
 
 # save as internal R package file
 setwd('C:/RESEARCH/git/wpgp/peanutButter')
-usethis::use_data(country_info, internal=T, overwrite=F)
+if(T) usethis::use_data(country_info, internal=T, overwrite=F)

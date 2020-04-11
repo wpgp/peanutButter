@@ -16,6 +16,9 @@ column(
     
     wellPanel(
       
+      tags$style('.irs-bar, .irs-bar-edge,
+               .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+      
       strong('Urban Settlements'),
       
       # people per housing unit
@@ -24,7 +27,7 @@ column(
         label = h5('Mean people per housing unit'),
         min = 0,
         max = 10,
-        value = 5,
+        value = 0,
         step = 0.1),
       
       # housing units per building
@@ -33,7 +36,7 @@ column(
         label = h5('Mean housing units per building'),
         min = 0,
         max = 10,
-        value = 1,
+        value = 0,
         step = 0.1),
       
       # probability residential
@@ -42,7 +45,7 @@ column(
         label = h5('Proportion residential buildings'),
         min = 0,
         max = 1,
-        value = 0.5,
+        value = 0,
         step = 0.01)
     ),
     
@@ -56,7 +59,7 @@ column(
         label = h5('Mean people per housing unit'),
         min = 0,
         max = 10,
-        value = 5,
+        value = 0,
         step = 0.1),
       
       # housing units per building
@@ -65,7 +68,7 @@ column(
         label = h5('Mean housing units per building'),
         min = 0,
         max = 10,
-        value = 1,
+        value = 0,
         step = 0.1),
       
       # probability residential
@@ -74,7 +77,7 @@ column(
         label = h5('Proportion residential buildings'),
         min = 0,
         max = 1,
-        value = 0.5,
+        value = 0,
         step = 0.01)
     )
   )

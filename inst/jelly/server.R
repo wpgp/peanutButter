@@ -6,23 +6,28 @@ function(input, output, session){
 
   # load data
   observeEvent(input$data_select, {
-    rv$urb_count <- peanutButter:::country_info[input$data_select,'urb_count']
-    rv$rur_count <- peanutButter:::country_info[input$data_select,'rur_count']
+    rv$country_info <- peanutButter:::country_info[input$data_select,]
     
-    updateSliderInput(session, 'people_urb', value=country_info[input$data_select,'people_urb'])
-    updateSliderInput(session, 'units_urb', value=country_info[input$data_select,'units_urb'])
-    updateSliderInput(session, 'residential_urb', value=country_info[input$data_select,'residential_urb'])
+    updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
+    updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
+    updateSliderInput(session, 'residential_urb', value=rv$country_info$residential_urb)
     
-    updateSliderInput(session, 'people_rur', value=country_info[input$data_select,'people_rur'])
-    updateSliderInput(session, 'units_rur', value=country_info[input$data_select,'units_rur'])
-    updateSliderInput(session, 'residential_rur', value=country_info[input$data_select,'residential_rur'])
+    updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
+    updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
+    updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
     
+    if(rv$country_info$wopr){
+      showModal(modalDialog(HTML(paste('There are data-driven population estimates for',input$data_select,'available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a> and <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision</a>.')), 
+                            title='Friendly Message:',
+                            footer=tagList(modalButton('Okay, thanks.'))
+      ))
+    }
   })
   
   # population total
   observe({
-    rv$pop_urb <- rv$urb_count*input$residential_urb*input$units_urb*input$people_urb
-    rv$pop_rur <- rv$rur_count*input$residential_rur*input$units_rur*input$people_rur
+    rv$pop_urb <- rv$country_info$urb_count*input$residential_urb*input$units_urb*input$people_urb
+    rv$pop_rur <- rv$country_info$rur_count*input$residential_rur*input$units_rur*input$people_rur
     
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
@@ -32,24 +37,24 @@ function(input, output, session){
                                              prettyNum(round(input$people_urb,1), big.mark=','), 
                                              prettyNum(round(input$units_urb,1), big.mark=','), 
                                              paste0(round(input$residential_urb,1)*100,'%'),
-                                             prettyNum(round(rv$urb_count), big.mark=','), 
+                                             prettyNum(round(rv$country_info$urb_count), big.mark=','), 
                                              prettyNum(round(input$people_rur,1), big.mark=','), 
                                              prettyNum(round(input$units_rur,1), big.mark=','), 
                                              paste0(round(input$residential_rur*100,1),'%'),
-                                             prettyNum(round(rv$rur_count), big.mark=',')
+                                             prettyNum(round(rv$country_info$rur_count), big.mark=',')
                                              ), 
                                            ncol=1),
                            row.names=c('Population Total',
                                        'Population Urban',
                                        'Population Rural',
-                                       'People per housing unit (urban)',
-                                       'Housing units per building (urban)',
-                                       'Proportion residential buildings (urban)',
-                                       'Buildings Urban',
-                                       'People per housing unit (rural)',
-                                       'Housing units per building (rural)',
-                                       'Proportion residential buildings (rural)',
-                                       'Buildings Rural'
+                                       'Urban: People per housing unit',
+                                       'Urban: Housing units per building',
+                                       'Urban: Proportion residential buildings',
+                                       'Urban: Total buildings',
+                                       'Rural: People per housing unit',
+                                       'Rural: Housing units per building',
+                                       'Rural: Proportion residential buildings',
+                                       'Rural: Total buildings'
                                        ))
     })
   
@@ -70,28 +75,28 @@ function(input, output, session){
                               format.args = list(big.mark=",", decimal.mark="."))
   
   # download settings button
-  output$table_button <- downloadHandler(filename = paste0(input$data_select,'_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
+  output$table_button <- downloadHandler(filename = function() paste0(input$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
                                           content = function(file) {
                                             write.csv(rv$table, file, row.names=T) 
                                           })
   
   # download raster button
-  output$raster_button <- downloadHandler(filename = paste0(input$data_select,'_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
-                                        content = function(file) {
-                                          raster::writeRaster(popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
-                                                                        urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
-                                                                        people_urb = input$people_urb,
-                                                                        units_urb = input$units_urb,
-                                                                        residential_urb = input$residential_urb,
-                                                                        people_rur = input$people_rur,
-                                                                        units_rur = input$units_rur,
-                                                                        residential_rur = input$residential_rur
-                                                                        ), 
-                                                              file)
+  output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
+                                          content = function(file) {
+                                            raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
+                                                                              urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
+                                                                              people_urb = input$people_urb,
+                                                                              units_urb = input$units_urb,
+                                                                              residential_urb = input$residential_urb,
+                                                                              people_rur = input$people_rur,
+                                                                              units_rur = input$units_rur,
+                                                                              residential_rur = input$residential_rur
+                                                                              ),
+                                                                filename = file)
                                           })
   
   # download source button
-  output$source_button <- downloadHandler(filename = paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
+  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
                                           content = function(file) {
                                             zip::zipr(zipfile = file,
                                                       files = c(file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
