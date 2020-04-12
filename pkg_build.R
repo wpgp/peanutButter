@@ -16,5 +16,8 @@ devtools::document()
 # install package
 install.packages(getwd(), repo=NULL, type='source')
 
+# load package
 library(peanutButter)
+
+# run app
 peanutButter::jelly()
