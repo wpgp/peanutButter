@@ -34,7 +34,7 @@ See the vignette for the peanutButter::jelly shiny application using: `vignette(
 
 ### peanutButter::jelly
 
-peanutButter::jelly is an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. peanutButter::jelly is available on the web at <a href='https://apps.worldpop.org/peanutButter', target='_blank'>https://apps.worldpop.org/peanutButter</a>. You can also run the application locally from your R console using:
+peanutButter::jelly is an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. peanutButter::jelly is available on the web at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. You can also run the application locally from your R console using:
 
 ```r
 peanutButter::jelly()
