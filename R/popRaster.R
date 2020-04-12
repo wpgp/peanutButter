@@ -1,5 +1,5 @@
-#' popRaster
-#' @description Create population raster using the peanut butter method.
+#' Gridded population estimates from building footprints
+#' @description Create population raster using the peanut butter method with building footprints.
 #' @param buildings_path Path to a raster (.tif) with building counts per pixel
 #' @param urban_path Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1) 
 #' @param people_urb Average number of people per housing unit in urban areas

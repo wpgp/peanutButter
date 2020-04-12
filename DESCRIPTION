@@ -4,11 +4,13 @@ Version: 0.1.0
 Date: 2020-04-08
 Author: WorldPop Research Group, University of Southampton
 Maintainer: Doug Leasure <D.R.Leasure@soton.ac.uk>
-License: None
+License: GNU GPLv3
 Imports: raster, shiny
 Suggest: 
 Description: An R package to create gridded popuation estimates from building footprints using the peanut butter method.
 RoxygenNote: 7.1.0
+VignetteBuilder: knitr
 Depends: 
     R (>= 2.10),
+    raster,
     zip

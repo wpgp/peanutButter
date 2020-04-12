@@ -1,47 +1,57 @@
-# peanutButter::jelly
-# A tool to produce quick gridded population estimates using the peanut butter method
-WorldPop Research Group, University of Southampton  
+#  peanutButter: An R package for rapid-response gridded population estimates from building footprints
 
-#### Overview
+WorldPop Research Group  
+University of Southampton
 
-The *peanutButter::jelly* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across the landscape in each settlement type. High resolution maps of building footprints (Maxar Technologies & Ecopia.AI 2020) are used to map where households are likely to occur.
+11 April 2020
 
-Code for the *peanutButter* R package is openly available from WorldPop on GitHub: https://github.com/wpgp/peanutButter.
+## Introduction
 
-#### Steps
-1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole. 
+The _peanutButter_ R package allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
 
-2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
+Code for the _peanutButter_ package is openly available on GitHub: <a href='https://github.com/wpgp/peanutButter' target='_blank'>https://github.com/wpgp/peanutButter</a>.
 
-3. Use the "Settings" and/or "Source Files" button(s) to save the input data.
+## Installation
 
-#### Advantages  
-- This method is quick and easy to implement in situations where suitable population estimates are not currently available.  
-- High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.
+Note: These installation instructions will not work until the repo is public. Please install the package from source until then.
 
-#### Disadvantages
-- This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
-- There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.  
+First, start a new R session. Then, install the _peanutButter_ R package from WorldPop on GitHub:
 
-#### Method
+```r
+devtools::install_github('wpgp/peanutButter')
+library(peanutButter)
+```
 
-The peanutButter::jelly method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:  
+You may be prompted to update some of your existing R packages. This is not required unless the _peanutButter_ installation fails. You can avoid checking for package updates by adding the argument `upgrade='never'`. If needed, you can update individual packages that may be responsible for any _peanutButter_ installation errors using `install.packages('package_name')`. Or, you can use `devtools::install_github('wpgp/peanutButter', upgrade='ask')` to update all of the packages that _peanutButter_ depends on. In R Studio, you can also update all of your R packages by clicking "Tools > Check for Package Updates". 
 
-1. Mean number of people per housing unit  
-2. Mean number of housing units per building  
-3. Proportion of buildings that are residential  
+Note: When updating multiple packages, it may be necessary to restart your R session before each installation to ensure that packages being updated are not currently loaded in your R environment.
 
-The population is estimated using the following formula:  
+## Usage
 
-`Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit`
+You can list vignettes that are available using: `vignette(package='peanutButter')`
 
-There are two source datasets working behind the scenes in the application:  
+See the vignette for the peanutButter::jelly shiny application using: `vignette('jelly', package='peanutButter')`
 
-1. The count of buildings in each ~100 m grid cell across the country,  
-2. A classification of each ~100 m grid cell as urban or rural.
+### peanutButter::jelly
 
-Use the "Source Files" button to download these rasters. Use the *peanutButter* R package if you want to provide your own building counts and/or map of urban areas (see ?peanutButter::popRaster).
+peanutButter::jelly is an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. peanutButter::jelly is available on the web at <a href='https://apps.worldpop.org/peanutButter', target='_blank'>https://apps.worldpop.org/peanutButter</a>. You can also run the application locally from your R console using:
+
+```r
+peanutButter::jelly()
+```
+
+## Contributing
+The _peanutButter_ R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation. Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny web server. 
 
 #### Citations
+
 Maxar Technologies and Ecopia.AI. 2020. Digitize Africa Data, Building Footprints.  
+
 WorldPop, Maxar Technologies, and Ecopia.AI. 2020. Gridded maps of building patterns throughout sub-Saharan Africa.
+
+## License
+
+#### <a href='COPYING' target='_blank'>GNU General Public License v3.0 (GNU GPLv3)]</a>  
+  
+  
+  

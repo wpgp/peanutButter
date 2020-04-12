@@ -16,8 +16,18 @@ function(input, output, session){
     updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
     updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
     
-    if(rv$country_info$wopr){
-      showModal(modalDialog(HTML(paste('There are data-driven population estimates for',input$data_select,'available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a> and <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision</a>.')), 
+    rv$popup_message <- NULL
+    if(rv$country_info$wopr & rv$country_info$woprVision){
+      rv$popup_message <- paste('There are data-driven gridded population estimates for',input$data_select,'available for download from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
+    } else if(rv$country_info$wopr) {
+      rv$popup_message <- paste('There are data-driven gridded population estimates for',input$data_select,'available for download from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
+    }
+    if(rv$country_info$partial_footprints){
+      rv$popup_message <- paste(rv$popup_message, '<br><br>Note: The building footprints for this country do not have complete national coverage.')
+    }
+    
+    if(!is.null(rv$popup_message)){
+      showModal(modalDialog(HTML(rv$popup_message), 
                             title='Friendly Message:',
                             footer=tagList(modalButton('Okay, thanks.'))
       ))
@@ -76,34 +86,52 @@ function(input, output, session){
   
   # download settings button
   output$table_button <- downloadHandler(filename = function() paste0(input$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
-                                          content = function(file) {
-                                            write.csv(rv$table, file, row.names=T) 
-                                          })
+                                         content = function(file) {
+                                           withProgress({
+                                             write.csv(rv$table, file, row.names=T) 
+                                           }, 
+                                           message='Preparing data:', 
+                                           detail='Creating .csv table with a record of your settings...', 
+                                           value=0.5)
+                                           })
+  
   
   # download raster button
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
-                                            raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
-                                                                              urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
-                                                                              people_urb = input$people_urb,
-                                                                              units_urb = input$units_urb,
-                                                                              residential_urb = input$residential_urb,
-                                                                              people_rur = input$people_rur,
-                                                                              units_rur = input$units_rur,
-                                                                              residential_rur = input$residential_rur
-                                                                              ),
-                                                                filename = file)
-                                          })
+                                            withProgress({
+                                              raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
+                                                                                urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
+                                                                                people_urb = input$people_urb,
+                                                                                units_urb = input$units_urb,
+                                                                                residential_urb = input$residential_urb,
+                                                                                people_rur = input$people_rur,
+                                                                                units_rur = input$units_rur,
+                                                                                residential_rur = input$residential_rur
+                                                                                ),
+                                                                  filename = file)
+                                            }, 
+                                            message='Preparing data:', 
+                                            detail='Creating .tif raster with your gridded population estimates...', 
+                                            value=0.5)
+                                            })
+  
   
   # download source button
   output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
                                           content = function(file) {
-                                            zip::zipr(zipfile = file,
-                                                      files = c(file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
-                                                                file.path(srcdir,paste0(input$data_select,'_urban.tif')))
-                                                       )
+                                            withProgress({
+                                              zip::zipr(zipfile = file,
+                                                        files = c(file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
+                                                                  file.path(srcdir,paste0(input$data_select,'_urban.tif')))
+                                                        )
+                                            }, 
+                                            message='Preparing data:', 
+                                            detail='Creating zip archive with our source data rasters...', 
+                                            value=0.5)
                                           })
-})
+                                          
+  })
 
 
 

@@ -6,7 +6,6 @@ setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 
 # source directory
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
-# srcdir <- 'in'
 
 # country list
 files <- list.files(srcdir)
@@ -33,7 +32,7 @@ country_info <- data.frame(country=country_list)
 row.names(country_info) <- country_list
 
 # default values spreadsheet
-defaults <- read.csv('in/defaults.csv',stringsAsFactors=F)
+defaults <- read.csv('data-raw/defaults.csv',stringsAsFactors=F)
 row.names(defaults) <- defaults$country
 
 # calculate country info
@@ -62,7 +61,9 @@ for(country in country_list){
 
 # wopr
 country_info$wopr <- country_info$country %in% unique(wopr::getCatalogue()$country)
+country_info$woprVision <- country_info$country %in% unique(wopr::getCatalogue(spatial_query=T)$country)
+
+country_info$partial_footprints <- country_info$country %in% c('COD','NGA')
 
 # save as internal R package file
-setwd('C:/RESEARCH/git/wpgp/peanutButter')
-if(T) usethis::use_data(country_info, internal=T, overwrite=F)
+if(F) usethis::use_data(country_info, internal=T, overwrite=F)

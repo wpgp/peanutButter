@@ -131,7 +131,6 @@ navbarPage(
       style='padding:0px',
       img(src='logoWorldPop.png', 
           style='height:30px; margin-top:-30px; margin-left:10px'))
-  )
-  
+    )
   )
 )

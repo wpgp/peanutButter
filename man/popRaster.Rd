@@ -2,7 +2,7 @@
 % Please edit documentation in R/popRaster.R
 \name{popRaster}
 \alias{popRaster}
-\title{popRaster}
+\title{Gridded population estimates from building footprints}
 \usage{
 popRaster(
   buildings_path,
@@ -33,5 +33,5 @@ popRaster(
 \item{units_rur}{Average number of housing units per building in rural areas}
 }
 \description{
-Create population raster using the peanut butter method.
+Create population raster using the peanut butter method with building footprints.
 }
