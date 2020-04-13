@@ -42,8 +42,8 @@ University of Southampton</p>
 <h2>Overview</h2>
 <p>The <em>peanutButter::jelly</em> web application allows you to produce gridded population estimates from building footprints using the “peanut butter” method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.</p>
 <p>Code for the <em>peanutButter</em> R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.</p>
-<div id="steps" class="section level3">
-<h3>Steps</h3>
+<div id="quick-start" class="section level3">
+<h3>Quick Start</h3>
 <ol style="list-style-type: decimal">
 <li><p>Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.</p></li>
 <li><p>Use the “Gridded Population Estimates” button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.</p></li>
@@ -63,7 +63,7 @@ University of Southampton</p>
 <ul>
 <li>This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.<br />
 </li>
-<li>There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.</li>
+<li>There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.</li>
 </ul>
 </div>
 </div>
@@ -78,15 +78,33 @@ University of Southampton</p>
 <li>Proportion of buildings that are residential</li>
 </ol>
 <p>The population is estimated using the following formula:</p>
-<p><code>Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit</code></p>
-<div id="default-values" class="section level3">
-<h3>Default Values</h3>
-<p>Our process for selecting default values for these parameters was:</p>
+<p><code>Population = Pop_Urban + Pop_Rural</code></p>
+<p><code>Pop_Urban = Buildings_Urban x PropResidential_Urban x UnitsPerBuilding_Urban x PeoplePerUnit_Urban</code></p>
+<p><code>Pop_Rural = Buildings_Rural x PropResidential_Rural x UnitsPerBuilding_Rural x PeoplePerUnit_Rural</code></p>
+<div id="population-parameters" class="section level3">
+<h3>Population parameters</h3>
+<p><strong>Mean people per housing unit</strong><br />
+This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:</p>
+<ul>
+<li><a href="https://microdata.worldbank.org/index.php/home" target="_blank">WorldBank Microdata Library</a><br />
+</li>
+<li><a href="https://international.ipums.org/international/" target="_blank">IPUMS Census Microdata</a><br />
+</li>
+<li><a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">United Nations Department of Economic and Social Affairs</a></li>
+</ul>
+<p><strong>Mean housing units per building</strong><br />
+This parameter defines the average number of housing units per residential building. This number would be expected to be near 1 for rural areas and slightly higher in urban areas.</p>
+<p><strong>Proportion residential buildings</strong><br />
+This parameter defines what proportion of the building footprints (Maxar Technologies, Ecopia.AI 2020) represent residential buildings. Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represents more than one building.</p>
+<div id="default-values" class="section level4">
+<h4>Default Values</h4>
+<p>We provide moderately informative default values for population parameters, but we strongly urge users to modify the defaults based on a thorough investigation of available data sources. Our process for selecting default values was:</p>
 <ol style="list-style-type: decimal">
 <li><p>Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit.</p></li>
 <li><p>Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.</p></li>
 <li><p>Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.</p></li>
 </ol>
+</div>
 </div>
 <div id="source-data" class="section level3">
 <h3>Source Data</h3>
@@ -102,7 +120,7 @@ University of Southampton</p>
 </div>
 <div id="contributing" class="section level2">
 <h2>Contributing</h2>
-<p>The <em>peanutButter</em> R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation. Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The <em>peanutButter</em> R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop’s Shiny server (<a href="https://apps.worldpop.org" target="_blank">https://apps.worldpop.org</a>).</p>
+<p>The <em>peanutButter</em> R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation. Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The <em>peanutButter</em> R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop’s Shiny server (<a href="https://apps.worldpop.org" target="_blank">https://apps.worldpop.org</a>).</p>
 </div>
 <div id="citations" class="section level2">
 <h2>Citations</h2>

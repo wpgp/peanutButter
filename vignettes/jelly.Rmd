@@ -18,7 +18,7 @@ The *peanutButter::jelly* web application allows you to produce gridded populati
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
-### Steps
+### Quick Start
 1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole. 
 
 2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
@@ -31,7 +31,7 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 
 ### Disadvantages
 - This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
-- There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy the estimates produced.  
+- There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
 
 ## Method
 
@@ -43,11 +43,30 @@ The peanutButter method requires you to provide estimates of three population ch
 
 The population is estimated using the following formula:  
 
-`Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit`
+`Population = Pop_Urban + Pop_Rural`  
 
-### Default Values
+`Pop_Urban = Buildings_Urban x PropResidential_Urban x UnitsPerBuilding_Urban x PeoplePerUnit_Urban`  
 
-Our process for selecting default values for these parameters was:  
+`Pop_Rural = Buildings_Rural x PropResidential_Rural x UnitsPerBuilding_Rural x PeoplePerUnit_Rural`
+
+### Population parameters
+
+**Mean people per housing unit**  
+This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:  
+
+- <a href="https://microdata.worldbank.org/index.php/home" target="_blank">WorldBank Microdata Library</a>  
+- <a href="https://international.ipums.org/international/" target="_blank">IPUMS Census Microdata</a>  
+- <a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">United Nations Department of Economic and Social Affairs</a>  
+
+**Mean housing units per building**  
+This parameter defines the average number of housing units per residential building. This number would be expected to be near 1 for rural areas and slightly higher in urban areas.
+
+**Proportion residential buildings**  
+This parameter defines what proportion of the building footprints (Maxar Technologies, Ecopia.AI 2020) represent residential buildings. Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represents more than one building.
+
+#### Default Values
+
+We provide moderately informative default values for population parameters, but we strongly urge users to modify the defaults based on a thorough investigation of available data sources. Our process for selecting default values was:  
 
 1. Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit. 
 
@@ -67,7 +86,7 @@ Use the "Source Files" button to download these rasters.
 Note: Use the <a href='https://github.com/wpgp/peanutButter' target='_blank'>*peanutButter* R package</a> if you want to provide your own building counts and/or map of urban areas. The code for producing the source files from building footprints (Maxar Technologies, Ecopia.AI 2020) is included in the `data-raw` folder of the R package.
 
 ## Contributing
-The _peanutButter_ R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation. Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny server (<a href="https://apps.worldpop.org" target="_blank">https://apps.worldpop.org</a>). 
+The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation. Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny server (<a href="https://apps.worldpop.org" target="_blank">https://apps.worldpop.org</a>). 
 
 ## Citations
 
