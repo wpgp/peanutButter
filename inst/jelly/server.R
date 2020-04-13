@@ -6,28 +6,32 @@ function(input, output, session){
 
   # load data
   observeEvent(input$data_select, {
+    
+    # country info
     rv$country_info <- country_info[input$data_select,]
     
+    # slider values
     updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
     updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
     updateSliderInput(session, 'residential_urb', value=rv$country_info$residential_urb)
-    
     updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
     updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
     updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
     
-    rv$popup_message <- NULL
+    # popup message
+    rv$popup_message <- c()
     if(rv$country_info$wopr & rv$country_info$woprVision){
-      rv$popup_message <- paste('There are data-driven gridded population estimates for',input$data_select,'available for download from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
+      rv$popup_message[1] <- paste0('Customized gridded population estimates are available for ',input$data_select,' that are based on spatially-referenced household survey data and a rigorous statistical model. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
     } else if(rv$country_info$wopr) {
-      rv$popup_message <- paste('There are data-driven gridded population estimates for',input$data_select,'available for download from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
-    }
-    if(rv$country_info$partial_footprints){
-      rv$popup_message <- paste(rv$popup_message, '<br><br>Note: The building footprints for this country do not have complete national coverage.')
+      rv$popup_message[1] <- paste0('Customized gridded population estimates are available for ',input$data_select,' that are based on spatially-referenced household survey data and a rigorous statistical model. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
     }
     
-    if(!is.null(rv$popup_message)){
-      showModal(modalDialog(HTML(rv$popup_message), 
+    if(rv$country_info$partial_footprints){
+      rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',input$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
+    }
+    
+    if(!is.null(rv$popup_message[1])){
+      showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')), 
                             title='Friendly Message:',
                             footer=tagList(modalButton('Okay, thanks.'))
       ))
