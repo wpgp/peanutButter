@@ -35,7 +35,7 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 
 ## Method
 
-The peanutButter method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:  
+The peanutButter method requires you to provide estimates of three population characteristics for both urban and rural settlement types using expert opinion:  
 
 1. Mean number of people per housing unit  
 2. Mean number of housing units per building  
@@ -45,7 +45,19 @@ The population is estimated using the following formula:
 
 `Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit`
 
-There are two source datasets working behind the scenes in the application:  
+### Default Values
+
+Our process for selecting default values for these parameters was:  
+
+1. Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit. 
+
+2. Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.  
+
+3. Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
+
+### Source Data
+
+There are two source datasets working behind the scenes in the application (both were derived from building footprints; Maxar Technologies, Ecopia.AI 2020):  
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.

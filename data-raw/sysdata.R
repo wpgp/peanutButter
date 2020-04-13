@@ -31,10 +31,6 @@ for(country in country_list){
 country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
-# default values spreadsheet
-defaults <- read.csv('data-raw/defaults.csv',stringsAsFactors=F)
-row.names(defaults) <- defaults$country
-
 # calculate country info
 
 # building counts
@@ -52,11 +48,15 @@ for(country in country_list){
 }
 
 # default settings
+defaults <- read.csv('data-raw/defaults.csv',stringsAsFactors=F)
+row.names(defaults) <- defaults$country
+
 for(country in country_list){
   i <- ifelse(country %in% defaults$country, country, 'DEF')
   for(parm in c('people_urb','units_urb','residential_urb','people_rur','units_rur','residential_rur')){
     country_info[country,parm] <- defaults[i,parm]      
   }
+  country_info[country,c('residential_urb','residential_rur')] <- min(1,defaults[country,'population'] / (country_info[country,'urb_count']*country_info[country,'units_urb']*country_info[country,'people_urb'] + country_info[country,'rur_count']*country_info[country,'units_rur']*country_info[country,'people_rur']))
 }
 
 # wopr

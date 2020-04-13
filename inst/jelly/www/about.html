@@ -69,7 +69,7 @@ University of Southampton</p>
 </div>
 <div id="method" class="section level2">
 <h2>Method</h2>
-<p>The peanutButter method requires you to estimate three population characteristics for both urban and rural settlement types using expert opinion:</p>
+<p>The peanutButter method requires you to provide estimates of three population characteristics for both urban and rural settlement types using expert opinion:</p>
 <ol style="list-style-type: decimal">
 <li>Mean number of people per housing unit<br />
 </li>
@@ -79,7 +79,18 @@ University of Southampton</p>
 </ol>
 <p>The population is estimated using the following formula:</p>
 <p><code>Population = TotalBuildings x ProportionResidential x UnitsPerBuilding x PeoplePerUnit</code></p>
-<p>There are two source datasets working behind the scenes in the application:</p>
+<div id="default-values" class="section level3">
+<h3>Default Values</h3>
+<p>Our process for selecting default values for these parameters was:</p>
+<ol style="list-style-type: decimal">
+<li><p>Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit.</p></li>
+<li><p>Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.</p></li>
+<li><p>Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.</p></li>
+</ol>
+</div>
+<div id="source-data" class="section level3">
+<h3>Source Data</h3>
+<p>There are two source datasets working behind the scenes in the application (both were derived from building footprints; Maxar Technologies, Ecopia.AI 2020):</p>
 <ol style="list-style-type: decimal">
 <li>The count of buildings in each ~100 m grid cell across the country,<br />
 </li>
@@ -87,6 +98,7 @@ University of Southampton</p>
 </ol>
 <p>Use the “Source Files” button to download these rasters.</p>
 <p>Note: Use the <a href="https://github.com/wpgp/peanutButter" target="_blank"><em>peanutButter</em> R package</a> if you want to provide your own building counts and/or map of urban areas. The code for producing the source files from building footprints (Maxar Technologies, Ecopia.AI 2020) is included in the <code>data-raw</code> folder of the R package.</p>
+</div>
 </div>
 <div id="contributing" class="section level2">
 <h2>Contributing</h2>

@@ -8,10 +8,10 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 devtools::document()
 
 # vignettes
-# devtools::build_vignettes()
+devtools::build_vignettes()
 
 # about jelly
-# file.copy('doc/jelly.html','inst/jelly/www/about.html', overwrite=T)
+file.copy('doc/jelly.html','inst/jelly/www/about.html', overwrite=T)
 
 # install package
 install.packages(getwd(), repo=NULL, type='source')

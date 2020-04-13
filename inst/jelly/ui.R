@@ -34,7 +34,7 @@ column(
         inputId = 'units_urb',            
         label = h5('Mean housing units per building'),
         min = 0,
-        max = 10,
+        max = 5,
         value = 0,
         step = 0.1),
       
@@ -66,7 +66,7 @@ column(
         inputId = 'units_rur',            
         label = h5('Mean housing units per building'),
         min = 0,
-        max = 10,
+        max = 5,
         value = 0,
         step = 0.1),
       
