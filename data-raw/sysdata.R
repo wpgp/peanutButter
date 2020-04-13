@@ -28,7 +28,7 @@ for(country in country_list){
 }
 
 # setup country info data frame
-country_info <- data.frame(country=country_list)
+country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
 # default values spreadsheet
@@ -66,4 +66,4 @@ country_info$woprVision <- country_info$country %in% unique(wopr::getCatalogue(s
 country_info$partial_footprints <- country_info$country %in% c('COD','NGA')
 
 # save as internal R package file
-if(F) usethis::use_data(country_info, internal=T, overwrite=F)
+usethis::use_data(country_info, internal=T, overwrite=F)

@@ -6,7 +6,7 @@ function(input, output, session){
 
   # load data
   observeEvent(input$data_select, {
-    rv$country_info <- peanutButter:::country_info[input$data_select,]
+    rv$country_info <- country_info[input$data_select,]
     
     updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
     updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
@@ -46,11 +46,11 @@ function(input, output, session){
                                              prettyNum(round(rv$pop_rur), big.mark=','), 
                                              prettyNum(round(input$people_urb,1), big.mark=','), 
                                              prettyNum(round(input$units_urb,1), big.mark=','), 
-                                             paste0(round(input$residential_urb,1)*100,'%'),
+                                             paste0(round(input$residential_urb*100),'%'),
                                              prettyNum(round(rv$country_info$urb_count), big.mark=','), 
                                              prettyNum(round(input$people_rur,1), big.mark=','), 
                                              prettyNum(round(input$units_rur,1), big.mark=','), 
-                                             paste0(round(input$residential_rur*100,1),'%'),
+                                             paste0(round(input$residential_rur*100),'%'),
                                              prettyNum(round(rv$country_info$rur_count), big.mark=',')
                                              ), 
                                            ncol=1),

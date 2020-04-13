@@ -11,13 +11,12 @@ column(
     selectInput(
       inputId = 'data_select', 
       label = HTML('Select Country<br><small>(see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">country codes</a>)</small>'),
-      choices = row.names(peanutButter:::country_info), 
-      selected = sample(row.names(peanutButter:::country_info),1)),
+      choices = row.names(country_info), 
+      selected = sample(country_info$country[!country_info$wopr & !country_info$woprVision],1)),
     
     wellPanel(
       
-      tags$style('.irs-bar, .irs-bar-edge,
-               .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+      tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
       
       strong('Urban Settlements'),
       
