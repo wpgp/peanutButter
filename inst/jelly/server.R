@@ -21,9 +21,9 @@ function(input, output, session){
     # popup message
     rv$popup_message <- c()
     if(rv$country_info$wopr & rv$country_info$woprVision){
-      rv$popup_message[1] <- paste0('Customized gridded population estimates are available for ',input$data_select,' that are based on spatially-referenced household survey data and a rigorous statistical model. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
+      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',input$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
     } else if(rv$country_info$wopr) {
-      rv$popup_message[1] <- paste0('Customized gridded population estimates are available for ',input$data_select,' that are based on spatially-referenced household survey data and a rigorous statistical model. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
+      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',input$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
     }
     
     if(rv$country_info$partial_footprints){

@@ -14,7 +14,7 @@ for(i in 1:length(files)){
   country_list[i] <- unlist(strsplit(x = files[i], 
                                      split = '_'))[1]
 }  
-country_list <- sort(unique(country_list))
+country_list <- sort(unique(c(country_list,peanutButter:::country_info$country)))
 
 # check files exist
 for(country in country_list){
@@ -31,20 +31,24 @@ for(country in country_list){
 country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
+country_info[row.names(peanutButter:::country_info),names(peanutButter:::country_info)] <- peanutButter:::country_info
+
 # calculate country info
 
 # building counts
 for(country in country_list){
-  print(country)
+  if(is.na(country_info[country,'bld_count']) | is.na(country_info[country,'urb_count']) | is.na(country_info[country,'rur_count'])){
+    print(country)
     
-  # load rasters
-  buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings.tif')))
-  urban <- raster::raster(file.path(srcdir,paste0(country,'_urban.tif')))
-  
-  # building counts
-  country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
-  country_info[country,'urb_count'] <- sum(buildings[urban==1], na.rm=T)
-  country_info[country,'rur_count'] <- country_info[country,'bld_count'] - country_info[country,'urb_count']
+    # load rasters
+    buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings.tif')))
+    urban <- raster::raster(file.path(srcdir,paste0(country,'_urban.tif')))
+    
+    # building counts
+    country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
+    country_info[country,'urb_count'] <- sum(buildings[urban==1], na.rm=T)
+    country_info[country,'rur_count'] <- country_info[country,'bld_count'] - country_info[country,'urb_count']
+  }
 }
 
 # default settings
