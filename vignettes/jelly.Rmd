@@ -54,8 +54,10 @@ The population is estimated using the following formula:
 **Mean people per housing unit**  
 This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:  
 
+- <a href="https://www.statcompiler.com/en/" target="_blank">STATCompiler from the DHS Program</a>  
 - <a href="https://microdata.worldbank.org/index.php/home" target="_blank">WorldBank Microdata Library</a>  
 - <a href="https://international.ipums.org/international/" target="_blank">IPUMS Census Microdata</a>  
+- <a href="https://mics.unicef.org/surveys" target="_blank">MICS survey data from UNICEF</a>  
 - <a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">United Nations Department of Economic and Social Affairs</a>  
 
 **Mean housing units per building**  
