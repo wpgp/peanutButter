@@ -89,7 +89,7 @@ tags$style(HTML(".navbar-nav {float:none !important;}
                 .navbar-nav > li:nth-child(3){float:right}")),
 
 navbarPage(
-  title='peanutButter::jelly',              
+  title='peanutButter::jelly (beta)',              
   inverse=F,
   
   # tab: simulator
@@ -105,10 +105,15 @@ navbarPage(
       column(
         width = 9,
         style='height: calc(98vh - 75px)',
-        h4('Results'),
+        # h4('Instructions'),
+        div(style='width:500px',
+          HTML('Move the sliders (on the left) to update the population estimates (below) until you are satisfied that the settings and the results are reasonable.<br><br>
+               Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster) created by applying your settings to a high resolution map of building footprints.<br><br>')
+          ),
+        # h4('Results'),
         tableOutput('table_results'),
-        h4('Settings'),
-        tableOutput('table_settings'),
+        # h4('Settings'),
+        # tableOutput('table_settings'),
         downloadButton('raster_button', 'Gridded Population Estimates', style='width:405px'),br(),br(),
         downloadButton('table_button', 'Settings', style='width:200px'),
         downloadButton('source_button', 'Source Files', style='width:200px')

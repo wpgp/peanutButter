@@ -48,44 +48,45 @@ function(input, output, session){
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','), 
                                              prettyNum(round(rv$pop_urb), big.mark=','), 
                                              prettyNum(round(rv$pop_rur), big.mark=','), 
+                                             prettyNum(round(rv$country_info$urb_count), big.mark=','), 
+                                             prettyNum(round(rv$country_info$rur_count), big.mark=','),
                                              prettyNum(round(input$people_urb,1), big.mark=','), 
                                              prettyNum(round(input$units_urb,1), big.mark=','), 
                                              paste0(round(input$residential_urb*100),'%'),
-                                             prettyNum(round(rv$country_info$urb_count), big.mark=','), 
                                              prettyNum(round(input$people_rur,1), big.mark=','), 
                                              prettyNum(round(input$units_rur,1), big.mark=','), 
-                                             paste0(round(input$residential_rur*100),'%'),
-                                             prettyNum(round(rv$country_info$rur_count), big.mark=',')
+                                             paste0(round(input$residential_rur*100),'%')
                                              ), 
                                            ncol=1),
                            row.names=c('Population Total',
                                        'Population Urban',
                                        'Population Rural',
+                                       'Buildings Urban',
+                                       'Buildings Rural',
                                        'Urban: People per housing unit',
                                        'Urban: Housing units per building',
                                        'Urban: Proportion residential buildings',
-                                       'Urban: Total buildings',
                                        'Rural: People per housing unit',
                                        'Rural: Housing units per building',
-                                       'Rural: Proportion residential buildings',
-                                       'Rural: Total buildings'
+                                       'Rural: Proportion residential buildings'
                                        ))
     })
   
   # results table
-  output$table_results <- renderTable(data.frame(rv$table[1:3,], row.names=row.names(rv$table)[1:3]), 
+  output$table_results <- renderTable(data.frame(rv$table[c('Population Total',
+                                                            'Population Urban',
+                                                            'Population Rural',
+                                                            'Buildings Urban',
+                                                            'Buildings Rural'),], row.names=c('Population Total',
+                                                                                              'Population Urban',
+                                                                                              'Population Rural',
+                                                                                              'Buildings Urban',
+                                                                                              'Buildings Rural')), 
                               digits = 0,
                               striped = T,
                               colnames = F,
                               rownames = T,
-                              format.args = list(big.mark=",", decimal.mark="."))
-  
-  # settings table
-  output$table_settings <- renderTable(data.frame(rv$table[4:nrow(rv$table),], row.names=row.names(rv$table)[4:nrow(rv$table)]), 
-                              digits = 0,
-                              striped = T,
-                              colnames = F,
-                              rownames = T,
+                              width = 405,
                               format.args = list(big.mark=",", decimal.mark="."))
   
   # download settings button
