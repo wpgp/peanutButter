@@ -4,7 +4,10 @@
 \alias{jelly}
 \title{Run the peanutButter::jelly shiny application}
 \usage{
-jelly()
+jelly(srcdir)
+}
+\arguments{
+\item{srcdir}{Source directory path.}
 }
 \description{
 A shiny web application to produce population estimates from building footprints using the peanut butter method.
