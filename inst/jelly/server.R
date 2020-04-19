@@ -82,12 +82,12 @@ function(input, output, session){
                                                                                               'Population Rural',
                                                                                               'Buildings Urban',
                                                                                               'Buildings Rural')), 
-                              digits = 0,
-                              striped = T,
-                              colnames = F,
-                              rownames = T,
-                              width = 405,
-                              format.args = list(big.mark=",", decimal.mark="."))
+                                      digits = 0,
+                                      striped = T,
+                                      colnames = F,
+                                      rownames = T,
+                                      width = 405,
+                                      format.args = list(big.mark=",", decimal.mark="."))
   
   # download settings button
   output$table_button <- downloadHandler(filename = function() paste0(input$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
@@ -96,8 +96,8 @@ function(input, output, session){
                                              write.csv(rv$table, file, row.names=T) 
                                            }, 
                                            message='Preparing data:', 
-                                           detail='Creating .csv table with a record of your settings...', 
-                                           value=0.5)
+                                           detail='Creating .csv spreadsheet with your settings...', 
+                                           value=1)
                                            })
   
   
@@ -105,7 +105,6 @@ function(input, output, session){
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
                                             withProgress({
-                                              print(file)
                                               raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
                                                                                 urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
                                                                                 people_urb = input$people_urb,
@@ -114,12 +113,12 @@ function(input, output, session){
                                                                                 people_rur = input$people_rur,
                                                                                 units_rur = input$units_rur,
                                                                                 residential_rur = input$residential_rur
-                                              ),
+                                                ),
                                               filename = file)
                                             }, 
                                             message='Preparing data:', 
                                             detail='Creating .tif raster with your gridded population estimates...', 
-                                            value=0.5)
+                                            value=1)
                                           })
   
   # download source button
@@ -132,8 +131,9 @@ function(input, output, session){
                                               )
                                             }, 
                                             message='Preparing data:', 
-                                            detail='Creating zip archive with our source data rasters...', 
-                                            value=0.5)  
+                                            detail='Creating .zip archive with our source data rasters...', 
+                                            value=1)  
                                           })
+  
 })
   

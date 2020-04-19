@@ -1,8 +1,8 @@
 ---
-title: The peanutButter::jelly web application for rapid-response gridded population estimates
+title: The peanutButter web application for rapid-response gridded population estimates
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The peanutButter application for rapid-response gridded population estimates using the peanut butter method}
+  %\VignetteIndexEntry{The peanutButter web application for rapid-response gridded population estimates}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
