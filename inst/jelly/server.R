@@ -105,6 +105,7 @@ function(input, output, session){
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
                                             withProgress({
+                                              print(file)
                                               raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
                                                                                 urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
                                                                                 people_urb = input$people_urb,
@@ -113,31 +114,26 @@ function(input, output, session){
                                                                                 people_rur = input$people_rur,
                                                                                 units_rur = input$units_rur,
                                                                                 residential_rur = input$residential_rur
-                                                                                ),
-                                                                  filename = file)
+                                              ),
+                                              filename = file)
                                             }, 
                                             message='Preparing data:', 
                                             detail='Creating .tif raster with your gridded population estimates...', 
                                             value=0.5)
-                                            })
-  
+                                          })
   
   # download source button
-  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
+  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'), 
                                           content = function(file) {
                                             withProgress({
                                               zip::zipr(zipfile = file,
                                                         files = c(file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
                                                                   file.path(srcdir,paste0(input$data_select,'_urban.tif')))
-                                                        )
+                                              )
                                             }, 
                                             message='Preparing data:', 
                                             detail='Creating zip archive with our source data rasters...', 
-                                            value=0.5)
+                                            value=0.5)  
                                           })
-                                          
-  })
-
-
-
-
+})
+  
