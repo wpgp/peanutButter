@@ -2,7 +2,7 @@
 title: The peanutButter::jelly web application for rapid-response gridded population estimates
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{The peanutButter::jelly application for rapid-response gridded population estimates using the peanut butter method}
+  %\VignetteIndexEntry{The peanutButter application for rapid-response gridded population estimates using the peanut butter method}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -14,7 +14,7 @@ University of Southampton
 
 ## Overview
 
-The *peanutButter::jelly* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
+The *peanutButter* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 

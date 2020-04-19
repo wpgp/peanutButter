@@ -89,7 +89,7 @@ tags$style(HTML(".navbar-nav {float:none !important;}
                 .navbar-nav > li:nth-child(3){float:right}")),
 
 navbarPage(
-  title='peanutButter::jelly (beta)',              
+  title='peanutButter (beta)',              
   inverse=F,
   
   # tab: simulator
