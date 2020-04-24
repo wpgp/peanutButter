@@ -10,6 +10,24 @@ function(input, output, session){
     # country info
     rv$country_info <- country_info[input$data_select,]
     
+    rv$path_buildings <- paste0(rv$country_info$country, '_buildings_v1_0_count.tif')
+    rv$path_urban <- paste0(rv$country_info$country, '_buildings_v1_0_urban.tif')
+    
+    if(file.exists(file.path(srcdir,rv$path_buildings))){
+      rv$path_buildings <- file.path(srcdir,rv$path_buildings)
+    } else if(file.exists(file.path(srcdir,rv$country_info$country,'buildings','v1.0',rv$path_buildings))){
+      rv$path_builings <- file.path(srcdir,rv$country_info$country,'buildings','v1.0',rv$path_buildings)
+    } else {
+      warning(paste('Source file not in source directory:',rv$path_buildings))
+    }
+    if(file.exists(file.path(srcdir,rv$path_urban))){
+      rv$path_urban <- file.path(srcdir,rv$path_urban)
+    } else if(file.exists(file.path(srcdir,rv$country_info$country,'buildings','v1.0',rv$path_urban))){
+      rv$path_urban <- file.path(srcdir,rv$country_info$country,'buildings','v1.0',rv$path_urban)
+    } else {
+      warning(paste('Source file not in source directory:',rv$path_urban))
+    }
+    
     # slider values
     updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
     updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
@@ -105,8 +123,8 @@ function(input, output, session){
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
                                             withProgress({
-                                              raster::writeRaster(x = popRaster(buildings_path = file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
-                                                                                urban_path = file.path(srcdir,paste0(input$data_select,'_urban.tif')),
+                                              raster::writeRaster(x = popRaster(buildings_path = rv$path_buildings,
+                                                                                urban_path = rv$path_urban,
                                                                                 people_urb = input$people_urb,
                                                                                 units_urb = input$units_urb,
                                                                                 residential_urb = input$residential_urb,
@@ -126,8 +144,8 @@ function(input, output, session){
                                           content = function(file) {
                                             withProgress({
                                               zip::zipr(zipfile = file,
-                                                        files = c(file.path(srcdir,paste0(input$data_select,'_buildings.tif')),
-                                                                  file.path(srcdir,paste0(input$data_select,'_urban.tif')))
+                                                        files = c(rv$path_buildings,
+                                                                  rv$path_urban)
                                               )
                                             }, 
                                             message='Preparing data:', 

@@ -18,8 +18,8 @@ country_list <- sort(unique(c(country_list,peanutButter:::country_info$country))
 
 # check files exist
 for(country in country_list){
-  count.exists <- file.exists(file.path(srcdir,paste0(country,'_buildings.tif')))
-  type.exists <- file.exists(file.path(srcdir,paste0(country,'_urban.tif')))
+  count.exists <- paste0(country,'_buildings.tif') %in% files
+  type.exists <- paste0(country,'_urban.tif') %in% files
   
   # drop country if missing files
   if(!count.exists | !type.exists){

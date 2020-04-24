@@ -90,6 +90,8 @@ tags$style(HTML(".navbar-nav {float:none !important;}
 
 navbarPage(
   title='peanutButter (beta)',              
+  footer=tags$footer(HTML(paste0('<a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter v',packageVersion('peanutButter'),'</a>')),
+                     align = 'right'),
   inverse=F,
   
   # tab: simulator
