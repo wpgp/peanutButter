@@ -1,18 +1,18 @@
 shinyServer(
 function(input, output, session){
-  
+
   # reactive values
   rv <- reactiveValues()
 
   # load data
   observeEvent(input$data_select, {
-    
+
     # country info
     rv$country_info <- country_info[input$data_select,]
-    
+
     rv$path_buildings <- paste0(rv$country_info$country, '_buildings_v1_0_count.tif')
     rv$path_urban <- paste0(rv$country_info$country, '_buildings_v1_0_urban.tif')
-    
+
     if(file.exists(file.path(srcdir,rv$path_buildings))){
       rv$path_buildings <- file.path(srcdir,rv$path_buildings)
     } else if(file.exists(file.path(srcdir,rv$country_info$country,'buildings','v1.0',rv$path_buildings))){
@@ -27,7 +27,7 @@ function(input, output, session){
     } else {
       warning(paste('Source file not in source directory:',rv$path_urban))
     }
-    
+
     # slider values
     updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
     updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
@@ -35,7 +35,7 @@ function(input, output, session){
     updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
     updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
     updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
-    
+
     # popup message
     rv$popup_message <- c()
     if(rv$country_info$wopr & rv$country_info$woprVision){
@@ -43,38 +43,38 @@ function(input, output, session){
     } else if(rv$country_info$wopr) {
       rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',input$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
     }
-    
+
     if(rv$country_info$partial_footprints){
       rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',input$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
     }
-    
+
     if(!is.null(rv$popup_message[1])){
-      showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')), 
+      showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')),
                             title='Friendly Message:',
                             footer=tagList(modalButton('Okay, thanks.'))
       ))
     }
   })
-  
+
   # population total
   observe({
     rv$pop_urb <- rv$country_info$urb_count*input$residential_urb*input$units_urb*input$people_urb
     rv$pop_rur <- rv$country_info$rur_count*input$residential_rur*input$units_rur*input$people_rur
-    
+
     rv$pop_total <- rv$pop_urb + rv$pop_rur
-    
-    rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','), 
-                                             prettyNum(round(rv$pop_urb), big.mark=','), 
-                                             prettyNum(round(rv$pop_rur), big.mark=','), 
-                                             prettyNum(round(rv$country_info$urb_count), big.mark=','), 
+
+    rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
+                                             prettyNum(round(rv$pop_urb), big.mark=','),
+                                             prettyNum(round(rv$pop_rur), big.mark=','),
+                                             prettyNum(round(rv$country_info$urb_count), big.mark=','),
                                              prettyNum(round(rv$country_info$rur_count), big.mark=','),
-                                             prettyNum(round(input$people_urb,1), big.mark=','), 
-                                             prettyNum(round(input$units_urb,1), big.mark=','), 
+                                             prettyNum(round(input$people_urb,1), big.mark=','),
+                                             prettyNum(round(input$units_urb,1), big.mark=','),
                                              paste0(round(input$residential_urb*100),'%'),
-                                             prettyNum(round(input$people_rur,1), big.mark=','), 
-                                             prettyNum(round(input$units_rur,1), big.mark=','), 
+                                             prettyNum(round(input$people_rur,1), big.mark=','),
+                                             prettyNum(round(input$units_rur,1), big.mark=','),
                                              paste0(round(input$residential_rur*100),'%')
-                                             ), 
+                                             ),
                                            ncol=1),
                            row.names=c('Population Total',
                                        'Population Urban',
@@ -89,7 +89,7 @@ function(input, output, session){
                                        'Rural: Proportion residential buildings'
                                        ))
     })
-  
+
   # results table
   output$table_results <- renderTable(data.frame(rv$table[c('Population Total',
                                                             'Population Urban',
@@ -99,26 +99,26 @@ function(input, output, session){
                                                                                               'Population Urban',
                                                                                               'Population Rural',
                                                                                               'Buildings Urban',
-                                                                                              'Buildings Rural')), 
+                                                                                              'Buildings Rural')),
                                       digits = 0,
                                       striped = T,
                                       colnames = F,
                                       rownames = T,
                                       width = 405,
                                       format.args = list(big.mark=",", decimal.mark="."))
-  
+
   # download settings button
   output$table_button <- downloadHandler(filename = function() paste0(input$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
                                          content = function(file) {
                                            withProgress({
-                                             write.csv(rv$table, file, row.names=T) 
-                                           }, 
-                                           message='Preparing data:', 
-                                           detail='Creating .csv spreadsheet with your settings...', 
+                                             write.csv(rv$table, file, row.names=T)
+                                           },
+                                           message='Preparing data:',
+                                           detail='Creating .csv spreadsheet with your settings...',
                                            value=1)
                                            })
-  
-  
+
+
   # download raster button
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
@@ -133,25 +133,26 @@ function(input, output, session){
                                                                                 residential_rur = input$residential_rur
                                                 ),
                                               filename = file)
-                                            }, 
-                                            message='Preparing data:', 
-                                            detail='Creating .tif raster with your gridded population estimates...', 
+                                            },
+                                            message='Preparing data:',
+                                            detail='Creating .tif raster with your gridded population estimates...',
                                             value=1)
                                           })
-  
+
   # download source button
-  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'), 
+  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
                                           content = function(file) {
                                             withProgress({
                                               zip::zipr(zipfile = file,
                                                         files = c(rv$path_buildings,
-                                                                  rv$path_urban)
+                                                                  rv$path_urban,
+                                                                  path_readme)
                                               )
-                                            }, 
-                                            message='Preparing data:', 
-                                            detail='Creating .zip archive with our source data rasters...', 
-                                            value=1)  
+                                            },
+                                            message='Preparing data:',
+                                            detail='Creating .zip archive with our source data rasters...',
+                                            value=1)
                                           })
-  
+
 })
-  
+

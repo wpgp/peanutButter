@@ -1,6 +1,14 @@
 # source directory
 srcdir <- .GlobalEnv$srcdir
 
+# data readme
+lf <- list.files(srcdir)
+if(any(grepl('README', lf))){
+  path_readme <- file.path(srcdir, lf[grepl('README', lf)][1])
+} else {
+  path_readme <- NULL
+}
+
 # country info
 country_info <- peanutButter:::country_info
 

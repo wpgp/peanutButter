@@ -24,4 +24,5 @@ install.packages(getwd(), repo=NULL, type='source')
 library(peanutButter)
 
 # run app
-peanutButter::jelly(srcdir = '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter')
+srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
+peanutButter::jelly(srcdir)
