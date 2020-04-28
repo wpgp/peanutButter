@@ -3,7 +3,7 @@
 WorldPop Research Group  
 University of Southampton
 
-11 April 2020
+28 April 2020
 
 ## Introduction
 
@@ -46,17 +46,20 @@ peanutButter::jelly()
 ```
 
 ## Contributing
-The _peanutButter_ R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny web server. 
+The _peanutButter_ R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny web server. Professor Andy Tatem provides oversight of the WorldPop Research Group.
 
-#### Citations
+**Suggested citation:**
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>
+
+## License
+GNU General Public License v3.0 (GNU GPLv3)  
+
+## References
 
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
 
-WorldPop, Ecopia.AI., and Maxar Technologies. 2020. Gridded maps of building patterns throughout sub-Saharan Africa.
+WorldPop, Ecopia.AI., and Maxar Technologies. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton. doi:10.5258/SOTON/WP00666 
 
-## License
-
-#### <a href='COPYING' target='_blank'>GNU General Public License v3.0 (GNU GPLv3)]</a>  
   
   
   

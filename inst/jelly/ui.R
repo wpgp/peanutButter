@@ -2,7 +2,7 @@
 inputs <- 
 column(
   width=3,
-  style=paste0('height: calc(98vh - 75px); padding:30px; overflow-y:scroll; border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
+  style=paste0('height: calc(98vh - 80px); padding:30px; overflow-y:scroll; border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
   shinyjs::useShinyjs(),
   
   fluidRow(
@@ -106,7 +106,7 @@ navbarPage(
       # results panel (center)
       column(
         width = 9,
-        style='height: calc(98vh - 75px)',
+        style='height: calc(98vh - 80px)',
         # h4('Instructions'),
         div(style='width:500px',
           HTML('Move the sliders (on the left) to update the population estimates (below) until you are satisfied that the settings and the results are reasonable.<br><br>
@@ -126,7 +126,7 @@ navbarPage(
   # tab: About
   tabPanel(
     title = 'About',
-    tags$iframe(style='overflow-y:scroll; width:100%; height: calc(98vh - 75px)',
+    tags$iframe(style='overflow-y:scroll; width:100%; height: calc(98vh - 80px)',
                 frameBorder='0',
                 src='about.html')
     ),
