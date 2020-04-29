@@ -123,7 +123,7 @@ function(input, output, session){
   output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                           content = function(file) {
                                             withProgress({
-                                              raster::writeRaster(x = popRaster(buildings_path = rv$path_buildings,
+                                              raster::writeRaster(x = aggregate(buildings_path = rv$path_buildings,
                                                                                 urban_path = rv$path_urban,
                                                                                 people_urb = input$people_urb,
                                                                                 units_urb = input$units_urb,

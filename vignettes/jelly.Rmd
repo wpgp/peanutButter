@@ -2,7 +2,7 @@
 title: peanutButter - A web application to produce rapid-response gridded population estimates
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{peanutButter::jelly - A web application to produce rapid-response gridded population estimates}
+  %\VignetteIndexEntry{peanutButter - A web application to produce rapid-response gridded population estimates}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

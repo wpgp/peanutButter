@@ -1,4 +1,4 @@
-#' Gridded population estimates from building footprints
+#' Aggregate population estimates from buildings
 #' @description Create population raster using the peanut butter method with building footprints.
 #' @param buildings_path Path to a raster (.tif) with building counts per pixel
 #' @param urban_path Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1) 
@@ -10,7 +10,7 @@
 #' @param residential_rur Probability of residential building in rural areas
 #' @export
 
-popRaster <- function(buildings_path, urban_path, 
+aggregate <- function(buildings_path, urban_path, 
                       people_urb=5, units_urb=1, residential_urb=0.5, 
                       people_rur=5, residential_rur=0.5, units_rur=1){
   

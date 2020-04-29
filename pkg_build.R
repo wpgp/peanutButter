@@ -1,5 +1,6 @@
 # cleanup
-rm(list=ls()); gc(); cat("\014"); try(dev.off(), silent=T);.libPaths('c:/research/r/library')
+rm(list=ls()); gc(); cat("\014"); try(dev.off(), silent=T);
+if(Sys.info()['user']%in%c('drl1u18')).libPaths('c:/research/r/library')
 
 # working directory
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
