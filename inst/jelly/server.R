@@ -1,17 +1,36 @@
 shinyServer(
 function(input, output, session){
 
+  options(shiny.maxRequestSize=30*1024^2)
+  
   # reactive values
   rv <- reactiveValues()
 
-  # load data
-  observeEvent(input$data_select, {
+  observeEvent(input$data_selectBU, {
+    rv$data_select <- input$data_selectBU
+    updateSelectInput(session, 'data_selectTD', selected=input$data_selectBU)
+  })
+  observeEvent(input$data_selectTD, {
+    rv$data_select <- input$data_selectTD
+    updateSelectInput(session, 'data_selectBU', selected=input$data_selectTD)
+  })
+  
+  ##---- load data ----##
+  observeEvent(rv$data_select, {
 
     # country info
-    rv$country_info <- country_info[input$data_select,]
+    rv$country_info <- country_info[rv$data_select,]
 
     rv$path_buildings <- paste0(rv$country_info$country, '_buildings_v1_0_count.tif')
     rv$path_urban <- paste0(rv$country_info$country, '_buildings_v1_0_urban.tif')
+    
+    if(file.exists(file.path(srcdir,rv$country_info$country,'buildings',data_version,paste0(rv$country_info$country, '_buildings_v1_0_README.tif')))){
+      rv$path_readme <- file.exists(file.path(srcdir,rv$country_info$country,'buildings',data_version,paste0(rv$country_info$country, '_buildings_v1_0_README.tif')))
+    } else if(file.exists(file.path(srcdir,paste0(rv$country_info$country, '_buildings_v1_0_README.tif')))){
+      rv$path_readme <- file.path(srcdir,paste0(rv$country_info$country, '_buildings_v1_0_README.tif'))
+    } else {
+      rv$path_readme <- NULL
+    }
 
     if(file.exists(file.path(srcdir,rv$path_buildings))){
       rv$path_buildings <- file.path(srcdir,rv$path_buildings)
@@ -39,13 +58,13 @@ function(input, output, session){
     # popup message
     rv$popup_message <- c()
     if(rv$country_info$wopr & rv$country_info$woprVision){
-      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',input$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
+      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
     } else if(rv$country_info$wopr) {
-      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',input$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',input$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
+      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
     }
 
     if(rv$country_info$partial_footprints){
-      rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',input$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
+      rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',rv$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
     }
 
     if(!is.null(rv$popup_message[1])){
@@ -56,6 +75,8 @@ function(input, output, session){
     }
   })
 
+  ##---- bottom-up ----##
+  
   # population total
   observe({
     rv$pop_urb <- rv$country_info$urb_count*input$residential_urb*input$units_urb*input$people_urb
@@ -107,52 +128,126 @@ function(input, output, session){
                                       width = 405,
                                       format.args = list(big.mark=",", decimal.mark="."))
 
+  ## buttons ##
+  
   # download settings button
-  output$table_button <- downloadHandler(filename = function() paste0(input$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
-                                         content = function(file) {
-                                           withProgress({
-                                             write.csv(rv$table, file, row.names=T)
-                                           },
-                                           message='Preparing data:',
-                                           detail='Creating .csv spreadsheet with your settings...',
-                                           value=1)
+  output$table_buttonBU <- downloadHandler(filename = function() paste0(rv$data_select,'_settings_',format(Sys.time(), "%Y%m%d%H%M"),'.csv'),
+                                           content = function(file) {
+                                             withProgress({
+                                               write.csv(rv$table, file, row.names=T)
+                                             },
+                                             message='Preparing data:',
+                                             detail='Creating .csv spreadsheet with your settings...',
+                                             value=1)
                                            })
-
+  
+  
+  # download raster button
+  output$raster_buttonBU <- downloadHandler(filename = function() paste0(rv$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
+                                            content = function(file) {
+                                              withProgress({
+                                                raster::writeRaster(x = aggregate(buildings_path = raster::raster(rv$path_buildings),
+                                                                                  urban_path = raster::raster(rv$path_urban),
+                                                                                  people_urb = input$people_urb,
+                                                                                  units_urb = input$units_urb,
+                                                                                  residential_urb = input$residential_urb,
+                                                                                  people_rur = input$people_rur,
+                                                                                  units_rur = input$units_rur,
+                                                                                  residential_rur = input$residential_rur
+                                                ),
+                                                filename = file)
+                                              },
+                                              message='Preparing data:',
+                                              detail='Creating .tif raster with your gridded population estimates...',
+                                              value=1)
+                                            })
+  
+  # download source button
+  output$source_buttonBU <- downloadHandler(filename = function() paste0(rv$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
+                                            content = function(file) {
+                                              withProgress({
+                                                zip::zipr(zipfile = file,
+                                                          files = c(rv$path_buildings,
+                                                                    rv$path_urban,
+                                                                    rv$path_readme)
+                                                )
+                                              },
+                                              message='Preparing data:',
+                                              detail='Creating .zip archive with our source data rasters...',
+                                              value=1)
+                                            })
+  
+  ##---- top-down ----##
+  
+  ## file upload
+  observeEvent(input$user_json, {
+    if(is.null(input$user_json)){
+      
+      rv$feature <- NULL
+      
+    } else {
+      
+      tryCatch({
+        rv$feature <- sf::st_read(input$user_json[,'datapath'], quiet=T)
+        rv$feature <- sf::st_transform(rv$feature, crs=4326)
+      }, warning=function(w){
+        shinyjs::reset('user_json')
+        showNotification(as.character(w), type='warning', duration=20)
+      }, error=function(e){
+        shinyjs::reset('user_json')
+        showNotification(as.character(e), type='error', duration=20)
+      })
+    }
+  })
+  
+  observeEvent(input$user_json, {
+    if(is.null(input$user_json[,'datapath'])){
+      shinyjs::disable('raster_buttonTD')
+    } else {
+      shinyjs::enable('raster_buttonTD')
+    }
+  })  
+  
+  ## buttons ##
 
   # download raster button
-  output$raster_button <- downloadHandler(filename = function() paste0(input$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
-                                          content = function(file) {
-                                            withProgress({
-                                              raster::writeRaster(x = aggregate(buildings_path = rv$path_buildings,
-                                                                                urban_path = rv$path_urban,
-                                                                                people_urb = input$people_urb,
-                                                                                units_urb = input$units_urb,
-                                                                                residential_urb = input$residential_urb,
-                                                                                people_rur = input$people_rur,
-                                                                                units_rur = input$units_rur,
-                                                                                residential_rur = input$residential_rur
-                                                ),
-                                              filename = file)
-                                            },
-                                            message='Preparing data:',
-                                            detail='Creating .tif raster with your gridded population estimates...',
-                                            value=1)
-                                          })
-
+  output$raster_buttonTD <- downloadHandler(filename = function() paste0(rv$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
+                                            content = function(file) {
+                                              withProgress({
+                                                tryCatch({
+                                                  raster::writeRaster(x = disaggregate(feature = sf::st_read(input$user_json[,'datapath'], 
+                                                                                                             quiet=T), 
+                                                                                       buildings = raster::raster(rv$path_buildings)),
+                                                                      filename = file)
+                                                  
+                                                }, warning=function(w){
+                                                  showNotification(as.character(w), type='warning', duration=20)
+                                                }, error=function(e){
+                                                  showNotification(as.character(e), type='error', duration=20)
+                                                }, finally={
+                                                  shinyjs::reset('user_json')
+                                                })  
+                                                
+                                                },
+                                                message='Preparing data:',
+                                                detail='Creating .tif raster with your gridded population estimates...',
+                                                value=1)  
+                                            })
+  
   # download source button
-  output$source_button <- downloadHandler(filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
-                                          content = function(file) {
-                                            withProgress({
-                                              zip::zipr(zipfile = file,
-                                                        files = c(rv$path_buildings,
-                                                                  rv$path_urban,
-                                                                  path_readme)
-                                              )
-                                            },
-                                            message='Preparing data:',
-                                            detail='Creating .zip archive with our source data rasters...',
-                                            value=1)
-                                          })
+  output$source_buttonTD <- downloadHandler(filename = function() paste0(rv$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
+                                            content = function(file) {
+                                              withProgress({
+                                                zip::zipr(zipfile = file,
+                                                          files = c(rv$path_buildings,
+                                                                    rv$path_urban,
+                                                                    rv$path_readme)
+                                                )
+                                              },
+                                              message='Preparing data:',
+                                              detail='Creating .zip archive with our source data rasters...',
+                                              value=1)
+                                            })
 
 })
 

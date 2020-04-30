@@ -2,15 +2,11 @@
 srcdir <- .GlobalEnv$srcdir
 
 # data readme
-lf <- list.files(srcdir)
-if(any(grepl('README', lf))){
-  path_readme <- file.path(srcdir, lf[grepl('README', lf)][1])
-} else {
-  path_readme <- NULL
-}
+data_version <- 'v1.0'
 
 # country info
 country_info <- peanutButter:::country_info
+initialize_country <- sample(country_info$country[!country_info$wopr & !country_info$woprVision],1)
 
 # cleanup
 lf1 <- list.files(tempdir(), recursive=T, full.names=T)

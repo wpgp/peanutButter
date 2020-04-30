@@ -5,8 +5,8 @@
 \title{Aggregate population estimates from buildings}
 \usage{
 aggregate(
-  buildings_path,
-  urban_path,
+  buildings,
+  urban,
   people_urb = 5,
   units_urb = 1,
   residential_urb = 0.5,
@@ -16,9 +16,9 @@ aggregate(
 )
 }
 \arguments{
-\item{buildings_path}{Path to a raster (.tif) with building counts per pixel}
+\item{buildings}{A "raster" object with building counts per pixel}
 
-\item{urban_path}{Path to a raster (.tif) with binary map of urban areas (i.e. 0 and 1)}
+\item{urban}{A "raster" object with binary map of urban areas (i.e. 0 and 1)}
 
 \item{people_urb}{Average number of people per housing unit in urban areas}
 

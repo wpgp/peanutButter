@@ -1,5 +1,5 @@
-# left panel: user inputs
-inputs <- 
+# left panel: user inputs for bottom-up
+inputsBU <- 
 column(
   width=3,
   style=paste0('height: calc(98vh - 80px); padding:30px; overflow-y:scroll; border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
@@ -9,10 +9,10 @@ column(
     
     # select data
     selectInput(
-      inputId = 'data_select', 
+      inputId = 'data_selectBU', 
       label = HTML('Select Country<br><small>(see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">country codes</a>)</small>'),
       choices = row.names(country_info), 
-      selected = sample(country_info$country[!country_info$wopr & !country_info$woprVision],1)),
+      selected = initialize_country),
     
     wellPanel(
       
@@ -82,11 +82,36 @@ column(
   )
 )
 
+# left panel: user inputs for bottom-up
+inputsTD <- 
+  column(
+    width=3,
+    style=paste0('height: calc(98vh - 80px); padding:30px; overflow-y:scroll; border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
+    shinyjs::useShinyjs(),
+    
+    fluidRow(
+      
+      # select data
+      selectInput(
+        inputId = 'data_selectTD', 
+        label = HTML('Select Country<br><small>(see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">country codes</a>)</small>'),
+        choices = row.names(country_info), 
+        selected = initialize_country),
+      
+      # upload geojson
+      strong('Upload Polygons (GeoJson)'),
+      
+      fileInput("user_json", NULL,
+                multiple = FALSE,
+                accept = c(".geojson",".json"),
+                buttonLabel = 'Browse')
+    )
+  )
 # main panel
 ui <- tagList(
 
 tags$style(HTML(".navbar-nav {float:none !important;}
-                .navbar-nav > li:nth-child(3){float:right}")),
+                .navbar-nav > li:nth-child(4){float:right}")),
 
 navbarPage(
   title='peanutButter (beta)',              
@@ -94,31 +119,57 @@ navbarPage(
                      align = 'right'),
   inverse=F,
   
-  # tab: simulator
+  # tab: bottom-up
   tabPanel(
-    title = 'Population Simulator',                      
+    title = 'Bottom-up',                      
     
     fluidRow(
       
       # inputs panel (left)
-      inputs,
+      inputsBU,
       
       # results panel (center)
       column(
         width = 9,
         style='height: calc(98vh - 80px)',
-        # h4('Instructions'),
+        h4('Bottom-up Population Estimates'),
         div(style='width:500px',
-          HTML('Move the sliders (on the left) to update the population estimates (below) until you are satisfied that the settings and the results are reasonable.<br><br>
-               Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster) created by applying your settings to a high resolution map of building footprints.<br><br>')
+          HTML('The bottom-up tool will apply your estimates of mean people per building evenly across individual buildings and then aggregate buildings to estimate population size for each ~100 m grid cell.<br><br>
+                Move the sliders (panel to the left) to update the population estimates (table below) until you are satisfied that the settings and the results are reasonable.<br><br>
+                Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster) created by applying your settings to a high resolution map of building footprints.<br><br>')
           ),
-        # h4('Results'),
         tableOutput('table_results'),
-        # h4('Settings'),
-        # tableOutput('table_settings'),
-        downloadButton('raster_button', 'Gridded Population Estimates', style='width:405px'),br(),br(),
-        downloadButton('table_button', 'Settings', style='width:200px'),
-        downloadButton('source_button', 'Source Files', style='width:200px')
+        downloadButton('raster_buttonBU', 'Gridded Population Estimates', style='width:405px'),br(),br(),
+        downloadButton('table_buttonBU', 'Settings', style='width:200px'),
+        downloadButton('source_buttonBU', 'Source Files', style='width:200px')
+        )
+      )
+    ),
+  
+  # tab: top-down
+  tabPanel(
+    title = 'Top-down',
+
+    fluidRow(
+
+      # inputs panel (left)
+      inputsTD,
+
+      # results panel (center)
+      column(
+        width = 9,
+        style='height: calc(98vh - 80px)',
+
+        h4('Top-down Population Estimates'),
+        div(style='width:500px',
+            HTML('The top-down tool allows you to disaggregate known population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br> 
+                 Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon in the first column.<br><br>
+                 After you upload your polygons, click the "Gridded population estimates" button and the peanutButter application will disaggregate your population totals into a 100 m grid based on building footprints.<br><br>')
+            ),
+
+        downloadButton('raster_buttonTD', 'Gridded Population Estimates', style='width:405px'),
+        downloadButton('source_buttonTD', 'Source Files', style='width:200px'),
+        br(),br()
         )
       )
     ),

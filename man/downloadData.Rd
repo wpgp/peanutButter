@@ -7,11 +7,11 @@
 downloadData(version = "v1.0", wopr_dir = "wopr", maxsize = 100)
 }
 \arguments{
+\item{version}{Version of the buildings data sets to use}
+
 \item{wopr_dir}{Directory where downloads should be saved}
 
 \item{maxsize}{Maximum file size (MB) allowed to download without notification}
-
-\item{dat}{Data sets to download provided as a data.frame with at least one row from the wOPR data catalogue (see ?getCatalogue)}
 }
 \value{
 Files are downloaded to local disk

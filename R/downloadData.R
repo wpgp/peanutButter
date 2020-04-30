@@ -1,6 +1,6 @@
 #' Download source data from WOPR
 #' @description Download peanutButter source data from the WorldPop Open Population Repository
-#' @param dat Data sets to download provided as a data.frame with at least one row from the wOPR data catalogue (see ?getCatalogue)
+#' @param version Version of the buildings data sets to use
 #' @param wopr_dir Directory where downloads should be saved
 #' @param maxsize Maximum file size (MB) allowed to download without notification
 #' @return Files are downloaded to local disk
@@ -8,11 +8,39 @@
 
 downloadData <- function(version='v1.0', wopr_dir='wopr', maxsize=100){
 
-  catalogue <- getCatalogue()
+  # get catalogue
+  response <- httr::content( httr::GET('https://wopr.worldpop.org/api/v1.0/data'), as='parsed')
+  
+  cols <- c('country','category','version', 'filetype', names(response[[1]][[1]][[1]][[1]]))
+  catalogue <- data.frame(matrix(NA, ncol=length(cols), nrow=0))
+  names(catalogue) <- cols
+  
+  for(iso in names(response)){
+    for(category in names(response[[iso]])){
+      for(version in names(response[[iso]][[category]])){
+        for(filetype in names(response[[iso]][[category]][[version]])){
+          newrow <- data.frame(matrix(NA, ncol=length(cols), nrow=1))
+          names(newrow) <- cols
+          
+          newrow[1,c('country','category','version','filetype')] <- c(iso, category, version, filetype)
+          
+          for(attribute in names(response[[iso]][[category]][[version]][[filetype]])){
+            value <- response[[iso]][[category]][[version]][[filetype]][[attribute]]
+            if(!is.null(value)){
+              newrow[1, attribute] <- value  
+            }
+          }
+          catalogue <- rbind(result, newrow)
+        }
+      }
+    }
+  }
+  
+  # subset catalogue
   dat <- subset(catalogue, country %in% peanutButter:::country_info$country &
                   category == 'buildings' &
                   version == version &
-                  type %in% c('count','urban'))
+                  filetype %in% c('count','urban'))
   
   dat$category <- tolower(dat$category)
   

@@ -4,9 +4,16 @@
 #' @param buildings A "raster" object with counts of buildings per pixel.
 #' @return Gridded population estimates as a "raster" object.
 
-disaggregate <- function(buildings, feature, popcol=NULL){
+disaggregate <- function(feature, buildings, popcol=NULL){
   
   if(is.null(popcol)) popcol <- names(feature)[1]
+
+  if(!is.numeric(sf::st_drop_geometry(feature)[,popcol])){
+    stop('Column with population data ("popcol" or column #1) must be numeric.')
+  }
+  if(length(grep('+proj=longlat +datum=WGS84', crs(feature), fixed=T)) == 0){
+    stop('Feature CRS proj4 string must include: +proj=longlat +datum=WGS84')
+  }
   
   # id
   feature$id <- 1:nrow(feature)

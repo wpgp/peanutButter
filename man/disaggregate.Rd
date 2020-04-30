@@ -4,12 +4,12 @@
 \alias{disaggregate}
 \title{Disaggregate population totals from polygons}
 \usage{
-disaggregate(buildings, feature, popcol = NULL)
+disaggregate(feature, buildings, popcol = NULL)
 }
 \arguments{
-\item{buildings}{A "raster" object with counts of buildings per pixel.}
-
 \item{feature}{An "sf" object with feature geometries (POLYGONS or MULTIPOLYGONS). The first column should contain population totals for each polygon (class "numeric").}
+
+\item{buildings}{A "raster" object with counts of buildings per pixel.}
 }
 \value{
 Gridded population estimates as a "raster" object.
