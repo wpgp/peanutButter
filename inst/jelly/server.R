@@ -214,15 +214,18 @@ function(input, output, session){
   output$raster_buttonTD <- downloadHandler(filename = function() paste0(rv$data_select,'_population_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'),
                                             content = function(file) {
                                               withProgress({
-                                                tryCatch({
-                                                  raster::writeRaster(x = disaggregate(feature = sf::st_read(input$user_json[,'datapath'], 
-                                                                                                             quiet=T), 
-                                                                                       buildings = raster::raster(rv$path_buildings)),
-                                                                      filename = file)
+                                                tryCatch(
+                                                  withCallingHandlers(
+                                                    {
+                                                      x = disaggregate(feature = sf::st_read(input$user_json[,'datapath'], 
+                                                                                         quiet=T), 
+                                                                   buildings = raster::raster(rv$path_buildings))
+                                                      raster::writeRaster(x, filename = file)
                                                   
-                                                }, warning=function(w){
-                                                  showNotification(as.character(w), type='warning', duration=20)
-                                                }, error=function(e){
+                                                    }, warning=function(w){
+                                                      showNotification(as.character(w), type='warning', duration=20)
+                                                    }
+                                                  ), error=function(e){
                                                   showNotification(as.character(e), type='error', duration=20)
                                                 }, finally={
                                                   shinyjs::reset('user_json')
