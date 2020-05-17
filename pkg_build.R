@@ -1,30 +1,27 @@
 # cleanup
 rm(list=ls()); gc(); cat("\014"); try(dev.off(), silent=T);
-if(Sys.info()['user']%in%c('drl1u18')) .libPaths('c:/research/r/library')
 
 # working directory
 setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
-## BUILD PACKAGE
-
-# package documentation
-devtools::document()
-
-# vignettes
-devtools::build_vignettes()
-
-# about tab for peanutButter::jelly
-file.copy('doc/jelly.html','inst/jelly/www/about.html', overwrite=T)
-
-## INSTALL PACKAGE
+# rebuild documentation
+if(T){
+  # package documentation
+  devtools::document()
+  
+  # vignettes
+  devtools::build_vignettes()
+  
+  # about tab for peanutButter::jelly
+  file.copy('doc/jelly.html','inst/jelly/www/about.html', overwrite=T)
+}
 
 # install from source
-install.packages(getwd(), repo=NULL, type='source')
+install.packages(getwd(), repo=NULL, type='source', lib='c:/research/r/library')
+citation('peanutButter')
 
 # load
-library(peanutButter)
-
-citation('peanutButter')
+library(peanutButter, lib='c:/research/r/library')
 
 # run app
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'

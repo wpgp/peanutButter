@@ -14,12 +14,13 @@ for(i in 1:length(files)){
   country_list[i] <- unlist(strsplit(x = files[i], 
                                      split = '_'))[1]
 }  
-country_list <- sort(unique(c(country_list,peanutButter:::country_info$country)))
+# country_list <- sort(unique(c(country_list,as.character(peanutButter:::country_info$country))))
+country_list <- sort(unique(country_list))
 
 # check files exist
 for(country in country_list){
-  count.exists <- paste0(country,'_buildings.tif') %in% files
-  type.exists <- paste0(country,'_urban.tif') %in% files
+  count.exists <- paste0(country,'_buildings_v1_0_count.tif') %in% files
+  type.exists <- paste0(country,'_buildings_v1_0_urban.tif') %in% files
   
   # drop country if missing files
   if(!count.exists | !type.exists){
@@ -31,7 +32,7 @@ for(country in country_list){
 country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
-country_info[row.names(peanutButter:::country_info),names(peanutButter:::country_info)] <- peanutButter:::country_info
+country_info[row.names(peanutButter:::country_info),names(peanutButter:::country_info)[-1]] <- peanutButter:::country_info[,-1]
 
 # calculate country info
 
@@ -41,8 +42,8 @@ for(country in country_list){
     print(country)
     
     # load rasters
-    buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings.tif')))
-    urban <- raster::raster(file.path(srcdir,paste0(country,'_urban.tif')))
+    buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings_v1_0_count.tif')))
+    urban <- raster::raster(file.path(srcdir,paste0(country,'_buildings_v1_0_urban.tif')))
     
     # building counts
     country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
@@ -67,7 +68,7 @@ for(country in country_list){
 country_info$wopr <- country_info$country %in% unique(wopr::getCatalogue()$country)
 country_info$woprVision <- country_info$country %in% unique(wopr::getCatalogue(spatial_query=T)$country)
 
-country_info$partial_footprints <- country_info$country %in% c('COD','NGA')
+country_info$partial_footprints <- country_info$country %in% c('COD')
 
 # save as internal R package file
 usethis::use_data(country_info, internal=T, overwrite=F)

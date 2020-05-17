@@ -16,8 +16,6 @@ column(
     
     wellPanel(
       
-      tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
-      
       strong('Urban Settlements'),
       
       # people per housing unit
@@ -78,7 +76,31 @@ column(
         max = 1,
         value = 0,
         step = 0.01)
-    )
+    ),
+    
+    wellPanel(
+      
+      strong('Age-sex Selection'),
+      
+      tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+      
+      splitLayout(cellWidths=c('20%','80%'),
+                  checkboxInput(inputId="female_toggleBU", label="Female", value=T),
+                  shinyWidgets::sliderTextInput(inputId="female_selectBU",
+                                                label=NULL,
+                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                selected=c('<1', '80+'),
+                                                force_edges=T,
+                                                grid=T)),
+      splitLayout(cellWidths=c('20%','80%'),
+                  checkboxInput(inputId="male_toggleBU", label="Male", value=T),
+                  shinyWidgets::sliderTextInput(inputId="male_selectBU",
+                                                label=NULL,
+                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                selected=c('<1', '80+'),
+                                                force_edges=T,
+                                                grid=T))
+      )
   )
 )
 
@@ -103,10 +125,31 @@ inputsTD <-
       
       fileInput("user_json", NULL,
                 multiple = FALSE,
-                accept = c(".geojson",".json"),
-                buttonLabel = 'Browse')
+                accept = c("application/json",".geojson",".json"),
+                buttonLabel = 'Browse'),
+      
+      # age-sex
+      strong('Age-sex Selection'),
+      
+      splitLayout(cellWidths=c('20%','80%'),
+                  checkboxInput(inputId="female_toggleTD", label="Female", value=T),
+                  shinyWidgets::sliderTextInput(inputId="female_selectTD",
+                                                label=NULL,
+                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                selected=c('<1', '80+'),
+                                                force_edges=T,
+                                                grid=T)),
+      splitLayout(cellWidths=c('20%','80%'),
+                  checkboxInput(inputId="male_toggleTD", label="Male", value=T),
+                  shinyWidgets::sliderTextInput(inputId="male_selectTD",
+                                                label=NULL,
+                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                selected=c('<1', '80+'),
+                                                force_edges=T,
+                                                grid=T))
     )
   )
+
 # main panel
 ui <- tagList(
 

@@ -10,7 +10,7 @@
 #' @param residential_rur Probability of residential building in rural areas
 #' @export
 
-aggregate <- function(buildings, urban, 
+aggregator <- function(buildings, urban, 
                       people_urb=5, units_urb=1, residential_urb=0.5, 
                       people_rur=5, residential_rur=0.5, units_rur=1){
   
