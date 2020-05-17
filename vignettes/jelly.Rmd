@@ -1,36 +1,49 @@
 ---
 title: peanutButter - A web application to produce rapid-response gridded population estimates
-output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette: toc: true
 vignette: >
   %\VignetteIndexEntry{peanutButter - A web application to produce rapid-response gridded population estimates}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-28 April 2020
+
+17 May 2020
 
 ## Overview
 
-The *peanutButter* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
+The *peanutButter* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method of spreading people evenly across buildings based on a set of simple parameters. The *peanutButter* application utilizes high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
+
+The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user.
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
-## Quick Start
+## Quick Start: Bottom-up
 1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole. 
 
 2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
 
 3. (optional) Use the "Settings" and/or "Source Files" button(s) to save the input data.
 
-## Advantages  
+## Quick Start: Top-down
+1. Upload a GeoJson file containing polygons and their associated population totals, by clicking on the "Browse" button and selecting your GeoJson file. Ensure that you have the correct country selected.
+
+2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by disaggregating a polygon's population total evenly across the buildings inside the polygon.
+
+3. (optional) Use the "Source Files" button to save the input data.
+
+
+## Bottom-up
+
+### Advantages  
 - This method is quick and easy to implement in situations where suitable population estimates are not currently available.  
 - High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.
 
-## Disadvantages
+### Disadvantages
 - This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
 - There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
 
-## Method
+### Method
 
 The peanutButter method requires you to provide estimates of three population characteristics for both urban and rural settlement types using expert opinion:  
 
@@ -46,7 +59,7 @@ The population is estimated using the following formula:
 
 `Pop_Rural = Buildings_Rural x PropResidential_Rural x UnitsPerBuilding_Rural x PeoplePerUnit_Rural`
 
-## Population parameters
+### Population parameters
 
 **Mean people per housing unit**  
 This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:  
@@ -64,7 +77,7 @@ This parameter defines the average number of housing units per residential build
 **Proportion residential buildings**  
 This parameter defines what proportion of the building footprints (Dooley and Tatem 2020) represent residential buildings. Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represents more than one building.
 
-## Default Values
+### Default Values
 
 We provide moderately informative default values for population parameters, but we strongly urge users to modify the defaults based on a thorough investigation of available data sources. Our process for selecting default values was:  
 
@@ -73,6 +86,14 @@ We provide moderately informative default values for population parameters, but 
 2. Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.  
 
 3. Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
+
+## Top-down
+
+### Advantages
+
+### Disadvantages
+
+### Method
 
 ## Source Data
 

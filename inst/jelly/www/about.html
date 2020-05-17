@@ -214,39 +214,53 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h1 class="title toc-ignore">peanutButter - A web application to produce rapid-response gridded population estimates</h1>
 
 
+<div id="TOC">
+true
+</div>
 
-<p>28 April 2020</p>
+<p>17 May 2020</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>The <em>peanutButter</em> web application allows you to produce gridded population estimates from building footprints using the “peanut butter” method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.</p>
+<p>The <em>peanutButter</em> web application allows you to produce gridded population estimates from building footprints using the “peanut butter” method of spreading people evenly across buildings based on a set of simple parameters. The <em>peanutButter</em> application utilizes high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.</p>
+<p>The “peanut butter” approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user.</p>
 <p>Code for the <em>peanutButter</em> R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.</p>
 </div>
-<div id="quick-start" class="section level2">
-<h2>Quick Start</h2>
+<div id="quick-start-bottom-up" class="section level2">
+<h2>Quick Start: Bottom-up</h2>
 <ol style="list-style-type: decimal">
 <li><p>Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole.</p></li>
 <li><p>Use the “Gridded Population Estimates” button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.</p></li>
 <li><p>(optional) Use the “Settings” and/or “Source Files” button(s) to save the input data.</p></li>
 </ol>
 </div>
-<div id="advantages" class="section level2">
-<h2>Advantages</h2>
+<div id="quick-start-top-down" class="section level2">
+<h2>Quick Start: Top-down</h2>
+<ol style="list-style-type: decimal">
+<li><p>Upload a GeoJson file containing polygons and their associated population totals, by clicking on the “Browse” button and selecting your GeoJson file. Ensure that you have the correct country selected.</p></li>
+<li><p>Use the “Gridded Population Estimates” button to generate a gridded population map (a geotiff raster) that is produced by disaggregating a polygon’s population total evenly across the buildings inside the polygon.</p></li>
+<li><p>(optional) Use the “Source Files” button to save the input data.</p></li>
+</ol>
+</div>
+<div id="bottom-up" class="section level2">
+<h2>Bottom-up</h2>
+<div id="advantages" class="section level3">
+<h3>Advantages</h3>
 <ul>
 <li>This method is quick and easy to implement in situations where suitable population estimates are not currently available.<br />
 </li>
 <li>High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.</li>
 </ul>
 </div>
-<div id="disadvantages" class="section level2">
-<h2>Disadvantages</h2>
+<div id="disadvantages" class="section level3">
+<h3>Disadvantages</h3>
 <ul>
 <li>This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.<br />
 </li>
 <li>There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.</li>
 </ul>
 </div>
-<div id="method" class="section level2">
-<h2>Method</h2>
+<div id="method" class="section level3">
+<h3>Method</h3>
 <p>The peanutButter method requires you to provide estimates of three population characteristics for both urban and rural settlement types using expert opinion:</p>
 <ol style="list-style-type: decimal">
 <li>Mean number of people per housing unit<br />
@@ -260,8 +274,8 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><code>Pop_Urban = Buildings_Urban x PropResidential_Urban x UnitsPerBuilding_Urban x PeoplePerUnit_Urban</code></p>
 <p><code>Pop_Rural = Buildings_Rural x PropResidential_Rural x UnitsPerBuilding_Rural x PeoplePerUnit_Rural</code></p>
 </div>
-<div id="population-parameters" class="section level2">
-<h2>Population parameters</h2>
+<div id="population-parameters" class="section level3">
+<h3>Population parameters</h3>
 <p><strong>Mean people per housing unit</strong><br />
 This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:</p>
 <ul>
@@ -282,14 +296,27 @@ This parameter defines the average number of housing units per residential build
 <p><strong>Proportion residential buildings</strong><br />
 This parameter defines what proportion of the building footprints (Dooley and Tatem 2020) represent residential buildings. Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represents more than one building.</p>
 </div>
-<div id="default-values" class="section level2">
-<h2>Default Values</h2>
+<div id="default-values" class="section level3">
+<h3>Default Values</h3>
 <p>We provide moderately informative default values for population parameters, but we strongly urge users to modify the defaults based on a thorough investigation of available data sources. Our process for selecting default values was:</p>
 <ol style="list-style-type: decimal">
 <li><p>Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit.</p></li>
 <li><p>Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.</p></li>
 <li><p>Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.</p></li>
 </ol>
+</div>
+</div>
+<div id="top-down" class="section level2">
+<h2>Top-down</h2>
+<div id="advantages-1" class="section level3">
+<h3>Advantages</h3>
+</div>
+<div id="disadvantages-1" class="section level3">
+<h3>Disadvantages</h3>
+</div>
+<div id="method-1" class="section level3">
+<h3>Method</h3>
+</div>
 </div>
 <div id="source-data" class="section level2">
 <h2>Source Data</h2>
