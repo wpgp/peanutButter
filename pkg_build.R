@@ -18,10 +18,11 @@ if(T){
 
 # install from source
 install.packages(getwd(), repo=NULL, type='source', lib='c:/research/r/library')
-citation('peanutButter')
 
 # load
 library(peanutButter, lib='c:/research/r/library')
+
+citation('peanutButter')
 
 # run app
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'

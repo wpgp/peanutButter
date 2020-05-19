@@ -15,34 +15,38 @@ vignette: >
 
 The *peanutButter* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method of spreading people evenly across buildings based on a set of simple parameters. The *peanutButter* application utilizes high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
 
-The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user.
+The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user. The preffered approach will depend on what information you have available: estimates of people per building (bottom-up) or estimates of people per administrative unit (top-down).
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
-## Quick Start: Bottom-up
-1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates of total population, urban population, and rural population for the country as a whole. 
-
-2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
-
-3. (optional) Use the "Settings" and/or "Source Files" button(s) to save the input data.
-
-## Quick Start: Top-down
-1. Upload a GeoJson file containing polygons and their associated population totals, by clicking on the "Browse" button and selecting your GeoJson file. Ensure that you have the correct country selected.
-
-2. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by disaggregating a polygon's population total evenly across the buildings inside the polygon.
-
-3. (optional) Use the "Source Files" button to save the input data.
-
-
-## Bottom-up
-
 ### Advantages  
-- This method is quick and easy to implement in situations where suitable population estimates are not currently available.  
+- The peanut butter method is quick and easy to implement in situations where detailed population estimates are not currently available.  
 - High resolution building footprints provide a valuable source of information about where populations are located and their relative densities.
 
 ### Disadvantages
 - This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
 - There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
+
+## Quick Start: Bottom-up
+1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates (shown in the spreadsheet) of total population, urban population, and rural population for the country as a whole. 
+
+2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. Note: this will not change the population totals shown in the spreadsheet.
+
+3. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
+
+4. (optional) Use the "Settings" and/or "Source Files" button(s) to save the input data.
+
+## Quick Start: Top-down
+1. Upload a GeoJson file containing polygons and their associated population totals, by clicking on the "Browse" button and selecting your GeoJson file. Ensure that you have the correct country selected.
+
+2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. 
+
+3. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by disaggregating a polygon's population total evenly across the buildings inside the polygon.
+
+4. (optional) Use the "Source Files" button to save the input data.
+
+
+## More Info: Bottom-up
 
 ### Method
 
@@ -59,6 +63,8 @@ The population is estimated using the following formula:
 `Pop_Urban = Buildings_Urban x PropResidential_Urban x UnitsPerBuilding_Urban x PeoplePerUnit_Urban`  
 
 `Pop_Rural = Buildings_Rural x PropResidential_Rural x UnitsPerBuilding_Rural x PeoplePerUnit_Rural`
+
+You can supply your own inputs (i.e. raster of building count, raster of urban/rural classification) to produce gridded population estimates using the "aggregator" function of the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
 
 ### Population parameters
 
@@ -88,24 +94,41 @@ We provide moderately informative default values for population parameters, but 
 
 3. Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
 
-## Top-down
+## More Info: Top-down
 
-### Advantages
+### Method  
 
-### Disadvantages
+The top-down peanut butter approach produces gridded population estimates by disaggregating user-provided population totals within user-provided polygon boundaries (e.g. administrative boundaries). There are three steps involved in this process:  
 
-### Method
+1.  Calculate the total number of buildings in each polygon using the source data from Dooley and Tatem (2020) that were derived from high resolution building footprints (Ecopia.Ai and Maxar 2020).
 
-## Source Data
+2. Calculate the average number of people per building by dividing the user-provided population total for each polygon by the total number of buildings in that polygon. 
 
-There are two source datasets working behind the scenes in the application that were derived from building footprints (WorldPop, Ecopia.AI, and Maxar Technologies 2020):  
+3. Produced gridded estimates by multiplying the average people per building by the total number of buildings in each ~100 m grid cell.  
+
+## More info: Age-sex  
+
+Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:  
+
+1. Sum the individual age-sex proportions for each grid cell across the age-sex groups selected using the sliders.  
+
+2. Multiply the resulting grid of proportions by the gridded estimates of total population from the bottom-up or top-down method.
+
+To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, age-sex proportions, or age-sex regions), you can use the "demographic" function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
+
+## peanutButter Source Data
+
+There are two source datasets working behind the scenes in the application (Dooley and Tatem 2020) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
 
-Use the "Source Files" button to download these rasters and their documentation. 
+There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:  
 
-Note: If you want to provide your own building counts and/or map of urban areas, you can use the <a href='https://github.com/wpgp/peanutButter' target='_blank'>*peanutButter* R package</a>.
+1. A spreadsheet with age-sex proportions for each region,  
+2. A region IDs for every 100 m grid cell.  
+
+Use the "Source Files" button to download the source files and documentation.  
 
 ## Contributing
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group. 
@@ -118,7 +141,13 @@ GNU General Public License v3.0 (GNU GPLv3)
   
 ## References  
 
+Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N, Nielsen K, Pistolesi L, Adamo S, Mills J, Nieves JJ, Chamberlain H, Bondarenko M, Lloyd C, Yetman G, Gaughan A, Stevens F, Linard C, James W, Sorichetta A, Tatem AJ. In prep. Population structure by age and sex: a multi-temporal subnational perspective.  
+
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
 
-Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"© 2020. doi:10.5258/SOTON/WP00666 
+Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666  
+
+Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 https://dx.doi.org/10.1038/sdata.2017.89  
+
+WorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by the Bill and Melinda Gates Foundation (OPP1134076). 
 

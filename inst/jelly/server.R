@@ -26,8 +26,8 @@ function(input, output, session){
     rv$path_agesex_regions <- paste0(rv$country_info$country, '_agesex_regions.tif')
     rv$path_agesex_table <- paste0(rv$country_info$country, '_agesex_table.csv')
     
-    if(file.exists(file.path(srcdir,rv$country_info$country,'buildings',data_version,paste0(rv$country_info$country, '_buildings_v1_0_README.tif')))){
-      rv$path_readme <- file.exists(file.path(srcdir,rv$country_info$country,'buildings',data_version,paste0(rv$country_info$country, '_buildings_v1_0_README.tif')))
+    if(file.exists(file.path(srcdir,'XXX_buildings_v1_0_README.pdf'))){
+      rv$path_readme <- file.path(srcdir,'XXX_buildings_v1_0_README.pdf')
     } else {
       rv$path_readme <- NULL
     }
@@ -298,7 +298,8 @@ function(input, output, session){
       withProgress({
         zip::zipr(zipfile = file,
                   files = c(rv$path_buildings,
-                            rv$path_urban,
+                            rv$path_agesex_regions,
+                            rv$path_agesex_table,
                             rv$path_readme)
         )
       },
