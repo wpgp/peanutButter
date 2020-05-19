@@ -181,6 +181,7 @@ navbarPage(
                 Move the sliders (panel to the left) to update the population estimates (table below) until you are satisfied that the settings and the results are reasonable.<br><br>
                 Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster) created by applying your settings to a high resolution map of building footprints.<br><br>')
           ),
+        strong("Results"),
         tableOutput('table_results'),
         downloadButton('raster_buttonBU', 'Gridded Population Estimates', style='width:405px'),br(),br(),
         downloadButton('table_buttonBU', 'Settings', style='width:200px'),

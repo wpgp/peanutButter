@@ -15,7 +15,7 @@ vignette: >
 
 The *peanutButter* web application allows you to produce gridded population estimates from building footprints using the "peanut butter" method of spreading people evenly across buildings based on a set of simple parameters. The *peanutButter* application utilizes high resolution maps of building footprints (Maxar Technologies, Ecopia.AI 2020) that are based on recent satellite imagery.
 
-The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user. The preffered approach will depend on what information you have available: estimates of people per building (bottom-up) or estimates of people per administrative unit (top-down).
+The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applying these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user. The prefered approach will depend on what information you have available: estimates of people per building (bottom-up) or estimates of people per administrative unit (top-down).
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
@@ -28,9 +28,9 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 - There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
 
 ## Quick Start: Bottom-up
-1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates (shown in the spreadsheet) of total population, urban population, and rural population for the country as a whole. 
+1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates (shown in the 'Results' table) of total population, urban population, and rural population for the country as a whole. 
 
-2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. Note: this will not change the population totals shown in the spreadsheet.
+2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. Note: this will not change the population totals shown in the 'Results' table.
 
 3. Use the "Gridded Population Estimates" button to generate a gridded population map (a geotiff raster) that is produced by applying your population parameters to building footprints in each approximately 100 m grid cell across the country.  
 
@@ -114,7 +114,7 @@ Gridded population estimates for specific demographic group(s) are produced the 
 
 2. Multiply the resulting grid of proportions by the gridded estimates of total population from the bottom-up or top-down method.
 
-To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, age-sex proportions, or age-sex regions), you can use the "demographic" function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
+To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, or region-specific age-sex proportions), you can use the "demographic" function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package. For an example of the age-sex information needed, please refer to the 'agesex' files downloaded when clicking on the "source files" butoon for any country.
 
 ## peanutButter Source Data
 
@@ -131,7 +131,7 @@ There are also two source datasets that provide the proportion of population in 
 Use the "Source Files" button to download the source files and documentation.  
 
 ## Contributing
-The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group. 
+The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (Dooley and Tatem. 2020). Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group. 
 
 **Recommended citation:**  
 Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. WorldPop Research Group, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>

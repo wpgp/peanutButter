@@ -201,6 +201,8 @@ function(input, output, session){
         zip::zipr(zipfile = file,
                   files = c(rv$path_buildings,
                             rv$path_urban,
+                            rv$path_agesex_regions,
+                            rv$path_agesex_table,
                             rv$path_readme)
         )
       },
