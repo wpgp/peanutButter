@@ -10,5 +10,5 @@ citEntry(entry="Book",
   publisher = "{University of Southampton}",
   doi = "10.5258/SOTON/WP00667",
   url = "https://github.com/wpgp/peanutButter",
-  textVersion = paste0('Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version ', meta$Version, '. University of Southampton. doi:10.5258/SOTON/WP00667')
+  textVersion = paste0('Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version ', meta$Version, '. WorldPop Research Group, University of Southampton. doi:10.5258/SOTON/WP00667')
 )

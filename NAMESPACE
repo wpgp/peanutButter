@@ -2,4 +2,6 @@
 
 export(agesexLookup)
 export(aggregator)
+export(demographic)
+export(disaggregator)
 export(jelly)

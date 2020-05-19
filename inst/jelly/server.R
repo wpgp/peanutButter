@@ -179,11 +179,11 @@ function(input, output, session){
         
         if(length(rv$agesex_selectBU) < 36){
           setProgress(value=1, message='Preparing data:', detail='Creating .tif raster with gridded population estimates for selected age-sex groups...')
-          x <- agesex(agesex_select = rv$agesex_selectBU,
-                      pop_raster = x,
-                      agesex_regions = raster::raster(rv$path_agesex_regions),
-                      agesex_table = read.csv(rv$path_agesex_table))
-        }
+          x <- demographic(population = x,
+                           group_select = rv$agesex_selectBU,
+                           regions = raster::raster(rv$path_agesex_regions),
+                           proportions = read.csv(rv$path_agesex_table))
+          }
         
         raster::writeRaster(x = x,
                             filename = file)
@@ -269,11 +269,11 @@ function(input, output, session){
               
               setProgress(value=1, message='Preparing data:', detail='Creating .tif raster with gridded population estimates for selected age-sex groups...')
               
-              x <- agesex(agesex_select = rv$agesex_selectTD,
-                          pop_raster = x,
-                          agesex_regions = raster::raster(rv$path_agesex_regions),
-                          agesex_table = read.csv(rv$path_agesex_table))
-            }
+              x <- demographic(population = x,
+                               group_select = rv$agesex_selectBU,
+                               regions = raster::raster(rv$path_agesex_regions),
+                               proportions = read.csv(rv$path_agesex_table))
+              }
             
             raster::writeRaster(x, filename = file)
             

@@ -1,5 +1,3 @@
-library(peanutButter)
-
 # source directory
 srcdir <- .GlobalEnv$srcdir
 

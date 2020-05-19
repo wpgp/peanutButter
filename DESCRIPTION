@@ -5,13 +5,10 @@ Date: 2020-05-17
 Author: Douglas R Leasure, Claire A Dooley, Maksym Bondarenko, Andrew J Tatem
 Maintainer: Doug Leasure <D.R.Leasure@soton.ac.uk>
 License: GNU GPLv3
-Imports: raster, shiny, shinyWidgets
+Imports: fasterize, raster, shiny, shinyWidgets, sp, zip
 Suggest: 
 Description: An R package to create gridded popuation estimates from building footprints using the peanut butter method.
 RoxygenNote: 7.1.0
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10),
-    raster,
-    sp,
-    zip
+    R (>= 2.10)
