@@ -1,7 +1,8 @@
 #' Disaggregate population totals from polygons
 #' @description Create gridded population estimates by disaggregating population totals from polygon geometries using building footprints.
-#' @param feature An "sf" object with feature geometries (POLYGONS or MULTIPOLYGONS). The first column should contain population totals for each polygon (class "numeric").
-#' @param buildings A "raster" object with counts of buildings per pixel.
+#' @param feature sf. An "sf" object with feature geometries (POLYGONS or MULTIPOLYGONS). The first column should contain population totals for each polygon (class "numeric").
+#' @param buildings raster. A "raster" object with counts of buildings per pixel.
+#' @param popcol character. The column name from "feature" that contains the population totals. If NULL, the first column will be used.
 #' @return Gridded population estimates as a "raster" object.
 #' @export
 
@@ -11,8 +12,12 @@ disaggregator <- function(feature, buildings, popcol=NULL){
   
   if(is.null(popcol)) popcol <- names(feature)[1]
 
+  if(!is.null(popcol) & !popcol %in% names(feature)){
+    stop(paste(popcol,'is not a column name in the attribute table.'), call.=F)
+  }
+  
   if(!is.numeric(sf::st_drop_geometry(feature)[,popcol])){
-    stop('Column with population data (i.e. column #1) must be numeric.',call. = FALSE)
+    stop(paste0('Column with population data (',ifelse(is.null(popcol),'column #1',popcol),') must be numeric.'),call. = FALSE)
   }
   # if(length(grep('+proj=longlat +datum=WGS84', crs(feature), fixed=T)) == 0){
   #   stop('Polygons CRS proj4 string must include: +proj=longlat +datum=WGS84',call. = FALSE)

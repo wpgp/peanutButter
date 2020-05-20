@@ -7,9 +7,11 @@
 disaggregator(feature, buildings, popcol = NULL)
 }
 \arguments{
-\item{feature}{An "sf" object with feature geometries (POLYGONS or MULTIPOLYGONS). The first column should contain population totals for each polygon (class "numeric").}
+\item{feature}{sf. An "sf" object with feature geometries (POLYGONS or MULTIPOLYGONS). The first column should contain population totals for each polygon (class "numeric").}
 
-\item{buildings}{A "raster" object with counts of buildings per pixel.}
+\item{buildings}{raster. A "raster" object with counts of buildings per pixel.}
+
+\item{popcol}{character. The column name from "feature" that contains the population totals. If NULL, the first column will be used.}
 }
 \value{
 Gridded population estimates as a "raster" object.

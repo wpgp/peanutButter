@@ -178,7 +178,7 @@ function(input, output, session){
                         residential_rur = input$residential_rur)
         
         if(length(rv$agesex_selectBU) < 36){
-          setProgress(value=1, message='Preparing data:', detail='Creating .tif raster with gridded population estimates for selected age-sex groups...')
+          setProgress(value=1, message='Preparing data:', detail='Updating your gridded population estimates to represent the selected age-sex groups...')
           x <- demographic(population = x,
                            group_select = rv$agesex_selectBU,
                            regions = raster::raster(rv$path_agesex_regions),
@@ -207,7 +207,7 @@ function(input, output, session){
         )
       },
       message='Preparing data:',
-      detail='Creating .zip archive with our source data rasters...',
+      detail='Creating .zip archive with source data...',
       value=1)
     })
   
@@ -216,8 +216,10 @@ function(input, output, session){
 
   observeEvent(input$user_json, {
     if(is.null(input$user_json[,'datapath'])){
+      updateSelectInput(session, 'popcol', choices='(no polygons uploaded)')
       shinyjs::disable('raster_buttonTD')
     } else {
+      updateSelectInput(session, 'popcol', choices=names(sf::st_read(input$user_json[,'datapath'], quiet=T)))
       shinyjs::enable('raster_buttonTD')
     }
   })  
@@ -248,11 +250,12 @@ function(input, output, session){
             if(is.null(input$user_json[,'datapath'])) stop('You must first upload a geojson that contains polygons with the total population of each polygon in first column of the attribute table.', call.=F)
             
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
-                              buildings = raster::raster(rv$path_buildings))
+                              buildings = raster::raster(rv$path_buildings),
+                              popcol = input$popcol)
             
             if(length(rv$agesex_selectBU) < 36){
               
-              setProgress(value=1, message='Preparing data:', detail='Creating .tif raster with gridded population estimates for selected age-sex groups...')
+              setProgress(value=1, message='Preparing data:', detail='Updating your gridded population estimates to represent the selected age-sex groups...')
               
               x <- demographic(population = x,
                                group_select = rv$agesex_selectBU,
@@ -289,7 +292,7 @@ function(input, output, session){
         )
       },
       message='Preparing data:',
-      detail='Creating .zip archive with our source data rasters...',
+      detail='Creating .zip archive with source data...',
       value=1)
     })
 })

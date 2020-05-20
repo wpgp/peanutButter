@@ -32,7 +32,7 @@ column(
         inputId = 'units_urb',            
         label = h5('Mean housing units per building'),
         min = 0,
-        max = 5,
+        max = 10,
         value = 0,
         step = 0.1),
       
@@ -64,7 +64,7 @@ column(
         inputId = 'units_rur',            
         label = h5('Mean housing units per building'),
         min = 0,
-        max = 5,
+        max = 10,
         value = 0,
         step = 0.1),
       
@@ -80,9 +80,13 @@ column(
     
     wellPanel(
       
+      tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+      
       strong('Age-sex Selection'),
       
-      tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+      br(),
+      'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
+      br(),br(),
       
       splitLayout(cellWidths=c('20%','80%'),
                   checkboxInput(inputId="female_toggleBU", label="Female", value=T),
@@ -99,7 +103,8 @@ column(
                                                 choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
                                                 selected=c('<1', '80+'),
                                                 force_edges=T,
-                                                grid=T))
+                                                grid=T)),
+      'Note: The on-screen results represent total populations and do not change with your age-sex selection.'
       )
   )
 )
@@ -123,13 +128,22 @@ inputsTD <-
       # upload geojson
       strong('Upload Polygons (GeoJson)'),
       
-      fileInput("user_json", NULL,
+      fileInput("user_json", 
+                NULL,
                 multiple = FALSE,
                 accept = c("application/json",".geojson",".json"),
                 buttonLabel = 'Browse'),
       
+      selectInput(inputId = 'popcol', 
+                  label = 'Column name with population totals',
+                  choices = '(no polygons uploaded)'),
+      
       # age-sex
       strong('Age-sex Selection'),
+      
+      br(),
+      'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
+      br(),br(),
       
       splitLayout(cellWidths=c('20%','80%'),
                   checkboxInput(inputId="female_toggleTD", label="Female", value=T),
