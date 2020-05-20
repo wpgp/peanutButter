@@ -213,27 +213,7 @@ function(input, output, session){
   
   ##---- top-down ----##
   
-  ## file upload
-  observeEvent(input$user_json, {
-    if(is.null(input$user_json)){
-      
-      rv$feature <- NULL
-      
-    } else {
-      
-      tryCatch({
-        rv$feature <- sf::st_read(input$user_json[,'datapath'], quiet=T)
-        rv$feature <- sf::st_transform(rv$feature, crs=4326)
-      }, warning=function(w){
-        shinyjs::reset('user_json')
-        showNotification(as.character(w), type='warning', duration=20)
-      }, error=function(e){
-        shinyjs::reset('user_json')
-        showNotification(as.character(e), type='error', duration=20)
-      })
-    }
-  })
-  
+
   observeEvent(input$user_json, {
     if(is.null(input$user_json[,'datapath'])){
       shinyjs::disable('raster_buttonTD')
@@ -264,6 +244,9 @@ function(input, output, session){
       withProgress({
         tryCatch(
           withCallingHandlers({
+            
+            if(is.null(input$user_json[,'datapath'])) stop('You must first upload a geojson that contains polygons with the total population of each polygon in first column of the attribute table.', call.=F)
+            
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
                               buildings = raster::raster(rv$path_buildings))
             
