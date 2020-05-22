@@ -108,6 +108,10 @@ The top-down peanut butter approach produces gridded population estimates by dis
 
 3. Produced gridded estimates by multiplying the average people per building by the total number of buildings in each ~100 m grid cell.  
 
+User-provided polygons will be ignored if they are too small to overlap the centroid of at least one 100-m grid cell from the building raster (see [Source Data]). If this happens, the total population of the gridded population estimates (i.e. summing all cells) will exclude the populations from these small polygons.
+
+If there are zero buildings within any user-provided polygons, then the gridded population estimates will contain NA for these grid cells.
+
 ## More Info: Age-sex  
 
 Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:  

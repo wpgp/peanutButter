@@ -12,8 +12,7 @@ initialize_country <- sample(country_info$country[!country_info$wopr & !country_
 options(shiny.maxRequestSize = 50*1024^2)
 
 # cleanup
-temp_onStart <- list.files(tempdir(), recursive=T, full.names=T)
-onStop(function(){
+onStop(function(temp_onStart=list.files(tempdir(), recursive=T, full.names=T)){
   temp_onStop <- list.files(tempdir(), recursive=T, full.names=T)
   unlink(temp_onStop[!temp_onStop %in% temp_onStart])
 })

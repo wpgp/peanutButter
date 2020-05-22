@@ -9,6 +9,7 @@ function(input, output, session){
   # cleanup temporary tifs
   observeEvent(rv$temp_tifs, {
     unlink(rv$temp_tifs)
+    unlink(file.path(tempdir(), 'raster'), recursive=T)
   })
   
   # Syncronize country selection between bottom-up and top-down tabs
@@ -215,7 +216,7 @@ function(input, output, session){
                                 filename = file)
             
             rv$temp_tifs <- list.files(tempdir(), full.names=T)[grepl('.tif',list.files(tempdir()))]
-            
+
           }, warning=function(w){
             showNotification(as.character(w), type='warning', duration=20)
           }), 
