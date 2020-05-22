@@ -9,7 +9,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-17 May 2020
+22 May 2020
 
 ## Overview
 
@@ -68,7 +68,7 @@ The population is estimated using the following formula:
 
 You can supply your own inputs (i.e. raster of building count, raster of urban/rural classification) to produce gridded population estimates using the "aggregator" function of the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
 
-### Population parameters
+### Population Parameters
 
 **Mean people per housing unit**  
 This parameter defines the average number of people in a housing unit and it can be defined for urban and rural areas separately. References for determining these values could include:  
@@ -108,7 +108,7 @@ The top-down peanut butter approach produces gridded population estimates by dis
 
 3. Produced gridded estimates by multiplying the average people per building by the total number of buildings in each ~100 m grid cell.  
 
-## More info: Age-sex  
+## More Info: Age-sex  
 
 Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:  
 
@@ -118,9 +118,11 @@ Gridded population estimates for specific demographic group(s) are produced the 
 
 To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, or region-specific age-sex proportions), you can use the "demographic" function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package. For an example of the age-sex information needed, please refer to the 'agesex' files downloaded when clicking on the "source files" butoon for any country.
 
-## peanutButter Source Data
+## Source Data
 
-There are two source datasets working behind the scenes in the application (Dooley and Tatem 2020) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
+In the peanutButter app, there are several source datasets working behind the scenes that you can download using the "Download Source" buttons.  
+
+There are two data sets describing building patterns (Dooley and Tatem 2020) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
@@ -130,7 +132,18 @@ There are also two source datasets that provide the proportion of population in 
 1. A spreadsheet with age-sex proportions for each region,  
 2. A region ID for every 100 m grid cell.  
 
-Use the "Source Files" button to download the source files and documentation.  
+## Year of Outputs  
+
+The year associated with the gridded population estimates produced by peanutButter depends on several factors. The spatial distribution of the population across the country depends on the spatial distribution of building footprints, whereas the population totals depend on the population data that you provide.
+
+**Building footprints**  
+The satellite imagery used to create the building footprints are from <a href='http://www.digitalglobe.com/products/mosaics', target='_blank'>Maxar's Vivid imagery mosaics</a>. The exact date that building footprints represent depends on the specific satellite image used in the mosaic at a given location. The average mosaic image is less than 20 months old (Ecopia.Ai & Maxar 2020). 
+
+**Population data**  
+Bottom-up: The time-point represented by the gridded population estimates are influenced by the date of your settings for people per housing unit, housing units per building, and proportion of buildings that are residential. The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
+
+Top-down: The time-point of the gridded population estimates is influenced by the date of the population totals in your uploaded geojson file.  
+
 
 ## Contributing
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   

@@ -11,7 +11,7 @@ setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
 
 # load inputs
-country <- 'SLE'
+country <- 'KEN'
 
 buildings <- raster::raster(file.path(srcdir, paste0(country,'_buildings_v1_0_count.tif')))
 urban <- raster::raster(file.path(srcdir, paste0(country,'_buildings_v1_0_urban.tif')))
@@ -20,15 +20,17 @@ proportions <- read.csv(file.path(srcdir, paste0(country,'_agesex_table.csv')))
 
 feature <- sf::st_read('c:/research/temp/SLE_harmonized_EA_totals.geojson')
   
-# population raster
+# bottom-up population raster
 population <- aggregator(buildings, urban)
 
+# top-down population raster
 population <- disaggregator(feature, buildings)
 
 # demographic function
+t1 <- Sys.time()
 group_population <- demographic(population = population,
                                 group_select = c('f0','m0'), 
                                 regions = regions,
                                 proportions = proportions)
-
+difftime(Sys.time(), t1)
 

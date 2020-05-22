@@ -16,21 +16,21 @@ aggregator(
 )
 }
 \arguments{
-\item{buildings}{A "raster" object with building counts per pixel}
+\item{buildings}{raster. A "raster" object with building counts per pixel}
 
-\item{urban}{A "raster" object with binary map of urban areas (i.e. 0 and 1)}
+\item{urban}{raster. A "raster" object with binary map of urban areas (i.e. 0 and 1)}
 
-\item{people_urb}{Average number of people per housing unit in urban areas}
+\item{people_urb}{numeric. Average number of people per housing unit in urban areas}
 
-\item{units_urb}{Average number of housing units per building in urban areas}
+\item{units_urb}{numeric. Average number of housing units per building in urban areas}
 
-\item{residential_urb}{Probability of residential building in urban areas}
+\item{residential_urb}{numeric. Probability of residential building in urban areas}
 
-\item{people_rur}{Average number of people per housing unit in rural areas}
+\item{people_rur}{numeric. Average number of people per housing unit in rural areas}
 
-\item{residential_rur}{Probability of residential building in rural areas}
+\item{residential_rur}{numeric. Probability of residential building in rural areas}
 
-\item{units_rur}{Average number of housing units per building in rural areas}
+\item{units_rur}{numeric. Average number of housing units per building in rural areas}
 }
 \description{
 Create population raster using the peanut butter method with building footprints.

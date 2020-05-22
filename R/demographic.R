@@ -23,18 +23,23 @@ demographic <- function(population, group_select, regions, proportions){
   # reduce cols
   proportions <- proportions[,c(1,ncol(proportions))]
   
-  # regions to matrix
+  # save raster coordinate system
   crs1 <- raster::crs(regions)
-  ex1 <- raster::xmin(regions); ex2 <- raster::xmax(regions); ex3 <- raster::ymin(regions); ex4 <- raster::ymax(regions)
+  ex1 <- raster::xmin(regions)
+  ex2 <- raster::xmax(regions)
+  ex3 <- raster::ymin(regions)
+  ex4 <- raster::ymax(regions)
+
+  # raster to matrix
   regions <- raster::as.matrix(regions)
-  
+
   # proportions to matrix
   group_proportion <- regions
   group_proportion[] <- NA
   for(id in proportions$id){
     group_proportion[which(regions==id)] <- proportions[as.character(id), 'prop']
   }
-  
+
   # rasterize group proportions
   group_proportion <- raster::raster(group_proportion, crs=crs1, xmn=ex1, xmx=ex2, ymn=ex3, ymx=ex4)
   

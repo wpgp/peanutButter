@@ -1,4 +1,4 @@
-# left panel: user inputs for bottom-up
+##---- bottom-up: user inputs panel ----##
 inputsBU <- 
 column(
   width=3,
@@ -109,7 +109,7 @@ column(
   )
 )
 
-# left panel: user inputs for bottom-up
+##---- top-down: user input panel ----##
 inputsTD <- 
   column(
     width=3,
@@ -169,7 +169,7 @@ inputsTD <-
     )
   )
 
-# main panel
+##---- MAIN PANEL ----##
 ui <- tagList(
 
 tags$style(HTML(".navbar-nav {float:none !important;}
@@ -181,7 +181,7 @@ navbarPage(
                      align = 'right'),
   inverse=F,
   
-  # tab: bottom-up
+  ##-- tab: bottom-up --##
   tabPanel(
     title = 'Bottom-up',                      
     
@@ -198,7 +198,7 @@ navbarPage(
         div(style='width:500px',
           HTML('The bottom-up tool will apply your estimates of mean people per building evenly across individual buildings and then aggregate buildings to estimate population size for each ~100 m grid cell.<br><br>
                 Move the sliders (panel to the left) to update the population estimates (table below) until you are satisfied that the settings and the results are reasonable.<br><br>
-                Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster) created by applying your settings to a high resolution map of building footprints.<br><br>')
+                Use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created by applying your settings to a high resolution map of building footprints.<br><br>')
           ),
         strong("Results"),
         tableOutput('table_results'),
@@ -209,7 +209,7 @@ navbarPage(
       )
     ),
   
-  # tab: top-down
+  ##-- tab: top-down --##
   tabPanel(
     title = 'Top-down',
 
@@ -237,7 +237,7 @@ navbarPage(
       )
     ),
   
-  # tab: About
+  ##---- tab: About ----##
   tabPanel(
     title = 'About',
     tags$iframe(style='overflow-y:scroll; width:100%; height: calc(98vh - 80px)',
@@ -245,7 +245,7 @@ navbarPage(
                 src='about.html')
     ),
   
-  # tab: WorldPop
+  ##---- tab: WorldPop ----##
   tabPanel(
     a(href='https://www.worldpop.org', target='_blank', 
       style='padding:0px',
