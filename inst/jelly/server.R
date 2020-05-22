@@ -6,6 +6,11 @@ function(input, output, session){
   # reactive values
   rv <- reactiveValues()
 
+  # cleanup temporary tifs
+  observeEvent(rv$temp_tifs, {
+    unlink(rv$temp_tifs)
+  })
+  
   # Syncronize country selection between bottom-up and top-down tabs
   observeEvent(input$data_selectBU, {
     rv$data_select <- input$data_selectBU
@@ -209,13 +214,16 @@ function(input, output, session){
             raster::writeRaster(x = x,
                                 filename = file)
             
+            rv$temp_tifs <- list.files(tempdir(), full.names=T)[grepl('.tif',list.files(tempdir()))]
+            
           }, warning=function(w){
             showNotification(as.character(w), type='warning', duration=20)
           }), 
           error=function(e){
             showNotification(as.character(e), type='error', duration=20)
           }, finally={
-        })
+            rm(x);gc()
+          })
       },
       message='Preparing data:',
       detail='Creating .tif raster with your gridded population estimates...',
@@ -301,6 +309,8 @@ function(input, output, session){
             # save result
             raster::writeRaster(x, filename = file)
             
+            rv$temp_tifs <- list.files(tempdir(), full.names=T)[grepl('.tif',list.files(tempdir()))]
+            
             }, warning=function(w){
               showNotification(as.character(w), type='warning', duration=20)
           }), 
@@ -308,6 +318,7 @@ function(input, output, session){
             showNotification(as.character(e), type='error', duration=20)
           }, finally={
             shinyjs::reset('user_json')
+            rm(x);gc()
           })  
         },
         message='Preparing data:',
