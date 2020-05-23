@@ -100,9 +100,9 @@ We provide moderately informative default values for population parameters, but 
 
 ### Method  
 
-The top-down peanut butter approach produces gridded population estimates by disaggregating user-provided population totals within user-provided polygon boundaries (e.g. administrative boundaries). There are three steps involved in this process:  
+The top-down approach produces gridded population estimates by disaggregating user-provided population totals within user-provided polygon boundaries (e.g. administrative boundaries). There are three steps involved in this process:  
 
-1.  Calculate the total number of buildings in each polygon using the source data from Dooley and Tatem (2020) that were derived from high resolution building footprints (Ecopia.Ai and Maxar 2020).
+1.  Calculate the total number of buildings in each polygon using the source data from Dooley and Tatem (2020) that were derived from high resolution building footprints (Ecopia.AI and Maxar 2020).
 
 2. Calculate the average number of people per building by dividing the user-provided population total for each polygon by the total number of buildings in that polygon. 
 
@@ -138,16 +138,18 @@ There are also two source datasets that provide the proportion of population in 
 
 ## Year of Outputs  
 
-The year associated with the gridded population estimates produced by peanutButter depends on several factors. The spatial distribution of the population across the country depends on the spatial distribution of building footprints, whereas the population totals depend on the population data that you provide.
+The time period associated with gridded population estimates produced by peanutButter depend on several factors. The spatial distribution of the population across the country depends on the spatial distribution of building footprints. The age-sex breakdown depends on the source demographic data. The population totals depend on the population data that you provide. 
 
 **Building footprints**  
-The satellite imagery used to create the building footprints are from <a href='http://www.digitalglobe.com/products/mosaics', target='_blank'>Maxar's Vivid imagery mosaics</a>. The exact date that building footprints represent depends on the specific satellite image used in the mosaic at a given location. The average mosaic image is less than 20 months old (Ecopia.Ai & Maxar 2020). 
+The satellite imagery used to create the building footprints are from <a href='http://www.digitalglobe.com/products/mosaics', target='_blank'>Maxar's Vivid imagery mosaics</a>. The exact date depends on the specific satellite image used in the mosaic at a given location. The average mosaic image is less than 20 months old (Ecopia.Ai & Maxar 2020). 
+
+**Demographic data**  
+The demographic data (WorldPop et al. 2018) describing age-sex proportions and their spatial distribution are based on projections that represent the year 2020, but they do not account for potential effects of population displacement and migration.
 
 **Population data**  
-Bottom-up: The time-point represented by the gridded population estimates are influenced by the date of your settings for people per housing unit, housing units per building, and proportion of buildings that are residential. The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
+Bottom-up: The time-point represented by the gridded population estimates are influenced by the date of your settings for "people per housing unit", "housing units per residential building", and "proportion of buildings that are residential". The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
 
 Top-down: The time-point of the gridded population estimates is influenced by the date of the population totals in your uploaded geojson file.  
-
 
 ## Contributing
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   

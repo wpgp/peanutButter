@@ -10,6 +10,12 @@ function(input, output, session){
   observeEvent(rv$temp_tifs, {
     unlink(rv$temp_tifs)
     unlink(file.path(tempdir(), 'raster'), recursive=T)
+    
+    shinyjs::enable('raster_buttonBU')
+    shinyjs::enable('table_buttonBU')
+    shinyjs::enable('source_buttonBU')
+    shinyjs::enable('raster_buttonTD')
+    shinyjs::enable('source_buttonTD')
   })
   
   # Syncronize country selection between bottom-up and top-down tabs
@@ -190,6 +196,12 @@ function(input, output, session){
         tryCatch(
           withCallingHandlers({
             
+            shinyjs::disable('raster_buttonBU')
+            shinyjs::disable('table_buttonBU')
+            shinyjs::disable('source_buttonBU')
+            shinyjs::disable('raster_buttonTD')
+            shinyjs::disable('source_buttonTD')
+            
             # bottom-up aggregation
             x <- aggregator(buildings = raster::raster(rv$path_buildings),
                             urban = raster::raster(rv$path_urban),
@@ -290,6 +302,12 @@ function(input, output, session){
             if(is.null(input$user_json[,'datapath'])) {
               stop('You must upload a geojson file that contains polygons with the total population of each in a column of the attribute table.', call.=F)
             }
+            
+            shinyjs::disable('raster_buttonBU')
+            shinyjs::disable('table_buttonBU')
+            shinyjs::disable('source_buttonBU')
+            shinyjs::disable('raster_buttonTD')
+            shinyjs::disable('source_buttonTD')
             
             # top-down disaggregation
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 

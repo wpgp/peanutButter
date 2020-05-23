@@ -22,7 +22,7 @@ column(
       sliderInput(
         inputId = 'people_urb',
         label = h5('Mean people per housing unit'),
-        min = 0,
+        min = 1,
         max = 10,
         value = 0,
         step = 0.1),
@@ -30,8 +30,8 @@ column(
       # housing units per building
       sliderInput(
         inputId = 'units_urb',            
-        label = h5('Mean housing units per building'),
-        min = 0,
+        label = h5('Mean housing units per residential building'),
+        min = 1,
         max = 10,
         value = 0,
         step = 0.1),
@@ -54,7 +54,7 @@ column(
       sliderInput(
         inputId = 'people_rur',
         label = h5('Mean people per housing unit'),
-        min = 0,
+        min = 1,
         max = 10,
         value = 0,
         step = 0.1),
@@ -62,8 +62,8 @@ column(
       # housing units per building
       sliderInput(
         inputId = 'units_rur',            
-        label = h5('Mean housing units per building'),
-        min = 0,
+        label = h5('Mean housing units per residential building'),
+        min = 1,
         max = 10,
         value = 0,
         step = 0.1),
@@ -88,7 +88,7 @@ column(
       'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
       br(),br(),
       
-      splitLayout(cellWidths=c('20%','80%'),
+      splitLayout(cellWidths=c('25%','75%'),
                   checkboxInput(inputId="female_toggleBU", label="Female", value=T),
                   shinyWidgets::sliderTextInput(inputId="female_selectBU",
                                                 label=NULL,
@@ -96,7 +96,7 @@ column(
                                                 selected=c('<1', '80+'),
                                                 force_edges=T,
                                                 grid=T)),
-      splitLayout(cellWidths=c('20%','80%'),
+      splitLayout(cellWidths=c('25%','75%'),
                   checkboxInput(inputId="male_toggleBU", label="Male", value=T),
                   shinyWidgets::sliderTextInput(inputId="male_selectBU",
                                                 label=NULL,
@@ -145,7 +145,7 @@ inputsTD <-
       'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
       br(),br(),
       
-      splitLayout(cellWidths=c('20%','80%'),
+      splitLayout(cellWidths=c('25%','75%'),
                   
                   checkboxInput(inputId="female_toggleTD", label="Female", value=T),
                   
@@ -156,7 +156,7 @@ inputsTD <-
                                                 force_edges=T,
                                                 grid=T)),
       
-      splitLayout(cellWidths=c('20%','80%'),
+      splitLayout(cellWidths=c('25%','75%'),
                   
                   checkboxInput(inputId="male_toggleTD", label="Male", value=T),
                   

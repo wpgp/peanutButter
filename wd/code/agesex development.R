@@ -11,7 +11,7 @@ setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
 
 # load inputs
-country <- 'KEN'
+country <- 'SSD'
 
 buildings <- raster::raster(file.path(srcdir, paste0(country,'_buildings_v1_0_count.tif')))
 urban <- raster::raster(file.path(srcdir, paste0(country,'_buildings_v1_0_urban.tif')))
