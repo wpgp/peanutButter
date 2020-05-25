@@ -36,13 +36,20 @@ function(input, output, session){
     rv$country_info <- country_info[rv$data_select,]
 
     # paths to source files
-    rv$path_readme <- 'XXX_buildings_v1_0_README.pdf'
-    if(file.exists(file.path(srcdir,rv$path_readme))){
-      rv$path_readme <- file.path(srcdir,rv$path_readme)
+    rv$path_readme1 <- 'XXX_buildings_v1_0_README.pdf'
+    if(file.exists(file.path(srcdir,rv$path_readme1))){
+      rv$path_readme1 <- file.path(srcdir,rv$path_readme1)
     } else {
-      rv$path_readme <- NULL
+      rv$path_readme1 <- NULL
     }
 
+    rv$path_readme2 <- 'XXX_agesex_README.pdf'
+    if(file.exists(file.path(srcdir,rv$path_readme2))){
+      rv$path_readme2 <- file.path(srcdir,rv$path_readme2)
+    } else {
+      rv$path_readme2 <- NULL
+    }
+    
     rv$path_buildings <- paste0(rv$country_info$country, '_buildings_v1_0_count.tif')
     if(file.exists(file.path(srcdir,rv$path_buildings))){
       rv$path_buildings <- file.path(srcdir,rv$path_buildings)
@@ -253,7 +260,8 @@ function(input, output, session){
                             rv$path_urban,
                             rv$path_agesex_regions,
                             rv$path_agesex_table,
-                            rv$path_readme)
+                            rv$path_readme1,
+                            rv$path_readme2)
         )
       },
       message='Preparing data:',
@@ -356,7 +364,8 @@ function(input, output, session){
                   files = c(rv$path_buildings,
                             rv$path_agesex_regions,
                             rv$path_agesex_table,
-                            rv$path_readme)
+                            rv$path_readme1,
+                            rv$path_readme2)
         )
       },
       message='Preparing data:',
