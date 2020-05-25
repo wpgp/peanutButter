@@ -112,6 +112,8 @@ User-provided polygons will be ignored if they are too small to overlap the cent
 
 If there are zero buildings within any user-provided polygons, then the gridded population estimates will contain NA for these grid cells.
 
+Areas of your polygons that exceed the national boundaries used in the building footprints (see [Source Data]) will not contain gridded population estimates.
+
 ## More Info: Age-sex  
 
 Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:  

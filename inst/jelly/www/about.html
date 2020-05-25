@@ -164,6 +164,7 @@ This parameter defines what proportion of the building counts (Dooley and Tatem 
 </ol>
 <p>User-provided polygons will be ignored if they are too small to overlap the centroid of at least one 100-m grid cell from the building raster (see <a href="#source-data">Source Data</a>). If this happens, the total population of the gridded population estimates (i.e. summing all cells) will exclude the populations from these small polygons.</p>
 <p>If there are zero buildings within any user-provided polygons, then the gridded population estimates will contain NA for these grid cells.</p>
+<p>Areas of your polygons that exceed the national boundaries used in the building footprints (see <a href="#source-data">Source Data</a>) will not contain gridded population estimates.</p>
 </div>
 </div>
 <div id="more-info-age-sex" class="section level2">
