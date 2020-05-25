@@ -41,8 +41,36 @@ for(country in country_list){
     agesex_raster <- raster::raster(srcfile_raster)
     agesex_table <- read.csv(srcfile_table)
     
-    # check source
+    # fix bad column names
     names(agesex_table)[names(agesex_table)=="ï..id"] <- 'id'
+    
+    # add new id to agesex_table
+    agesex_table$new_id <- 1:nrow(agesex_table)
+    
+    # save raster coordinate system
+    crs1 <- raster::crs(agesex_raster)
+    ex1 <- raster::xmin(agesex_raster)
+    ex2 <- raster::xmax(agesex_raster)
+    ex3 <- raster::ymin(agesex_raster)
+    ex4 <- raster::ymax(agesex_raster)
+    
+    # raster to matrix
+    new_agesex_raster <- agesex_raster <- raster::as.matrix(agesex_raster)
+    
+    # proportions to matrix
+    for(id in agesex_table$id){
+      new_agesex_raster[which(agesex_raster==id)] <- agesex_table[agesex_table$id==id,'new_id']
+    }
+    
+    # rasterize group proportions
+    agesex_raster <- raster::raster(new_agesex_raster, crs=crs1, xmn=ex1, xmx=ex2, ymn=ex3, ymx=ex4)
+    rm(new_agesex_raster)
+    
+    # rename id columns
+    names(agesex_table)[which(names(agesex_table)=='id')] <- 'old_id'
+    names(agesex_table)[which(names(agesex_table)=='new_id')] <- 'id'
+    
+    # check source
     if(!'id' %in% names(agesex_table)){
       warning(paste0(country,': the region "id" column is missing from the table.'));next()
     }
@@ -69,6 +97,7 @@ for(country in country_list){
     if(nrow(agesex_table) < length(raster::unique(agesex_raster))){
       warning(paste0(country,': final table has fewer regions than raster'));next()
     }
+    
     if(!ncol(agesex_table)==37){
       warning(paste0(country,': final table has wrong number columns '));next()
     }
