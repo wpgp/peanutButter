@@ -33,6 +33,19 @@ You can list vignettes that are available using: `vignette(package='peanutButter
 
 See the vignette for the peanutButter::jelly shiny application using: `vignette('jelly', package='peanutButter')`
 
+### Source data
+All of the source files used by peanutButter can be downloaded country-by-country through the web application at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. 
+
+There are two data sets describing building patterns (<a href="https://dx.doi.org/10.5258/SOTON/WP00666" target="_blank">Dooley and Tatem 2020</a>) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
+
+1. The count of buildings in each ~100 m grid cell across the country,  
+2. A classification of each ~100 m grid cell as urban or rural.
+
+There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:  
+
+1. A spreadsheet with age-sex proportions for each region,  
+2. A region ID for every 100 m grid cell.  
+
 ### peanutButter web application
 
 peanutButter includes an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. The peanutButter application is available on the web at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. You can also run the application locally from your R console using:
@@ -52,12 +65,15 @@ GNU General Public License v3.0 (GNU GPLv3)
 
 ## References
 
+Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N, Nilsen K, Pistolesi L, Adamo S, Mills J, Nieves JJ, Chamberlain H, Bondarenko M, Lloyd C, Ves N, Koper P,  Yetman G, Gaughan A, Stevens F, Linard C, James W, Sorichetta A, and Tatem AJ. In prep. Population structure by age and sex: a multi-temporal subnational perspective.
+
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
 
-Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666 
+Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666  
 
+Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 https://dx.doi.org/10.1038/sdata.2017.89  
 
-
+WorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by the Bill and Melinda Gates Foundation (OPP1134076). 
   
   
   
