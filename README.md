@@ -41,17 +41,20 @@ There are two data sets describing building patterns (<a href="https://dx.doi.or
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
 
-There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:  
+There are also two source datasets that provide the proportion of population in each age-sex group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:  
 
 1. A spreadsheet with age-sex proportions for each region,  
 2. A region ID for every 100 m grid cell.  
 
 ### peanutButter web application
 
-peanutButter includes an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. The peanutButter application is available on the web at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. You can also run the application locally from your R console using:
+peanutButter includes an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. The peanutButter application is available on the web at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. 
+
+
+You can also run the application locally from your R console, but you will first need to download the source files from the web application. Then, run the Shiny application locally using:
 
 ```r
-peanutButter::jelly()
+peanutButter::jelly(srcdir="c:/local_source_directory")
 ```
 
 ## Contributing
