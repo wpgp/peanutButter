@@ -3,22 +3,18 @@
 WorldPop Research Group  
 University of Southampton
 
-28 April 2020
+25 May 2020
 
 ## Introduction
 
-The _peanutButter_ R package allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints (Ecopia.AI and Maxar Technologies 2020) that are based on recent satellite imagery.
+The _peanutButter_ R package allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints that are based on recent satellite imagery (Dooley and Tatem 2020, Ecopia.AI and Maxar Technologies 2020).
 
 Code for the _peanutButter_ package is openly available on GitHub: <a href='https://github.com/wpgp/peanutButter' target='_blank'>https://github.com/wpgp/peanutButter</a>.
 
-**Recommended citations:**
-Leasure DR, Dooley CA. 2020. peanutButter: An R package for rapid-response gridded population estimates from building footprints, version 0.1.0. University of Southampton. doi:10.5258/SOTON/WP00665
-
-WorldPop, Ecopia.AI, and Maxar Technologies. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton. doi:10.5258/SOTON/WP00667 
+**Recommended citation:**
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. WorldPop Research Group, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>
 
 ## Installation
-
-Note: These installation instructions will not work until the repo is public. Please install the package from source until then.
 
 First, start a new R session. Then, install the _peanutButter_ R package from WorldPop on GitHub:
 
@@ -46,7 +42,7 @@ peanutButter::jelly()
 ```
 
 ## Contributing
-The _peanutButter_ R package was developed in the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. The _peanutButter_ R package and web application was developed by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements (WorldPop et al. 2020). Maksym Bondarenko maintains WorldPop's Shiny web server. Professor Andy Tatem provides oversight of the WorldPop Research Group.
+The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group. 
 
 **Suggested citation:**
 Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>
@@ -58,7 +54,9 @@ GNU General Public License v3.0 (GNU GPLv3)
 
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
 
-WorldPop, Ecopia.AI., and Maxar Technologies. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton. doi:10.5258/SOTON/WP00666 
+Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666 
+
+
 
   
   
