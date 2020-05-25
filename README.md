@@ -51,7 +51,7 @@ There are also two source datasets that provide the proportion of population in 
 peanutButter includes an R shiny application that allows you to produce rapid-response gridded population estimates from building footprints. The peanutButter application is available on the web at <a href="https://apps.worldpop.org/peanutButter" target="_blank">https://apps.worldpop.org/peanutButter</a>. 
 
 
-You can also run the application locally from your R console, but you will first need to download the source files from the web application. Then, run the Shiny application locally using:
+You can run the application locally from your R console, but you will first need to download the source files from the web application. Then, run the Shiny application locally using:
 
 ```r
 peanutButter::jelly(srcdir="c:/local_source_directory")
