@@ -2,14 +2,14 @@
 title: peanutButter - A web application to produce rapid-response gridded population estimates from building footprints
 output: 
   rmarkdown::html_vignette: 
-    toc: true
+    toc: false
 vignette: >
   %\VignetteIndexEntry{peanutButter - A web application to produce rapid-response gridded population estimates from building footprints}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-22 May 2020
+26 May 2020
 
 ## Overview
 
