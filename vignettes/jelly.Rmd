@@ -87,7 +87,7 @@ This parameter defines the average number of people in a housing unit and it can
 This parameter defines the average number of housing units per residential building. This number would be expected to be near 1 for rural areas and slightly higher in urban areas.
 
 **Proportion residential buildings**  
-This parameter defines what proportion of the building counts (Dooley and Tatem 2020) represents residential buildings. Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represent more than one building.
+This parameter defines the proportion of buildings that are residential (total building counts from Dooley and Tatem 2020). Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represent more than one building.
 
 ### Default Values
 
@@ -171,9 +171,9 @@ Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N,
 
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
 
-Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666  
+Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(c) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00666" target="_blank">doi:10.5258/SOTON/WP00666</a>  
 
-Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 https://dx.doi.org/10.1038/sdata.2017.89  
+Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 <a href="https://dx.doi.org/10.1038/sdata.2017.89" target="_blank">doi:10.1038/sdata.2017.89</a>  
 
 WorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by the Bill and Melinda Gates Foundation (OPP1134076). 
 
