@@ -9,7 +9,10 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-26 May 2020
+WorldPop Research Group  
+University of Southampton  
+
+26 May 2020  
 
 ## Overview
 
