@@ -6,6 +6,11 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 
 # rebuild documentation
 if(T){
+  
+  # render repository readme to html
+  rmarkdown::render(input = 'README.md', 
+                    output_format = 'html_document')
+  
   # package documentation
   devtools::document()
   
