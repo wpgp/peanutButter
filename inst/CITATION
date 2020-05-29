@@ -1,14 +1,14 @@
 citHeader("To cite package peanutButter in publications, please use:")
 
 citEntry(entry="Book",
-  author = c(person("Douglas", "Leasure", "R"),                     
-          person("Claire", "Dooley", "A"),                     
+  author = c(person("Douglas R", "Leasure"),                     
+          person("Claire A", "Dooley"),                     
           person("Maksym", "Bondarenko"),                     
-          person("Andrew", "Tatem", "J")),
+          person("Andrew J", "Tatem")),
   title = paste0("peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version ", meta$Version, "."),
   year = 2020,
-  publisher = "{University of Southampton}",
+  publisher = "{WorldPop, University of Southampton}",
   doi = "10.5258/SOTON/WP00667",
   url = "https://github.com/wpgp/peanutButter",
-  textVersion = paste0('Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version ', meta$Version, '. WorldPop Research Group, University of Southampton. doi:10.5258/SOTON/WP00667')
+  textVersion = paste0('Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version ', meta$Version, '. WorldPop, University of Southampton. doi:10.5258/SOTON/WP00667')
 )

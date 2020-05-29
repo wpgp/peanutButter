@@ -12,13 +12,13 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-26 May 2020  
+29 May 2020  
 
 ## Overview
 
-The *peanutButter* web application allows you to produce your own gridded population estimates by spreading your estimates of people per building evenly across a map of buildings. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings [@ecopia2020digitize, @dooley2020gridded].
+The *peanutButter* web application allows you to produce your own gridded population estimates by spreading your estimates of people per building evenly across a map of buildings. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings (Ecopia.AI and Maxar Technologies 2020, Dooley and Tatem 2020).
 
-The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up uses estimates of average household sizes for each settlement type (e.g. urban and rural) and then applies these to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user. The prefered approach will depend on what information you have available: estimates of people per building (bottom-up) or estimates of people per administrative unit (top-down).
+The "peanut butter" approach can be applied in a bottom-up or top-down fashion. Bottom-up maps user-defined estimates of people per building in urban and rural areas to each building in the corresponding settlement type. Top-down takes user-defined population totals for administrative units and spreads those people evenly across all buildings within a given unit such that the total per administrative unit matches those defined by the user. The prefered approach will depend on what information you have available: estimates of people per building (bottom-up) or estimates of people per administrative unit (top-down).
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
@@ -160,7 +160,7 @@ Top-down: The time-point of the gridded population estimates is influenced by th
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
 
 ## Recommended Citation 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. WorldPop Research Group, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.1.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00667</a>
 
 ## License
 GNU General Public License v3.0 (GNU GPLv3)  
