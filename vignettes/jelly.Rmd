@@ -18,7 +18,7 @@ University of Southampton
 
 The *peanutButter* web application allows you to produce gridded population estimates using your own estimates of people per building. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings extracted from Maxar's <a href="https://www.digitalglobe.com/products/mosaics" target="_blank">Vivid Imagery Mosaic</a> (Ecopia.AI and Maxar Technologies 2020, Dooley and Tatem 2020).
 
-```{r, echo=F, out.width="80%", fig.cap='Applying a user-defined estimate of 5.9 people per building to create gridded population estimates from building footprints for this urban area (darker red = more people).', out.extra='style="border:0px"'}
+```{r, echo=F, out.width="80%", fig.cap='Applying a user-defined estimate of 5.9 people per building to create gridded population estimates from building footprints in this urban area (darker red = more people).', out.extra='style="border:0px"'}
 knitr::include_graphics(path='images/peanutButter_overview2.png')
 ```
 
