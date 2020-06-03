@@ -17,10 +17,25 @@ for(i in 1:length(files)){
 # country_list <- sort(unique(c(country_list,as.character(peanutButter:::country_info$country))))
 country_list <- sort(unique(country_list))
 
+# function to get file names
+fileNames <- function(country, path=srcdir){
+  i <- list.files(path)
+  i <- i[grepl(paste0(country,'_'), i)]
+  count_file <- ifelse(any(grepl('_count.tif', i)), i[grepl('_count.tif', i)], NA)
+  urban_file <- ifelse(any(grepl('_urban.tif', i)), i[grepl('_urban.tif', i)], NA)
+  regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
+  agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
+  
+  return(list(count = count_file, 
+              urban = urban_file,
+              regions = regions_file,
+              agesex = agesex_file))
+}
+
 # check files exist
 for(country in country_list){
-  count.exists <- paste0(country,'_buildings_v1_0_count.tif') %in% files
-  type.exists <- paste0(country,'_buildings_v1_0_urban.tif') %in% files
+  count.exists <- fileNames(country)[['count']] %in% files
+  type.exists <- fileNames(country)[['urban']] %in% files
   
   # drop country if missing files
   if(!count.exists | !type.exists){
@@ -32,9 +47,15 @@ for(country in country_list){
 country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
-country_info[row.names(peanutButter:::country_info),names(peanutButter:::country_info)[-1]] <- peanutButter:::country_info[,-1]
+refresh_countries <- c('TZA')
 
-# calculate country info
+i <- peanutButter:::country_info
+if(length(refresh_countries) > 0) {
+  i <- i[-which(row.names(i) %in% refresh_countries),]
+}
+country_info[row.names(i),names(i)[-1]] <- i[,-1]
+
+## calculate country info
 
 # building counts
 for(country in country_list){
@@ -42,8 +63,8 @@ for(country in country_list){
     print(country)
     
     # load rasters
-    buildings <- raster::raster(file.path(srcdir,paste0(country,'_buildings_v1_0_count.tif')))
-    urban <- raster::raster(file.path(srcdir,paste0(country,'_buildings_v1_0_urban.tif')))
+    buildings <- raster::raster(file.path(srcdir,fileNames(country)[['count']]))
+    urban <- raster::raster(file.path(srcdir,fileNames(country)[['urban']]))
     
     # building counts
     country_info[country,'bld_count'] <- raster::cellStats(buildings, 'sum')
@@ -65,10 +86,10 @@ for(country in country_list){
 }
 
 # wopr
-country_info$wopr <- country_info$country %in% unique(wopr::getCatalogue()$country)
+country_info$wopr <- country_info$country %in% unique(subset(wopr::getCatalogue(), category=='Population')[,'country'])
 country_info$woprVision <- country_info$country %in% unique(wopr::getCatalogue(spatial_query=T)$country)
 
-country_info$partial_footprints <- country_info$country %in% c('COD')
+country_info$partial_footprints <- country_info$country %in% c()
 
 # save as internal R package file
 usethis::use_data(country_info, internal=T, overwrite=F)

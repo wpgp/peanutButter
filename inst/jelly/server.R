@@ -50,28 +50,28 @@ function(input, output, session){
       rv$path_readme2 <- NULL
     }
     
-    rv$path_buildings <- paste0(rv$country_info$country, '_buildings_v1_0_count.tif')
+    rv$path_buildings <- fileNames(rv$country_info$country)[['count']]
     if(file.exists(file.path(srcdir,rv$path_buildings))){
       rv$path_buildings <- file.path(srcdir,rv$path_buildings)
     } else {
       stop(paste('Source file not in source directory:',rv$path_buildings))
     }
     
-    rv$path_urban <- paste0(rv$country_info$country, '_buildings_v1_0_urban.tif')
+    rv$path_urban <- fileNames(rv$country_info$country)[['urban']]
     if(file.exists(file.path(srcdir,rv$path_urban))){
       rv$path_urban <- file.path(srcdir,rv$path_urban)
     } else {
       stop(paste('Source file not in source directory:',rv$path_urban))
     }
     
-    rv$path_agesex_regions <- paste0(rv$country_info$country, '_agesex_regions.tif')
+    rv$path_agesex_regions <- fileNames(rv$country_info$country)[['regions']]
     if(file.exists(file.path(srcdir,rv$path_agesex_regions))){
       rv$path_agesex_regions <- file.path(srcdir,rv$path_agesex_regions)
     } else {
       stop(paste('Source file not in source directory:',rv$path_agesex_regions))
     }
     
-    rv$path_agesex_table <- paste0(rv$country_info$country, '_agesex_table.csv')
+    rv$path_agesex_table <- fileNames(rv$country_info$country)[['agesex']]
     if(file.exists(file.path(srcdir,rv$path_agesex_table))){
       rv$path_agesex_table <- file.path(srcdir,rv$path_agesex_table)
     } else {

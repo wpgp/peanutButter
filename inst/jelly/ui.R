@@ -39,7 +39,7 @@ column(
       # probability residential
       sliderInput(
         inputId = 'residential_urb',
-        label = h5('Proportion residential buildings'),
+        label = h5('Proportion building footprints that are residential'),
         min = 0,
         max = 1,
         value = 0,
@@ -71,7 +71,7 @@ column(
       # probability residential
       sliderInput(
         inputId = 'residential_rur',
-        label = h5('Proportion residential buildings'),
+        label = h5('Proportion building footprints that are residential'),
         min = 0,
         max = 1,
         value = 0,
