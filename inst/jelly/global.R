@@ -20,6 +20,10 @@ fileNames <- function(country, path=srcdir){
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
   
+  if(any(is.na(i))){
+    stop(paste0('Source files missing for ',country,': ',names(which(is.na(i)))))
+  }
+  
   return(list(count = count_file, 
               urban = urban_file,
               regions = regions_file,

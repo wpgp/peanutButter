@@ -32,79 +32,88 @@ function(input, output, session){
   ##---- load data ----##
   observeEvent(rv$data_select, {
 
-    # country info
-    rv$country_info <- country_info[rv$data_select,]
-
-    # paths to source files
-    rv$path_readme1 <- 'XXX_buildings_v1_0_README.pdf'
-    if(file.exists(file.path(srcdir,rv$path_readme1))){
-      rv$path_readme1 <- file.path(srcdir,rv$path_readme1)
-    } else {
-      rv$path_readme1 <- NULL
-    }
-
-    rv$path_readme2 <- 'XXX_agesex_README.pdf'
-    if(file.exists(file.path(srcdir,rv$path_readme2))){
-      rv$path_readme2 <- file.path(srcdir,rv$path_readme2)
-    } else {
-      rv$path_readme2 <- NULL
-    }
-    
-    rv$path_buildings <- fileNames(rv$country_info$country)[['count']]
-    if(file.exists(file.path(srcdir,rv$path_buildings))){
-      rv$path_buildings <- file.path(srcdir,rv$path_buildings)
-    } else {
-      stop(paste('Source file not in source directory:',rv$path_buildings))
-    }
-    
-    rv$path_urban <- fileNames(rv$country_info$country)[['urban']]
-    if(file.exists(file.path(srcdir,rv$path_urban))){
-      rv$path_urban <- file.path(srcdir,rv$path_urban)
-    } else {
-      stop(paste('Source file not in source directory:',rv$path_urban))
-    }
-    
-    rv$path_agesex_regions <- fileNames(rv$country_info$country)[['regions']]
-    if(file.exists(file.path(srcdir,rv$path_agesex_regions))){
-      rv$path_agesex_regions <- file.path(srcdir,rv$path_agesex_regions)
-    } else {
-      stop(paste('Source file not in source directory:',rv$path_agesex_regions))
-    }
-    
-    rv$path_agesex_table <- fileNames(rv$country_info$country)[['agesex']]
-    if(file.exists(file.path(srcdir,rv$path_agesex_table))){
-      rv$path_agesex_table <- file.path(srcdir,rv$path_agesex_table)
-    } else {
-      stop(paste('Source file not in source directory:',rv$path_agesex_table))
-    }
-
-    # slider values
-    updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
-    updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
-    updateSliderInput(session, 'residential_urb', value=rv$country_info$residential_urb)
-    updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
-    updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
-    updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
-
-    # popup message
-    rv$popup_message <- c()
-    
-    if(rv$country_info$wopr & rv$country_info$woprVision){
-      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
-    } else if(rv$country_info$wopr) {
-      rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
-    }
-
-    if(rv$country_info$partial_footprints){
-      rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',rv$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
-    }
-
-    if(!is.null(rv$popup_message[1])){
-      showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')),
-                            title='Friendly Message:',
-                            footer=tagList(modalButton('Okay, thanks.'))
-      ))
-    }
+    tryCatch({
+      # country info
+      rv$country_info <- country_info[rv$data_select,]
+      
+      # paths to source files
+      rv$path_readme1 <- 'XXX_buildings_v1_0_README.pdf'
+      if(file.exists(file.path(srcdir,rv$path_readme1))){
+        rv$path_readme1 <- file.path(srcdir,rv$path_readme1)
+      } else {
+        rv$path_readme1 <- NULL
+      }
+      
+      rv$path_readme2 <- 'XXX_agesex_README.pdf'
+      if(file.exists(file.path(srcdir,rv$path_readme2))){
+        rv$path_readme2 <- file.path(srcdir,rv$path_readme2)
+      } else {
+        rv$path_readme2 <- NULL
+      }
+      
+      rv$path_buildings <- fileNames(rv$country_info$country, srcdir)[['count']]
+      if(file.exists(file.path(srcdir,rv$path_buildings))){
+        rv$path_buildings <- file.path(srcdir,rv$path_buildings)
+      } else {
+        stop(paste(rv$country_info$country,'"building count" source file not available.'), call.=F)
+      }
+      
+      rv$path_urban <- fileNames(rv$country_info$country, srcdir)[['urban']]
+      if(file.exists(file.path(srcdir,rv$path_urban))){
+        rv$path_urban <- file.path(srcdir,rv$path_urban)
+      } else {
+        stop(paste(rv$country_info$country,'"urban" source file not available.'), call.=F)
+      }
+      
+      rv$path_agesex_regions <- fileNames(rv$country_info$country, srcdir)[['regions']]
+      if(file.exists(file.path(srcdir,rv$path_agesex_regions))){
+        rv$path_agesex_regions <- file.path(srcdir,rv$path_agesex_regions)
+      } else {
+        stop(paste(rv$country_info$country,'"regions" source file not available.'), call.=F)
+      }
+      
+      rv$path_agesex_table <- fileNames(rv$country_info$country, srcdir)[['agesex']]
+      if(file.exists(file.path(srcdir,rv$path_agesex_table))){
+        rv$path_agesex_table <- file.path(srcdir,rv$path_agesex_table)
+      } else {
+        stop(paste(rv$country_info$country,'"agesex" source file not available.'), call.=F)
+      }
+      
+      # slider values
+      updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
+      updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
+      updateSliderInput(session, 'residential_urb', value=rv$country_info$residential_urb)
+      updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
+      updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
+      updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
+      
+      # popup message
+      rv$popup_message <- c()
+      
+      if(rv$country_info$wopr & rv$country_info$woprVision){
+        rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a> and you can explore those results on an interactive map using the <a href="https://apps.worldpop.org/woprVision" target="_blank">woprVision web application</a>.')
+      } else if(rv$country_info$wopr) {
+        rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
+      }
+      
+      if(rv$country_info$partial_footprints){
+        rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',rv$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
+      }
+      
+      if(!is.null(rv$popup_message[1])){
+        showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')),
+                              title='Friendly Message:',
+                              footer=tagList(modalButton('Okay, thanks.'))
+        ))
+      }  
+    }, warning=function(w){
+      showNotification(as.character(w), type='warning', duration=20)
+    }, 
+    error=function(e){
+      showNotification(as.character(e), type='error', duration=20)
+    }, finally={
+      
+    })
   })
 
   ##---- bottom-up ----##

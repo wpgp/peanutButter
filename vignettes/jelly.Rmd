@@ -12,7 +12,7 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-2 June 2020  
+4 June 2020  
 
 ## Overview
 
@@ -22,12 +22,12 @@ The *peanutButter* web application allows you to produce gridded population esti
 knitr::include_graphics(path='images/peanutButter_overview2.png')
 ```
 
-The peanutButter application has two tools that can be used to produce gridded population estimates: aggregator and disaggregator. The aggregator tool will apply your estimates of people per building in urban and rural areas to every building and then aggregate buildings to estimate population sizes for every ~100 m grid cell. The disaggregator tool starts with user-defined population totals for administrative units (or other areas) and disaggregates the population evenly among buildings. 
+The peanutButter application has two tools that can be used to produce gridded population estimates: aggregate and disaggregate. The "aggregate"" tool will apply your estimates of people per building in urban and rural areas to every building and then aggregate buildings to estimate population sizes for every ~100 m grid cell. The "disaggregate" tool starts with user-defined population totals for administrative units (or other areas) and disaggregates the population evenly among buildings. 
 
 The prefered approach will depend on the information that you have available:  
 
-- Use the aggregator tool if you have estimates of people per building for urban and rural areas.  
-- Use the disaggregator tool if you have estimates of total population in each administrative unit.
+- Use the aggregate tool if you have estimates of people per building for urban and rural areas.  
+- Use the disaggregate tool if you have estimates of total population in each administrative unit.
 
 Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
@@ -39,7 +39,7 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 - This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
 - There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
 
-## Quick Start: Aggregator Tool
+## Quick Start: Aggregate Tool
 1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates (shown in the 'Results' table) of total population, urban population, and rural population for the country as a whole. 
 
 2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. Note: this will not change the population totals shown in the 'Results' table.
@@ -48,7 +48,7 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 
 4. (optional) Use the "Settings" and/or "Source Files" button(s) to save the input data.
 
-## Quick Start: Disaggregator Tool
+## Quick Start: Disaggregate Tool
 1. Upload a GeoJson file containing polygons and their associated population totals, by clicking on the "Browse" button and selecting your GeoJson file. Ensure that you have the correct country selected.
 
 2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. 
@@ -58,11 +58,11 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 4. (optional) Use the "Source Files" button to save the input data.
 
 
-## More Info: Aggregator Tool
+## More Info: Aggregate Tool
 
 ### Method
 
-The aggregator tool requires you to provide estimates of three population characteristics for urban and rural settlement types using expert opinion:  
+The aggregate tool requires you to provide estimates of three population characteristics for urban and rural settlement types using expert opinion:  
 
 1. Mean number of people per housing unit  
 2. Mean number of housing units per building  
@@ -110,11 +110,11 @@ We provide moderately informative default values for population parameters, but 
 
 3. Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
 
-## More Info: Disaggregator Tool
+## More Info: Disaggregate Tool
 
 ### Method  
 
-The disaggregator tool produces gridded population estimates by disaggregating user-defined population totals evenly among buildings within user-defined polygon boundaries (e.g. administrative boundaries). There are three steps involved in this process:  
+The disaggregate tool produces gridded population estimates by disaggregating user-defined population totals evenly among buildings within user-defined polygon boundaries (e.g. administrative boundaries). There are three steps involved in this process:  
 
 1.  Calculate the total number of buildings in each polygon using the source data from Dooley and Tatem (2020) that were derived from high resolution building footprints (Ecopia.AI and Maxar Technologies 2020).
 
@@ -127,6 +127,8 @@ User-provided polygons will be ignored if they are too small to overlap the cent
 If there are zero buildings within any user-provided polygons, then the gridded population estimates will contain NA for these grid cells.
 
 Areas of your polygons that exceed the national boundaries used in the building footprints (see [Source Data]) will not contain gridded population estimates.
+
+You can supply your own inputs (i.e. raster of building counts) to produce gridded population estimates using the "disaggregator" function of the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
 
 ## More Info: Age-sex  
 
@@ -163,9 +165,9 @@ The satellite imagery used to create the building footprints is from <a href='ht
 The demographic data (WorldPop et al. 2018) describing age-sex proportions and their spatial distribution are based on projections that represent the year 2020, but they do not account for potential effects of population displacement and migration.
 
 **Population data**  
-Bottom-up: The time-point represented by the gridded population estimates is influenced by the date of your settings for "people per housing unit", "housing units per residential building", and "proportion of buildings that are residential". The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
+Aggregate tool: The time-point represented by the gridded population estimates is influenced by the date of your settings for "people per housing unit", "housing units per residential building", and "proportion of buildings that are residential". The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
 
-Top-down: The time-point of the gridded population estimates is influenced by the date of the population totals in your uploaded geojson file.  
+Disaggregate tool: The time-point of the gridded population estimates is influenced by the date of the population totals in your uploaded geojson file.  
 
 ## Contributing
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
