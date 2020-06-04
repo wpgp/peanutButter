@@ -9,6 +9,8 @@ University of Southampton
 
 The _peanutButter_ R package allows you to produce gridded population estimates from building footprints using the "peanut butter" method. This simple approach involves estimating the average household sizes for each settlement type (e.g. urban and rural) and then spreading those estimates evenly across buildings in each settlement type using high resolution maps of building footprints that are based on recent satellite imagery (Dooley and Tatem 2020, Ecopia.AI and Maxar Technologies 2020).
 
+The _peanutButter_ web application is available online from the <a href="https://apps.worldpop.org" target="_blank">WorldPop Applications</a> website. 
+
 Code for the _peanutButter_ package is openly available on GitHub: <a href='https://github.com/wpgp/peanutButter' target='_blank'>https://github.com/wpgp/peanutButter</a>.
 
 **Recommended citation:**  
