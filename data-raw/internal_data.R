@@ -4,6 +4,9 @@ rm(list=ls()); gc(); cat("\014"); try(dev.off(), silent=T)
 # working directory
 setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 
+# package
+library(peanutButter, lib='c:/research/r/library')
+
 # source directory
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
 
@@ -16,6 +19,7 @@ for(i in 1:length(files)){
 }  
 # country_list <- sort(unique(c(country_list,as.character(peanutButter:::country_info$country))))
 country_list <- sort(unique(country_list))
+country_list <- country_list[-which(country_list %in% c('XXX'))]
 
 # function to get file names
 fileNames <- function(country, path=srcdir){
@@ -47,7 +51,7 @@ for(country in country_list){
 country_info <- data.frame(country=as.character(country_list))
 row.names(country_info) <- country_list
 
-refresh_countries <- c('TZA')
+refresh_countries <- c()
 
 i <- peanutButter:::country_info
 if(length(refresh_countries) > 0) {

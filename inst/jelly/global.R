@@ -1,8 +1,6 @@
 # source directory
 srcdir <- .GlobalEnv$srcdir
-
-# data readme
-data_version <- 'v1.0'
+srcfiles <- list.files(srcdir)
 
 # country info
 country_info <- peanutButter:::country_info

@@ -37,14 +37,14 @@ function(input, output, session){
       rv$country_info <- country_info[rv$data_select,]
       
       # paths to source files
-      rv$path_readme1 <- 'XXX_buildings_v1_0_README.pdf'
+      rv$path_readme1 <- srcfiles[grepl('README.pdf', srcfiles)][1]
       if(file.exists(file.path(srcdir,rv$path_readme1))){
         rv$path_readme1 <- file.path(srcdir,rv$path_readme1)
       } else {
         rv$path_readme1 <- NULL
       }
       
-      rv$path_readme2 <- 'XXX_agesex_README.pdf'
+      rv$path_readme2 <- srcfiles[grepl('README.pdf', srcfiles)][2]
       if(file.exists(file.path(srcdir,rv$path_readme2))){
         rv$path_readme2 <- file.path(srcdir,rv$path_readme2)
       } else {
