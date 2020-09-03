@@ -1,7 +1,7 @@
 shinyServer(
 function(input, output, session){
 
-  options(shiny.maxRequestSize=30*1024^2)
+  options(shiny.maxRequestSize=50*1024^2)
   
   # reactive values
   rv <- reactiveValues()
@@ -18,7 +18,9 @@ function(input, output, session){
     shinyjs::enable('source_buttonTD')
   })
   
-  # Syncronize country selection between bottom-up and top-down tabs
+  ##---- syncronize bottom-up and top-down tabs ----##
+  
+  # country selection
   observeEvent(input$data_selectBU, {
     rv$data_select <- input$data_selectBU
     updateSelectInput(session, 'data_selectTD', selected=input$data_selectBU)
@@ -29,63 +31,91 @@ function(input, output, session){
     updateSelectInput(session, 'data_selectBU', selected=input$data_selectTD)
   })
   
+  # building area threshold
+  observeEvent(input$bld_min_areaBU, {
+    rv$bld_min_area <- input$bld_min_areaBU
+    updateSliderInput(session, 'bld_min_areaTD', value=input$bld_min_areaBU)
+  })
+  observeEvent(input$bld_min_areaTD, {
+    rv$bld_min_area <- input$bld_min_areaTD
+    updateSliderInput(session, 'bld_min_areaBU', value=input$bld_min_areaTD)
+  })
+  observeEvent(input$bld_max_areaBU, {
+    rv$bld_max_area <- input$bld_max_areaBU
+    updateSliderInput(session, 'bld_max_areaTD', value=input$bld_max_areaBU)
+  })
+  observeEvent(input$bld_max_areaTD, {
+    rv$bld_max_area <- input$bld_max_areaTD
+    updateSliderInput(session, 'bld_max_areaBU', value=input$bld_max_areaTD)
+  })
+  
+  # unit of analysis
+  observeEvent(input$units_countBU, {
+    rv$units_count <- input$units_countBU
+    updateSliderInput(session, 'units_countTD', value=input$units_countBU)
+  })
+  observeEvent(input$units_countTD, {
+    rv$units_count <- input$units_countTD
+    updateSliderInput(session, 'units_countBU', value=input$units_countTD)
+  })
+  
   ##---- load data ----##
   observeEvent(rv$data_select, {
 
     tryCatch({
+      
+      # reset reactive values
+      for(i in names(rv)[!names(rv) %in% c('data_select','bld_min_area','bld_max_area','units_count')]){
+        rv[[i]] <- NULL
+      }
+      
       # country info
       rv$country_info <- country_info[rv$data_select,]
       
+      # country data
+      rv$data_full <- readRDS(file.path(srcdir,
+                                        paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
+      
+      # filter by building area
+      rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
+
+      # default reactive values
+      rv$urb_count <- sum(rv$data$bld_urban)
+      rv$rur_count <- nrow(rv$data) - rv$urb_count
+
+      rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
+      rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
+
+      rv$pop_urb <- rv$urb_count * rv$country_info$people_urb * rv$country_info$units_urb * rv$country_info$residential_urb
+      rv$pop_rur <- rv$rur_count * rv$country_info$people_rur * rv$country_info$units_rur * rv$country_info$residential_rur
+      rv$pop_total <- rv$pop_rur + rv$pop_urb
+
+      # default slider values
+      updateSliderInput(session, 'pph_urb', value=rv$country_info$people_urb)
+      updateSliderInput(session, 'hpb_urb', value=rv$country_info$units_urb)
+      updateSliderInput(session, 'pres_urb', value=rv$country_info$residential_urb)
+      updateSliderInput(session, 'ppa_urb', value=rv$pop_urb / rv$urb_area)
+      
+      updateSliderInput(session, 'pph_rur', value=rv$country_info$people_rur)
+      updateSliderInput(session, 'hpb_rur', value=rv$country_info$units_rur)
+      updateSliderInput(session, 'pres_rur', value=rv$country_info$residential_rur)
+      updateSliderInput(session, 'ppa_rur', value=rv$pop_rur / rv$rur_area)
+      
       # paths to source files
-      rv$path_readme1 <- srcfiles[grepl('README.pdf', srcfiles)][1]
-      if(file.exists(file.path(srcdir,rv$path_readme1))){
-        rv$path_readme1 <- file.path(srcdir,rv$path_readme1)
-      } else {
-        rv$path_readme1 <- NULL
-      }
+      rv$path_buildings_readme <- file.path(srcdir, srcfiles[grepl('README.pdf', srcfiles) & grepl('buildings', srcfiles)][1])
+      if(!file.exists(rv$path_buildings_readme)) rv$path_buildings_readme <- NULL
       
-      rv$path_readme2 <- srcfiles[grepl('README.pdf', srcfiles)][2]
-      if(file.exists(file.path(srcdir,rv$path_readme2))){
-        rv$path_readme2 <- file.path(srcdir,rv$path_readme2)
-      } else {
-        rv$path_readme2 <- NULL
-      }
+      rv$path_agesex_readme <- file.path(srcdir, srcfiles[grepl('README.pdf', srcfiles) & grepl('agesex', srcfiles)][1])
+      if(!file.exists(rv$path_agesex_readme)) rv$path_agesex_readme <- NULL
       
-      rv$path_buildings <- fileNames(rv$country_info$country, srcdir)[['count']]
-      if(file.exists(file.path(srcdir,rv$path_buildings))){
-        rv$path_buildings <- file.path(srcdir,rv$path_buildings)
-      } else {
-        stop(paste(rv$country_info$country,'"building count" source file not available.'), call.=F)
-      }
+      rv$path_urban <- file.path(srcdir, fileNames(rv$country_info$country, srcdir)[['urban']])
+      if(!file.exists(rv$path_urban)) stop(paste(rv$country_info$country,'"urban" source file not available.'), call.=F)
       
-      rv$path_urban <- fileNames(rv$country_info$country, srcdir)[['urban']]
-      if(file.exists(file.path(srcdir,rv$path_urban))){
-        rv$path_urban <- file.path(srcdir,rv$path_urban)
-      } else {
-        stop(paste(rv$country_info$country,'"urban" source file not available.'), call.=F)
-      }
+      rv$path_agesex_regions <- file.path(srcdir,fileNames(rv$country_info$country, srcdir)[['regions']])
+      if(!file.exists(rv$path_agesex_regions)) stop(paste(rv$country_info$country,'"regions" source file not available.'), call.=F)
       
-      rv$path_agesex_regions <- fileNames(rv$country_info$country, srcdir)[['regions']]
-      if(file.exists(file.path(srcdir,rv$path_agesex_regions))){
-        rv$path_agesex_regions <- file.path(srcdir,rv$path_agesex_regions)
-      } else {
-        stop(paste(rv$country_info$country,'"regions" source file not available.'), call.=F)
-      }
-      
-      rv$path_agesex_table <- fileNames(rv$country_info$country, srcdir)[['agesex']]
-      if(file.exists(file.path(srcdir,rv$path_agesex_table))){
-        rv$path_agesex_table <- file.path(srcdir,rv$path_agesex_table)
-      } else {
-        stop(paste(rv$country_info$country,'"agesex" source file not available.'), call.=F)
-      }
-      
-      # slider values
-      updateSliderInput(session, 'people_urb', value=rv$country_info$people_urb)
-      updateSliderInput(session, 'units_urb', value=rv$country_info$units_urb)
-      updateSliderInput(session, 'residential_urb', value=rv$country_info$residential_urb)
-      updateSliderInput(session, 'people_rur', value=rv$country_info$people_rur)
-      updateSliderInput(session, 'units_rur', value=rv$country_info$units_rur)
-      updateSliderInput(session, 'residential_rur', value=rv$country_info$residential_rur)
+      rv$path_agesex_table <- file.path(srcdir,fileNames(rv$country_info$country, srcdir)[['agesex']])
+      if(!file.exists(rv$path_agesex_table)) stop(paste(rv$country_info$country,'"agesex" source file not available.'), call.=F)
       
       # popup message
       rv$popup_message <- c()
@@ -95,17 +125,15 @@ function(input, output, session){
       } else if(rv$country_info$wopr) {
         rv$popup_message[1] <- paste0('There are customized gridded population estimates available for ',rv$data_select,'. These data are available for download from the <a href="https://wopr.worldpop.org/?',rv$data_select,'" target="_blank">WorldPop Open Population Repository (WOPR)</a>.')
       }
-      
       if(rv$country_info$partial_footprints){
         rv$popup_message[length(rv$popup_message)+1] <- paste0('Warning: The building footprints for ',rv$data_select,' do not have complete national coverage. Download the source files to see the coverage.')
       }
-      
       if(!is.null(rv$popup_message[1])){
         showModal(modalDialog(HTML(paste(rv$popup_message,collapse='<br><br>')),
                               title='Friendly Message:',
-                              footer=tagList(modalButton('Okay, thanks.'))
-        ))
-      }  
+                              footer=tagList(modalButton('Okay, thanks.'))))
+      }
+      
     }, warning=function(w){
       showNotification(as.character(w), type='warning', duration=20)
     }, 
@@ -115,57 +143,147 @@ function(input, output, session){
       
     })
   })
-
+  
+  ##---- building threshold ----##
+  observeEvent(c(rv$bld_min_area,rv$bld_max_area), {
+    rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
+    
+    rv$urb_count <- sum(rv$data$bld_urban)
+    rv$rur_count <- nrow(rv$data) - rv$urb_count
+    
+    rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
+    rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
+  })
+    
   ##---- bottom-up ----##
   
-  # quick-calculate national population results (bottom-up)
+  ##---- controls: unit of analysis ----#
   observe({
-    rv$pop_urb <- rv$country_info$urb_count * input$residential_urb * input$units_urb * input$people_urb
-    rv$pop_rur <- rv$country_info$rur_count * input$residential_rur * input$units_rur * input$people_rur
-
+    shinyjs::toggle('pph_urb', condition=input$units_countBU==T)
+    shinyjs::toggle('hpb_urb', condition=input$units_countBU==T)
+    shinyjs::toggle('pres_urb', condition=input$units_countBU==T)
+    shinyjs::toggle('pph_rur', condition=input$units_countBU==T)
+    shinyjs::toggle('hpb_rur', condition=input$units_countBU==T)
+    shinyjs::toggle('pres_rur', condition=input$units_countBU==T)
+    
+    shinyjs::toggle('ppa_urb', condition=input$units_countBU==F)
+    shinyjs::toggle('ppa_rur', condition=input$units_countBU==F)
+  })
+  
+  ##---- quick-calculate national population results (bottom-up) ----##
+  observe({
+    
+    if(input$units_countBU){
+      rv$pop_urb <- rv$urb_count * input$pph_urb * input$pres_urb * input$hpb_urb
+      
+      rv$pop_rur <- rv$rur_count * input$pph_rur * input$pres_rur * input$hpb_rur
+      
+      rv$maxpop_urb <- max(rv$data[bld_urban==1, .N, by=cellID]$N, na.rm=T) *
+        input$pres_urb * input$hpb_urb * input$pph_urb
+      
+      rv$maxpop_rur <- max(rv$data[bld_urban==0, .N, by=cellID]$N, na.rm=T) *
+        input$pres_rur * input$hpb_rur * input$pph_rur
+      
+      updateSliderInput(session, 'ppa_urb',
+                        value = rv$pop_urb / rv$urb_area)
+      
+      updateSliderInput(session, 'ppa_rur',
+                        value = rv$pop_rur / rv$rur_area)
+      
+    } else {
+      
+      rv$pop_urb <- rv$urb_area * input$ppa_urb
+      
+      rv$pop_rur <- rv$rur_area * input$ppa_rur
+      
+      rv$maxpop_urb <- max(rv$data[bld_urban==1, .(A = sum(barea)), by=cellID]$A, na.rm=T) * 0.0001 *
+        input$ppa_urb 
+      
+      rv$maxpop_rur <- max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T) * 0.0001 *
+        input$ppa_rur 
+      
+      updateSliderInput(session, 'pres_urb',
+                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
+      
+      updateSliderInput(session, 'pres_rur',
+                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
+    }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
-
+  })
+  
+  # results table
+  observe({
+    
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
+                                             prettyNum(round(rv$bld_min_area), big.mark=','),
+                                             prettyNum(round(rv$bld_max_area), big.mark=','),
+                                             paste0(prettyNum(round(rv$pop_urb/rv$pop_total*100), big.mark=','),'%'),
                                              prettyNum(round(rv$pop_urb), big.mark=','),
-                                             prettyNum(round(rv$country_info$urb_count), big.mark=','),
-                                             prettyNum(round(input$people_urb*input$units_urb*input$residential_urb,1), big.mark=','),
-                                             prettyNum(round(input$people_urb,1), big.mark=','),
-                                             prettyNum(round(input$units_urb,1), big.mark=','),
-                                             paste0(round(input$residential_urb*100),'%'),
+                                             prettyNum(round(rv$urb_count), big.mark=','),
+                                             prettyNum(round(rv$urb_area,1), big.mark=','),
+                                             prettyNum(round(rv$pop_urb/rv$urb_area,1), big.mark=','),
+                                             prettyNum(round(rv$pop_urb/rv$urb_count,1), big.mark=','),
+                                             prettyNum(round(rv$maxpop_urb), big.mark=','),
+                                             prettyNum(round(input$pph_urb,1), big.mark=','),
+                                             prettyNum(round(input$hpb_urb,1), big.mark=','),
+                                             paste0(round(input$pres_urb*100),'%'),
                                              prettyNum(round(rv$pop_rur), big.mark=','),
-                                             prettyNum(round(rv$country_info$rur_count), big.mark=','),
-                                             prettyNum(round(input$people_rur*input$units_rur*input$residential_rur,1), big.mark=','),prettyNum(round(input$people_rur,1), big.mark=','),
-                                             prettyNum(round(input$units_rur,1), big.mark=','),
-                                             paste0(round(input$residential_rur*100),'%')
+                                             prettyNum(round(rv$rur_count), big.mark=','),
+                                             prettyNum(round(rv$rur_area,1), big.mark=','),
+                                             prettyNum(round(rv$pop_rur/rv$rur_area,1), big.mark=','),
+                                             prettyNum(round(rv$pop_rur/rv$rur_count,1), big.mark=','),
+                                             prettyNum(round(rv$maxpop_rur), big.mark=','),
+                                             prettyNum(round(input$pph_rur,1), big.mark=','),
+                                             prettyNum(round(input$hpb_rur,1), big.mark=','),
+                                             paste0(round(input$pres_rur*100),'%')
                                              ),
                                            ncol=1),
                            row.names=c('Population Total',
+                                       'Min residential building footprint (sq m)',
+                                       'Max residential building footprint (sq m)',
+                                       '% Urban Population',
                                        'Urban: Population',
                                        'Urban: Building footprints',
+                                       'Urban: Building area',
+                                       'Urban: People per building hectare',
                                        'Urban: People per building footprint',
+                                       'Urban: Max people per 100 m grid cell',
                                        'Urban: People per housing unit',
                                        'Urban: Housing units per building',
                                        'Urban: Proportion residential buildings',
                                        'Rural: Population',
                                        'Rural: Building footprints',
+                                       'Rural: Building area',
+                                       'Rural: People per building hectare',
                                        'Rural: People per building footprint',
+                                       'Rural: Max people per 100 m grid cell',
                                        'Rural: People per housing unit',
                                        'Rural: Housing units per building',
                                        'Rural: Proportion residential buildings'
                                        ))
   })
 
-  # results table (bottom-up)
+  # on-screen results table (bottom-up)
   output$table_results <- renderTable(data.frame(rv$table[c('Population Total',
+                                                            '% Urban Population',
                                                             'Urban: Population',
-                                                            'Urban: People per building footprint',
                                                             'Rural: Population',
-                                                            'Rural: People per building footprint'),], 
+                                                            'Urban: People per building footprint',
+                                                            'Rural: People per building footprint',
+                                                            'Urban: Max people per 100 m grid cell',
+                                                            'Rural: Max people per 100 m grid cell',
+                                                            'Urban: Building footprints',
+                                                            'Rural: Building footprints'),], 
                                                  row.names=c('Population Total',
+                                                             '% Urban Population',
                                                              'Urban: Population',
-                                                             'Urban: People per building footprint',
                                                              'Rural: Population',
-                                                             'Rural: People per building footprint')),
+                                                             'Urban: People per building footprint',
+                                                             'Rural: People per building footprint',
+                                                             'Urban: Max people per 100 m grid cell',
+                                                             'Rural: Max people per 100 m grid cell',
+                                                             'Urban: Building footprints',
+                                                             'Rural: Building footprints')),
                                       digits = 0,
                                       striped = T,
                                       colnames = F,
@@ -173,6 +291,7 @@ function(input, output, session){
                                       width = 405,
                                       format.args = list(big.mark=",", decimal.mark="."))
 
+  
   # observe age-sex selection (bottom-up)
   observe({
     
@@ -222,15 +341,26 @@ function(input, output, session){
             shinyjs::disable('source_buttonTD')
             
             # bottom-up aggregation
-            x <- aggregator(buildings = raster::raster(rv$path_buildings),
-                            urban = raster::raster(rv$path_urban),
-                            people_urb = input$people_urb,
-                            units_urb = input$units_urb,
-                            residential_urb = input$residential_urb,
-                            people_rur = input$people_rur,
-                            units_rur = input$units_rur,
-                            residential_rur = input$residential_rur)
-            
+            if(input$units_countBU){
+              x <- aggregator(buildings = buildingRaster(rv$data, raster::raster(rv$path_urban), 'count'),
+                              urban = raster::raster(rv$path_urban),
+                              people_urb = input$pph_urb,
+                              units_urb = input$hpb_urb,
+                              residential_urb = input$pres_urb,
+                              people_rur = input$pph_rur,
+                              units_rur = input$hpb_rur,
+                              residential_rur = input$pres_rur)
+            } else {
+              x <- aggregator(buildings = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+                              urban = raster::raster(rv$path_urban),
+                              people_urb = input$ppa_urb,
+                              units_urb = 1,
+                              residential_urb = 1,
+                              people_rur = input$ppa_rur,
+                              units_rur = 1,
+                              residential_rur = 1)
+            }
+          
             # age-sex adjustment
             if(length(rv$agesex_selectBU) < 36){
               
@@ -267,14 +397,30 @@ function(input, output, session){
     filename = function() paste0(rv$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
     content = function(file) {
       withProgress({
+        
+        if(input$units_countBU){
+          rv$path_buildings <- file.path(tempdir(), 
+                                         paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'count'),
+                              filename = rv$path_buildings)
+        } else {
+          rv$path_buildings <- file.path(tempdir(),
+                                         paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+                              filename = rv$path_buildings)
+        }
+        
+        rv$source_files <- c(rv$path_buildings,
+                             rv$path_urban,
+                             rv$path_buildings_readme)
+        if(length(rv$agesex_selectBU) < 36) {
+          rv$source_files <- c(rv$source_files, rv$path_agesex_regions,
+                               rv$path_agesex_table,
+                               rv$path_agesex_readme)
+        }
         zip::zipr(zipfile = file,
-                  files = c(rv$path_buildings,
-                            rv$path_urban,
-                            rv$path_agesex_regions,
-                            rv$path_agesex_table,
-                            rv$path_readme1,
-                            rv$path_readme2)
-        )
+                  files = rv$source_files)
+        unlink(rv$path_buildings)
       },
       message='Preparing data:',
       detail='Creating .zip archive with source data...',
@@ -331,7 +477,9 @@ function(input, output, session){
             
             # top-down disaggregation
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
-                              buildings = raster::raster(rv$path_buildings),
+                              buildings = buildingRaster(data = rv$data, 
+                                                         mastergrid = raster::raster(rv$path_urban), 
+                                                         type = ifelse(input$units_countTD,'count','area'))*0.0001,
                               popcol = input$popcol)
             
             # age-sex adjustment
@@ -372,13 +520,29 @@ function(input, output, session){
     },
     content = function(file) {
       withProgress({
+        
+        if(input$units_countTD){
+          rv$path_buildings <- file.path(tempdir(), 
+                                         paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'count'),
+                              filename = rv$path_buildings)
+        } else {
+          rv$path_buildings <- file.path(tempdir(),
+                                         paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+                              filename = rv$path_buildings)
+        }
+        rv$source_files <- c(rv$path_buildings,
+                             rv$path_urban,
+                             rv$path_buildings_readme)
+        if(length(rv$agesex_selectBU) < 36) {
+          rv$source_files <- c(rv$source_files, rv$path_agesex_regions,
+                               rv$path_agesex_table,
+                               rv$path_agesex_readme)
+        }
         zip::zipr(zipfile = file,
-                  files = c(rv$path_buildings,
-                            rv$path_agesex_regions,
-                            rv$path_agesex_table,
-                            rv$path_readme1,
-                            rv$path_readme2)
-        )
+                  files = rv$source_files)
+        unlink(rv$path_buildings)
       },
       message='Preparing data:',
       detail='Creating .zip archive with source data...',

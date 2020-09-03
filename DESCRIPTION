@@ -1,11 +1,11 @@
 Package: peanutButter
 Title: peanutButter
-Version: 0.2.1
-Date: 2020-07-09
+Version: 0.3.0
+Date: 2020-09-03
 Author: Douglas R Leasure, Claire A Dooley, Maksym Bondarenko, Andrew J Tatem
 Maintainer: Doug Leasure <D.R.Leasure@soton.ac.uk>
 License: GNU GPLv3
-Imports: fasterize, raster, shiny, shinyWidgets, sp, zip
+Imports: data.table, fasterize, raster, shiny, shinyjs, shinyWidgets, sp, zip
 Suggest: 
 Description: An R package to create gridded popuation estimates from building footprints using the peanut butter method.
 RoxygenNote: 7.1.0

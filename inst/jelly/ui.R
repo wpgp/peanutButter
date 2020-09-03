@@ -20,7 +20,7 @@ column(
       
       # people per housing unit
       sliderInput(
-        inputId = 'people_urb',
+        inputId = 'pph_urb',
         label = h5('Mean people per housing unit'),
         min = 1,
         max = 10,
@@ -29,21 +29,31 @@ column(
       
       # housing units per building
       sliderInput(
-        inputId = 'units_urb',            
+        inputId = 'hpb_urb',            
         label = h5('Mean housing units per residential building'),
         min = 1,
-        max = 10,
+        max = 3,
         value = 0,
         step = 0.1),
       
       # probability residential
       sliderInput(
-        inputId = 'residential_urb',
+        inputId = 'pres_urb',
         label = h5('Proportion building footprints that are residential'),
         min = 0,
         max = 1,
         value = 0,
-        step = 0.01)
+        step = 0.01),
+      
+      # people per building area
+      shinyjs::hidden(
+        sliderInput(
+          inputId = 'ppa_urb',
+          label = h5('Mean people per building area (ha)'),
+          min = 1,
+          max = 1500,
+          value = 0,
+          step = 1))
     ),
     
     wellPanel(
@@ -52,7 +62,7 @@ column(
       
       # people per housing unit
       sliderInput(
-        inputId = 'people_rur',
+        inputId = 'pph_rur',
         label = h5('Mean people per housing unit'),
         min = 1,
         max = 10,
@@ -61,21 +71,32 @@ column(
       
       # housing units per building
       sliderInput(
-        inputId = 'units_rur',            
+        inputId = 'hpb_rur',            
         label = h5('Mean housing units per residential building'),
         min = 1,
-        max = 10,
+        max = 3,
         value = 0,
         step = 0.1),
       
       # probability residential
       sliderInput(
-        inputId = 'residential_rur',
+        inputId = 'pres_rur',
         label = h5('Proportion building footprints that are residential'),
         min = 0,
         max = 1,
         value = 0,
-        step = 0.01)
+        step = 0.01),
+      
+      # people per building area
+      shinyjs::hidden(
+        sliderInput(
+          inputId = 'ppa_rur',
+          label = h5('Mean people per building area (ha)'),
+          min = 1,
+          max = 1500,
+          value = 0,
+          step = 1)
+      )
     ),
     
     wellPanel(
@@ -105,7 +126,48 @@ column(
                                                 force_edges=T,
                                                 grid=T)),
       'Note: The on-screen results represent total populations and do not change with your age-sex selection.'
-      )
+    ),
+    
+    wellPanel(
+      
+      h4('Advanced'),
+      
+      strong('Size Thresholds for Residential Buildings'),
+      br(),
+      'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.',
+      br(),br(),
+      
+      'Minimum residential building footprint area (sq m)',
+      br(),
+      sliderInput(inputId = 'bld_min_areaBU',
+                  label = NULL,
+                  min=0, 
+                  max=10,
+                  value=0,
+                  step=1),
+      'Maximum residential building footprint area (sq m)',
+      br(),
+      sliderInput(inputId = 'bld_max_areaBU',
+                  label = NULL,
+                  min=1e3, 
+                  max=max_building,
+                  value=max_building,
+                  step=500),
+      
+      br(),
+      strong('Unit of Analysis'),
+      br(),
+      'The population can be estimated in each pixel by applying your settings to the count of buildings or the total area of buildings.',
+      br(),
+      
+      splitLayout(cellWidths=c('10%','90%'),
+                  '',
+                  radioButtons(inputId = 'units_countBU',
+                               label = NULL,
+                               choiceNames = c('Building count','Building area'),
+                               choiceValues = c(T,F))),
+      'Note: Changing the unit of analysis will modify the urban/rural controls above.'
+    )
   )
 )
 
@@ -125,47 +187,92 @@ inputsTD <-
         choices = row.names(country_info), 
         selected = initialize_country),
       
-      # upload geojson
-      strong('Upload Polygons (GeoJson)'),
+      wellPanel(
+        # upload geojson
+        strong('Upload Polygons (GeoJson)'),
+        
+        fileInput("user_json", 
+                  NULL,
+                  multiple = FALSE,
+                  accept = c("application/json",".geojson",".json"),
+                  buttonLabel = 'Browse'),
+        
+        selectInput(inputId = 'popcol', 
+                    label = 'Column name with population totals',
+                    choices = '(no polygons uploaded)')
+      ),
       
-      fileInput("user_json", 
-                NULL,
-                multiple = FALSE,
-                accept = c("application/json",".geojson",".json"),
-                buttonLabel = 'Browse'),
+      wellPanel(
       
-      selectInput(inputId = 'popcol', 
-                  label = 'Column name with population totals',
-                  choices = '(no polygons uploaded)'),
+        # age-sex sliders
+        strong('Age-sex Selection'),
+        
+        br(),
+        'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
+        br(),br(),
+        
+        splitLayout(cellWidths=c('25%','75%'),
+                    
+                    checkboxInput(inputId="female_toggleTD", label="Female", value=T),
+                    
+                    shinyWidgets::sliderTextInput(inputId="female_selectTD",
+                                                  label=NULL,
+                                                  choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                  selected=c('<1', '80+'),
+                                                  force_edges=T,
+                                                  grid=T)),
+        
+        splitLayout(cellWidths=c('25%','75%'),
+                    
+                    checkboxInput(inputId="male_toggleTD", label="Male", value=T),
+                    
+                    shinyWidgets::sliderTextInput(inputId="male_selectTD",
+                                                  label=NULL,
+                                                  choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
+                                                  selected=c('<1', '80+'),
+                                                  force_edges=T,
+                                                  grid=T))
+      ),
       
-      # age-sex sliders
-      strong('Age-sex Selection'),
-      
-      br(),
-      'The gridded population estimates that you download will represent the population within the selected age-sex groups.',
-      br(),br(),
-      
-      splitLayout(cellWidths=c('25%','75%'),
-                  
-                  checkboxInput(inputId="female_toggleTD", label="Female", value=T),
-                  
-                  shinyWidgets::sliderTextInput(inputId="female_selectTD",
-                                                label=NULL,
-                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
-                                                selected=c('<1', '80+'),
-                                                force_edges=T,
-                                                grid=T)),
-      
-      splitLayout(cellWidths=c('25%','75%'),
-                  
-                  checkboxInput(inputId="male_toggleTD", label="Male", value=T),
-                  
-                  shinyWidgets::sliderTextInput(inputId="male_selectTD",
-                                                label=NULL,
-                                                choices=c('<1','1-4','5-9','10-14','15-19','20-24','25-29','30-34','35-39','40-44','45-49','50-54','55-59','60-64','65-69','70-74','75-79','80+'),
-                                                selected=c('<1', '80+'),
-                                                force_edges=T,
-                                                grid=T))
+      wellPanel(
+        
+        h4('Advanced'),
+        
+        strong('Size Thresholds for Residential Buildings'),
+        br(),
+        'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.',
+        br(),br(),
+        
+        'Minimum residential building footprint area (sq m)',
+        br(),
+        sliderInput(inputId = 'bld_min_areaTD',
+                    label = NULL,
+                    min=0, 
+                    max=10,
+                    value=0,
+                    step=1),
+        'Maximum residential building footprint area (sq m)',
+        br(),
+        sliderInput(inputId = 'bld_max_areaTD',
+                    label = NULL,
+                    min=1e3, 
+                    max=max_building,
+                    value=max_building,
+                    step=500),
+        
+        br(),
+        strong('Unit of Analysis'),
+        br(),
+        'The population can be estimated by disaggregating your population totals based on the count of buildings or the total area of buildings.',
+        br(),
+        
+        splitLayout(cellWidths=c('10%','90%'),
+                    '',
+                    radioButtons(inputId = 'units_countTD',
+                                 label = NULL,
+                                 choiceNames = c('Building count','Building area'),
+                                 choiceValues = c(T,F)))
+      )
     )
   )
 
