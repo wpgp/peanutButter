@@ -7,7 +7,7 @@ srcfiles <- list.files(srcdir)
 # country info
 country_info <- peanutButter:::country_info
 initialize_country <- sample(country_info$country[!country_info$wopr & !country_info$woprVision],1)
-initialize_country <- sample(c('TGO','SEN','ETH'),1)
+initialize_country <- 'TGO'
 
 # maximum file upload size
 options(shiny.maxRequestSize = 50*1024^2)
