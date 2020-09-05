@@ -180,6 +180,22 @@ function(input, output, session){
     shinyjs::runjs('$("#submit").css("box-shadow","0 0 0px #333333")')
     shinyjs::disable('submit')
     
+    
+    if(input$units_count){
+      updateSliderInput(session, 'pres_urb',
+                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
+      
+      updateSliderInput(session, 'pres_rur',
+                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
+    } else {
+      updateSliderInput(session, 'ppa_urb',
+                        value = rv$pop_urb / rv$urb_area)
+      
+      updateSliderInput(session, 'ppa_rur',
+                        value = rv$pop_rur / rv$rur_area)
+    }
+    
+    
     if(input$units_count){
       rv$pop_urb <- rv$urb_count * input$pph_urb * input$pres_urb * input$hpb_urb
       
@@ -205,19 +221,6 @@ function(input, output, session){
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
-    if(input$units_count){
-      updateSliderInput(session, 'pres_urb',
-                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
-      
-      updateSliderInput(session, 'pres_rur',
-                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
-    } else {
-      updateSliderInput(session, 'ppa_urb',
-                        value = rv$pop_urb / rv$urb_area)
-      
-      updateSliderInput(session, 'ppa_rur',
-                        value = rv$pop_rur / rv$rur_area)
-    }
     
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
                                              prettyNum(round(input$bld_min_area), big.mark=','),
