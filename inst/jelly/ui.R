@@ -122,7 +122,8 @@ controls_advanced <-
               
               'Maximum building footprint area (sq m)', br(),
               sliderInput('bld_max_area', 
-                          label=NULL, min=1e3, max=max_building, value=max_building, step=500)
+                          label=NULL, min=1e3, max=max_building, value=max_building, step=500), 
+              icon('exclamation-triangle'), paste0('  Setting the maximum area to ',max_building,' is equivalent to setting no limit (i.e. no large buildings will be removed).')
               
               
     )
