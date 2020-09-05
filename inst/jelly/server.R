@@ -189,6 +189,8 @@ function(input, output, session){
   ##---- quick-calculate national population results (bottom-up) ----##
   observeEvent(input$submit, {
     
+    rv$table <- NULL
+    
     shinyjs::runjs('$("#submit").css("box-shadow","0 0 0px #333333")')
     shinyjs::disable('submit')
     
