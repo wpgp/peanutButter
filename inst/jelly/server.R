@@ -46,8 +46,8 @@ function(input, output, session){
       rv$rur_count <- nrow(rv$data) - rv$urb_count
       rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
       rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
-      rv$pop_urb <- rv$urb_count * rv$country_info$people_urb * rv$country_info$units_urb * rv$country_info$residential_urb
-      rv$pop_rur <- rv$rur_count * rv$country_info$people_rur * rv$country_info$units_rur * rv$country_info$residential_rur
+      rv$pop_urb <- with(country_info, rv$urb_count * people_urb * units_urb * residential_urb)
+      rv$pop_rur <- with(country_info, rv$rur_count * people_rur * units_rur * residential_rur)
 
       # default slider values
       updateSliderInput(session, 'pph_urb', value=rv$country_info$people_urb)
@@ -126,7 +126,7 @@ function(input, output, session){
   })
   
   ##---- building threshold ----##
-  observeEvent(c(input$bld_min_area,input$bld_max_area), {
+  observeEvent(c(input$bld_min_area, input$bld_max_area), {
     rv$data <- rv$data_full[barea >= input$bld_min_area & barea <= input$bld_max_area]
     
     rv$urb_count <- sum(rv$data$bld_urban)
@@ -170,20 +170,6 @@ function(input, output, session){
     shinyjs::toggle('pres_rur', condition=input$units_count==T)
     shinyjs::toggle('ppa_urb', condition=input$units_count==F)
     shinyjs::toggle('ppa_rur', condition=input$units_count==F)
-    
-    if(input$units_count){
-      updateSliderInput(session, 'pres_urb',
-                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
-      
-      updateSliderInput(session, 'pres_rur',
-                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
-    } else {
-      updateSliderInput(session, 'ppa_urb',
-                        value = rv$pop_urb / rv$urb_area)
-      
-      updateSliderInput(session, 'ppa_rur',
-                        value = rv$pop_rur / rv$rur_area)
-    }
   })
   
   ##---- quick-calculate national population results (bottom-up) ----##
@@ -218,6 +204,20 @@ function(input, output, session){
         input$ppa_rur 
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
+    
+    if(input$units_count){
+      updateSliderInput(session, 'pres_urb',
+                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
+      
+      updateSliderInput(session, 'pres_rur',
+                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
+    } else {
+      updateSliderInput(session, 'ppa_urb',
+                        value = rv$pop_urb / rv$urb_area)
+      
+      updateSliderInput(session, 'ppa_rur',
+                        value = rv$pop_rur / rv$rur_area)
+    }
     
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
                                              prettyNum(round(input$bld_min_area), big.mark=','),

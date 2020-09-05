@@ -41,7 +41,7 @@ controls_bottomup2 <-
             shinyjs::hidden(
               sliderInput('ppa_rur',
                           label = h5('Mean people per building area (ha)'),
-                          min = 0, max = 2000, value = 0, step = 1)
+                          min = 0, max = 2500, value = 0, step = 1)
             )
           )
 
