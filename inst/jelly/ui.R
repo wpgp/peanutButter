@@ -167,7 +167,7 @@ ui <- tagList(fluidPage(
                controls_bottomup2,
                controls_topdown,
                controls_agesex,
-               checkboxInput('toggleAdvanced', 'Show Advanced Controls'),
+               checkboxInput('toggleAdvanced', HTML('<strong>Show Advanced Controls</strong>  ',paste0(icon('angle-double-right')))),
                controls_advanced)
         )
       ),
