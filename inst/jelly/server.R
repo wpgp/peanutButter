@@ -128,6 +128,10 @@ function(input, output, session){
       rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
     } else {
       rv$data_full <- rv$data <- NULL
+      
+      updateSliderInput(session, 'bld_min_area', value=0)
+      updateSliderInput(session, 'bld_max_area', value=max_building)
+      updateRadioButtons(session, 'units_count', selected=T)
     }
   })
   
