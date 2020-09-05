@@ -99,32 +99,34 @@ controls_agesex <-
 
 # controls: advanced
 controls_advanced <-
-  wellPanel(h4('Advanced'),
-            
-            strong('Unit of Analysis'), br(),
-            'The population can be estimated based on the count of buildings or the total area of buildings.', br(), br(),
-            
-            radioButtons('units_count',
-                         label=NULL, 
-                         choiceNames = c('Building count','Building area'),
-                         choiceValues = c(T,F)),
-            conditionalPanel(condition='input.tabs == "Aggregate"',
-                             icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls (above) for "Urban Settlements" and "Rural Settlements".'
-            ), br(),br(),
-            
-            strong('Size Thresholds for Buildings'), br(),
-            'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.', br(), br(),
-            
-            'Minimum building footprint area (sq m)', br(),
-            sliderInput('bld_min_area', 
-                        label=NULL, min=0, max=10, value=0, step=1),
-            
-            'Maximum building footprint area (sq m)', br(),
-            sliderInput('bld_max_area', 
-                        label=NULL, min=1e3, max=max_building, value=max_building, step=500)
-            
-            
-          )
+  conditionalPanel(condition='input.toggleAdvanced == true',
+    wellPanel(h4('Advanced'),
+              
+              strong('Unit of Analysis'), br(),
+              'The population can be estimated based on the count of buildings or the total area of buildings.', br(), br(),
+              
+              radioButtons('units_count',
+                           label=NULL, 
+                           choiceNames = c('Building count','Building area'),
+                           choiceValues = c(T,F)),
+              conditionalPanel(condition='input.tabs == "Aggregate"',
+                               icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls (above) for "Urban Settlements" and "Rural Settlements".'
+              ), br(),br(),
+              
+              strong('Size Thresholds for Buildings'), br(),
+              'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.', br(), br(),
+              
+              'Minimum building footprint area (sq m)', br(),
+              sliderInput('bld_min_area', 
+                          label=NULL, min=0, max=10, value=0, step=1),
+              
+              'Maximum building footprint area (sq m)', br(),
+              sliderInput('bld_max_area', 
+                          label=NULL, min=1e3, max=max_building, value=max_building, step=500)
+              
+              
+    )
+  )
 
 
 ui <- tagList(fluidPage(
@@ -165,6 +167,7 @@ ui <- tagList(fluidPage(
                controls_bottomup2,
                controls_topdown,
                controls_agesex,
+               checkboxInput('toggleAdvanced', 'Show Advanced Controls'),
                controls_advanced)
         )
       ),

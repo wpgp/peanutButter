@@ -4,7 +4,7 @@ function(input, output, session){
   options(shiny.maxRequestSize=50*1024^2)
   
   # reactive values
-  rv <- reactiveValues()
+  rv <- reactiveValues(bld_min_area=0, bld_max_area=Inf)
 
   # cleanup temporary tifs
   observeEvent(rv$temp_tifs, {
@@ -23,8 +23,10 @@ function(input, output, session){
 
     tryCatch({
       
+      updateCheckboxInput(session, 'toggleAdvanced', value=F)
+      
       # reset reactive values
-      for(i in names(rv)[!names(rv) %in% c('data_select','bld_min_area','bld_max_area','units_count')]){
+      for(i in names(rv)[!names(rv) %in% c('toggleAdvanced','units_count','bld_min_area','bld_max_area','agesex_select')]){
         rv[[i]] <- NULL
       }
       
@@ -34,20 +36,13 @@ function(input, output, session){
       # country info
       rv$country_info <- country_info[input$data_select,]
       
-      # country data
-      rv$data_full <- readRDS(file.path(srcdir,
-                                        paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
-      
-      # filter by building area
-      rv$data <- rv$data_full[barea >= input$bld_min_area & barea <= input$bld_max_area]
-
       # default reactive values
-      rv$urb_count <- sum(rv$data$bld_urban)
-      rv$rur_count <- nrow(rv$data) - rv$urb_count
-      rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
-      rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
-      rv$pop_urb <- with(country_info, rv$urb_count * people_urb * units_urb * residential_urb)
-      rv$pop_rur <- with(country_info, rv$rur_count * people_rur * units_rur * residential_rur)
+      rv$urb_count <- rv$country_info$urb_count
+      rv$rur_count <- rv$country_info$rur_count
+      rv$urb_area <- rv$country_info$urb_area
+      rv$rur_area <- rv$country_info$rur_area
+      rv$pop_urb <- with(country_info, urb_count * people_urb * units_urb * residential_urb)
+      rv$pop_rur <- with(country_info, rur_count * people_rur * units_rur * residential_rur)
 
       # default slider values
       updateSliderInput(session, 'pph_urb', value=rv$country_info$people_urb)
@@ -119,21 +114,46 @@ function(input, output, session){
   # observe input sliders
   observeEvent(c(input$pph_urb,input$hpb_urb,input$pres_urb,input$ppa_urb,
                  input$pph_rur,input$hpb_rur,input$pres_rur,input$ppa_rur,
-                 input$units_count,input$bld_min_area,input$bld_max_area), {
+                 input$toggleAdvanced, input$units_count,input$bld_min_area,input$bld_max_area), {
     
     shinyjs::runjs('$("#submit").css("box-shadow","0 0 3px #333333")')
     shinyjs::enable('submit')
   })
   
+  observeEvent(input$toggleAdvanced, {
+    if(input$toggleAdvanced){
+      rv$data_full <- readRDS(file.path(srcdir,
+                                        paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
+      
+      rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
+    } else {
+      rv$data_full <- rv$data <- NULL
+    }
+  })
+  
   ##---- building threshold ----##
   observeEvent(c(input$bld_min_area, input$bld_max_area), {
-    rv$data <- rv$data_full[barea >= input$bld_min_area & barea <= input$bld_max_area]
     
-    rv$urb_count <- sum(rv$data$bld_urban)
-    rv$rur_count <- nrow(rv$data) - rv$urb_count
+    rv$bld_max_area <- ifelse(input$bld_max_area==max_building, Inf, input$bld_max_area)
+    rv$bld_min_area <- input$bld_min_area
     
-    rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
-    rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
+    if(rv$bld_min_area==0 & rv$bld_max_area==Inf){
+      if(input$toggleAdvanced){
+        rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
+      }
+      rv$urb_count <- rv$country_info$urb_count
+      rv$rur_count <- rv$country_info$rur_count
+      rv$urb_area <- rv$country_info$urb_area
+      rv$rur_area <- rv$country_info$rur_area
+      
+    } else {
+      rv$data <- rv$data_full[barea >= rv$bld_min_area & barea <= rv$bld_max_area]
+      
+      rv$urb_count <- sum(rv$data$bld_urban)
+      rv$rur_count <- nrow(rv$data) - rv$urb_count
+      rv$urb_area <- sum(rv$data[bld_urban==1]$barea) * 0.0001
+      rv$rur_area <- sum(rv$data[bld_urban==0]$barea) * 0.0001
+    }
   })
   
   observeEvent(input$tabs, {
@@ -203,11 +223,15 @@ function(input, output, session){
       
       rv$pop_rur <- rv$rur_count * input$pph_rur * input$pres_rur * input$hpb_rur
       
-      rv$maxpop_urb <- max(rv$data[bld_urban==1, .N, by=cellID]$N, na.rm=T) *
-        input$pres_urb * input$hpb_urb * input$pph_urb
-      
-      rv$maxpop_rur <- max(rv$data[bld_urban==0, .N, by=cellID]$N, na.rm=T) *
-        input$pres_rur * input$hpb_rur * input$pph_rur
+      if(input$toggleAdvanced){
+        rv$maxpop_urb <- max(rv$data[bld_urban==1, .N, by=cellID]$N, na.rm=T) *
+          input$pres_urb * input$hpb_urb * input$pph_urb
+        
+        rv$maxpop_rur <- max(rv$data[bld_urban==0, .N, by=cellID]$N, na.rm=T) *
+          input$pres_rur * input$hpb_rur * input$pph_rur
+      } else {
+        rv$maxpop_urb <- rv$maxpop_rur <- NA
+      }
       
     } else {
       
@@ -215,23 +239,31 @@ function(input, output, session){
       
       rv$pop_rur <- rv$rur_area * input$ppa_rur
       
-      rv$maxpop_urb <- input$ppa_urb * 0.0001 * max(rv$data[bld_urban==1, .(A = sum(barea)), by=cellID]$A, na.rm=T)
-         
-      rv$maxpop_rur <- input$ppa_rur * 0.0001 * max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T)
+      if(input$toggleAdvanced){
+        rv$maxpop_urb <- input$ppa_urb * (0.0001 * max(rv$data[bld_urban==1, .(A = sum(barea)), by=cellID]$A, na.rm=T))
+        
+        rv$maxpop_rur <- input$ppa_rur * (0.0001 * max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T))
+      } else {
+        rv$maxpop_urb <- rv$maxpop_rur <- NA
+      }
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
     
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
-                                             prettyNum(round(input$bld_min_area), big.mark=','),
-                                             prettyNum(round(input$bld_max_area), big.mark=','),
+                                             prettyNum(round(rv$bld_min_area), big.mark=','),
+                                             ifelse(is.finite(rv$bld_max_area),
+                                                              prettyNum(round(rv$bld_max_area), big.mark=','),
+                                                              Inf),
                                              paste0(prettyNum(round(rv$pop_urb/rv$pop_total*100), big.mark=','),'%'),
                                              prettyNum(round(rv$pop_urb), big.mark=','),
                                              prettyNum(round(rv$urb_count), big.mark=','),
                                              prettyNum(round(rv$urb_area,1), big.mark=','),
                                              prettyNum(round(rv$pop_urb/rv$urb_area,1), big.mark=','),
                                              prettyNum(round(rv$pop_urb/rv$urb_count,1), big.mark=','),
-                                             prettyNum(round(rv$maxpop_urb), big.mark=','),
+                                             ifelse(input$toggleAdvanced, 
+                                                    prettyNum(round(rv$maxpop_urb), big.mark=','), 
+                                                    NA),
                                              prettyNum(round(input$pph_urb,1), big.mark=','),
                                              prettyNum(round(input$hpb_urb,1), big.mark=','),
                                              paste0(round(input$pres_urb*100),'%'),
@@ -240,7 +272,9 @@ function(input, output, session){
                                              prettyNum(round(rv$rur_area,1), big.mark=','),
                                              prettyNum(round(rv$pop_rur/rv$rur_area,1), big.mark=','),
                                              prettyNum(round(rv$pop_rur/rv$rur_count,1), big.mark=','),
-                                             prettyNum(round(rv$maxpop_rur), big.mark=','),
+                                             ifelse(input$toggleAdvanced, 
+                                                    prettyNum(round(rv$maxpop_rur), big.mark=','), 
+                                                    NA),
                                              prettyNum(round(input$pph_rur,1), big.mark=','),
                                              prettyNum(round(input$hpb_rur,1), big.mark=','),
                                              paste0(round(input$pres_rur*100),'%')
@@ -271,26 +305,21 @@ function(input, output, session){
                                        ))
     
     # on-screen results table (bottom-up)
-    output$table_results <- renderTable(data.frame(rv$table[c('Population Total',
-                                                              '% Urban Population',
-                                                              'Urban: Population',
-                                                              'Rural: Population',
-                                                              'Urban: People per building footprint',
-                                                              'Rural: People per building footprint',
-                                                              'Urban: Max people per 100 m grid cell',
-                                                              'Rural: Max people per 100 m grid cell',
-                                                              'Urban: Building footprints',
-                                                              'Rural: Building footprints'),], 
-                                                   row.names=c('Population Total',
-                                                               '% Urban Population',
-                                                               'Urban: Population',
-                                                               'Rural: Population',
-                                                               'Urban: People per building footprint',
-                                                               'Rural: People per building footprint',
-                                                               'Urban: Max people per 100 m grid cell',
-                                                               'Rural: Max people per 100 m grid cell',
-                                                               'Urban: Building footprints',
-                                                               'Rural: Building footprints')),
+    rv$table_rows <- c('Population Total',
+                       '% Urban Population',
+                       'Urban: Population',
+                       'Rural: Population',
+                       'Urban: People per building footprint',
+                       'Rural: People per building footprint',
+                       'Urban: Building footprints',
+                       'Rural: Building footprints')
+    
+    if(input$toggleAdvanced) rv$table_rows <- c(rv$table_rows,
+                                                'Urban: Max people per 100 m grid cell',
+                                                'Rural: Max people per 100 m grid cell')
+    
+    output$table_results <- renderTable(data.frame(rv$table[rv$table_rows,], 
+                                                   row.names=rv$table_rows),
                                         digits = 0,
                                         striped = T,
                                         colnames = F,
@@ -331,6 +360,9 @@ function(input, output, session){
             shinyjs::disable('source_buttonBU')
             shinyjs::disable('raster_buttonTD')
             shinyjs::disable('source_buttonTD')
+            
+            if(is.null(rv$data)) rv$data <- readRDS(file.path(srcdir,
+                                                              paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
             
             # bottom-up aggregation
             if(input$units_count){
@@ -392,6 +424,9 @@ function(input, output, session){
     filename = function() paste0(input$data_select,'_source_',format(Sys.time(), "%Y%m%d%H%M"),'.zip'),
     content = function(file) {
       withProgress({
+        
+        if(is.null(rv$data)) rv$data <- readRDS(file.path(srcdir,
+                                                          paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
         
         if(input$units_count){
           rv$path_buildings <- file.path(tempdir(), 
@@ -457,6 +492,9 @@ function(input, output, session){
             shinyjs::disable('raster_buttonTD')
             shinyjs::disable('source_buttonTD')
             
+            if(is.null(rv$data)) rv$data <- readRDS(file.path(srcdir,
+                                                              paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
+            
             # top-down disaggregation
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
                               buildings = buildingRaster(data = rv$data, 
@@ -502,6 +540,9 @@ function(input, output, session){
     },
     content = function(file) {
       withProgress({
+        
+        if(is.null(rv$data)) rv$data <- readRDS(file.path(srcdir,
+                                                          paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
         
         if(input$units_count){
           rv$path_buildings <- file.path(tempdir(), 
