@@ -89,23 +89,17 @@ controls_agesex <-
                                                       selected=c('<1', '80+'),
                                                       force_edges=T,
                                                       grid=T)),
-            icon('exclamation-triangle'), '  The on-screen results in the "Aggregate" tab represent total populations and do not change with your age-sex selection.'
+            conditionalPanel(condition='input.tabs == "Aggregate"',
+              icon('exclamation-triangle'), '  The on-screen results table represents total populations and does not change with your age-sex selection.'
+            ),
+            conditionalPanel(condition='input.tabs == "Disaggregate"',
+              icon('exclamation-triangle'), '  The population totals that you provide (above) must represent total population rather than a specific age-sex group.'
+            )
           )
 
 # controls: advanced
 controls_advanced <-
   wellPanel(h4('Advanced'),
-            
-            strong('Size Thresholds for Residential Buildings'), br(),
-            'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.', br(), br(),
-            
-            'Minimum residential building footprint area (sq m)', br(),
-            sliderInput('bld_min_area', 
-                        label=NULL, min=0, max=10, value=0, step=1),
-            
-            'Maximum residential building footprint area (sq m)', br(),
-            sliderInput('bld_max_area', 
-                        label=NULL, min=1e3, max=max_building, value=max_building, step=500), br(),
             
             strong('Unit of Analysis'), br(),
             'The population can be estimated based on the count of buildings or the total area of buildings.', br(), br(),
@@ -114,7 +108,22 @@ controls_advanced <-
                          label=NULL, 
                          choiceNames = c('Building count','Building area'),
                          choiceValues = c(T,F)),
-            icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls in the "Aggregate" tab.'
+            conditionalPanel(condition='input.tabs == "Aggregate"',
+                             icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls above for "Urban Settlements" and "Rural Settlements".'
+            ), br(),br(),
+            
+            strong('Size Thresholds for Buildings'), br(),
+            'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.', br(), br(),
+            
+            'Minimum building footprint area (sq m)', br(),
+            sliderInput('bld_min_area', 
+                        label=NULL, min=0, max=10, value=0, step=1),
+            
+            'Maximum building footprint area (sq m)', br(),
+            sliderInput('bld_max_area', 
+                        label=NULL, min=1e3, max=max_building, value=max_building, step=500)
+            
+            
           )
 
 
@@ -148,8 +157,8 @@ ui <- tagList(fluidPage(
         # controls: select country
         div(style='padding-left:15px',
             selectInput('data_select',
-                    label = HTML('Select Country<br><small>(see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3" target="_blank">country codes</a>)</small>'),
-                    choices = row.names(country_info), 
+                    label = HTML('Select Country'),
+                    choices = select_list, 
                     selected = initialize_country))
       ),
            
@@ -172,10 +181,10 @@ ui <- tagList(fluidPage(
         tabPanel('Aggregate',                      
            h4('Do-It-Yourself Gridded Population Estimates'),
            div(style='width:600px',
-               HTML('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints.<br><br>
-                    Move the sliders on the left panel to adjust settings and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
-                    When you are satisfied that the settings and the results are reasonable, use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>
-                    See the "About" tab for details about the method and source data.<br><br>')),
+               HTML(paste0('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints.<br><br>
+                    ',icon('info-circle'),'  Move the sliders on the left panel to adjust settings and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
+                    ',icon('info-circle'),'  When you are satisfied that the settings and the results are reasonable, use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>
+                    See the "About" tab for details about the method and source data.<br><br>'))),
            actionButton('submit',strong('Refresh Results'), style='width:405px'),br(),br(),
            tableOutput('table_results'),
            downloadButton('raster_buttonBU', strong('Gridded Population Estimates'), style='width:405px'),br(),br(),
@@ -185,10 +194,10 @@ ui <- tagList(fluidPage(
         
         tabPanel('Disaggregate',
            h4('Do-It-Yourself Gridded Population Estimates'),
-           div(style='width:600px', HTML('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br>
-                                         Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon.<br><br>
-                                         After you upload your polygons, click the "Gridded population estimates" button and the peanutButter application will disaggregate your population totals into a 100 m grid based on building footprints.<br><br>
-                                         See the "About" tab for details about the method and source data.<br><br>')),
+           div(style='width:600px', HTML(paste0('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br>
+                                         ',icon('info-circle'),'  Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon.<br><br>
+                                         ',icon('info-circle'),'  After you upload your polygons, click the "Gridded population estimates" button and the peanutButter application will disaggregate your population totals into a 100 m grid based on your population totals.<br><br>
+                                         See the "About" tab for details about the method and source data.<br><br>'))),
            downloadButton('raster_buttonTD', strong('Gridded Population Estimates'), style='width:405px'),
            downloadButton('source_buttonTD', 'Source Files', style='width:200px'),
            br(),br()

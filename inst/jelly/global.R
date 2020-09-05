@@ -7,7 +7,10 @@ srcfiles <- list.files(srcdir)
 # country info
 country_info <- peanutButter:::country_info
 initialize_country <- sample(country_info$country[!country_info$wopr & !country_info$woprVision],1)
-initialize_country <- 'TGO'
+
+# country selection list
+select_list <- as.list(country_info$country)
+names(select_list) <- country_info$country_name
 
 # maximum file upload size
 options(shiny.maxRequestSize = 50*1024^2)
@@ -24,6 +27,7 @@ fileNames <- function(country, path=srcdir){
   urban_file <- ifelse(any(grepl('_urban.tif', i)), i[grepl('_urban.tif', i)], NA)
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
+  data_file <- ifelse(any(grepl('_dt_Shape_Area_Urb.rds', i)), i[grepl('_dt_Shape_Area_Urb.rds', i)], NA)
   
   if(any(is.na(i))){
     stop(paste0('Source files missing for ',country,': ',names(which(is.na(i)))))
@@ -33,8 +37,10 @@ fileNames <- function(country, path=srcdir){
               area = area_file,
               urban = urban_file,
               regions = regions_file,
-              agesex = agesex_file))
+              agesex = agesex_file,
+              data = data_file))
 }
+
 
 # building raster function
 buildingRaster <- function(data, mastergrid, type='count'){

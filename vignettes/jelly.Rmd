@@ -12,7 +12,7 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-9 July 2020  
+5 September 2020  
 
 ## Overview
 
@@ -130,7 +130,7 @@ Areas of your polygons that exceed the national boundaries used in the building 
 
 You can supply your own inputs (i.e. raster of building counts) to produce gridded population estimates using the "disaggregator" function of the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.
 
-## More Info: Age-sex  
+## Age-sex  
 
 Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:  
 
@@ -139,6 +139,23 @@ Gridded population estimates for specific demographic group(s) are produced the 
 2. Multiply the resulting grid of proportions by the gridded estimates of total population from the bottom-up or top-down method.
 
 To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, or region-specific age-sex proportions), you can use the "demographic" function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package. For an example of the age-sex information needed, please refer to the 'agesex' files downloaded when clicking on the "source files" button for any country.
+
+## Advanced Controls
+
+Advanced controls allow you to screen out the smallest and largest buildings prior to calculating populations and to distribute population numbers based on building area rather than building counts (the default). These advanced settings apply to the "Aggregate" tab and the "Disaggregate" tab.
+
+### Size Thresholds for Buildings
+You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.
+
+Some building footprints are so small that they are unlikely to be residential structures. These building footprints could be sheds, outbuildings, animal pens, or other small structures. You can use the slider to define a threshold for the minimum building footprint area that you would like to assign population numbers to. The peanutButter app will then remove building footprints smaller than your threshold prior to calculating populations.
+
+On the other hand, there are some building footprints that are so large that they are unlikely to be residential structures. These building footprints could be stadiums, industrial buildings, or even solar panel fields. You can use the slider to define a threshold for the maximum building footprint area that you would like to assign population numbers to. The peanutButter app will then remove building footprints larger than your threshold prior to calculating populations.
+
+### Unit of Analysis
+
+The population can be estimated based on the count of buildings or the total area of buildings. If you change the unit of analysis to "area" rather than "count" then the controls on the "Aggregate" tab will change. The area-based controls require you to define the average number of people per hectare of building footprint area, whereas the count-based controls require you to define the average number of people per building.
+
+The area-based method will assign a larger portion of the population to very large buildings, whereas the point-based method will assign a larger portion of the population to very small buildings. Because of this, the results of the area-based method may be sensitive to the maximum size threshold that you define for residential buildings and the point-based method may be sensitive to the minimum size threshold that you define for residential buildings.
 
 ## Source Data
 
@@ -173,7 +190,7 @@ Disaggregate tool: The time-point of the gridded population estimates is influen
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
 
 ## Recommended Citation 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.2.1. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00678</a>
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
 
 ## License
 You are free to redistribute and modify the peanutButter software under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" source="_blank">GNU General Public License v3.0 (GNU GPLv3)</a>. The source code is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.  

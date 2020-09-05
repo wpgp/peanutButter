@@ -37,7 +37,7 @@
 
 <p>WorldPop Research Group<br />
 University of Southampton</p>
-<p>9 July 2020</p>
+<p>5 September 2020</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>The <em>peanutButter</em> web application allows you to produce gridded population estimates using your own estimates of people per building. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings extracted from Maxar’s <a href="https://www.digitalglobe.com/products/mosaics" target="_blank">Vivid Imagery Mosaic</a> (Ecopia.AI and Maxar Technologies 2020, Dooley and Tatem 2020).</p>
@@ -158,14 +158,29 @@ This parameter defines the proportion of buildings that are residential (total b
 <p>You can supply your own inputs (i.e. raster of building counts) to produce gridded population estimates using the “disaggregator” function of the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package.</p>
 </div>
 </div>
-<div id="more-info-age-sex" class="section level2">
-<h2>More Info: Age-sex</h2>
+<div id="age-sex" class="section level2">
+<h2>Age-sex</h2>
 <p>Gridded population estimates for specific demographic group(s) are produced the same way for the top-down and bottom-up methods using ~100 m gridded estimates of the proportion of population in each age-sex group (WorldPop et al. 2018). There are 2 steps involved:</p>
 <ol style="list-style-type: decimal">
 <li><p>Sum the individual age-sex proportions for each grid cell across the age-sex groups selected using the sliders.</p></li>
 <li><p>Multiply the resulting grid of proportions by the gridded estimates of total population from the bottom-up or top-down method.</p></li>
 </ol>
 <p>To produce gridded population estimates for specific age-sex groups using your own inputs (i.e. population raster, or region-specific age-sex proportions), you can use the “demographic” function from the <a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter</a> R package. For an example of the age-sex information needed, please refer to the ‘agesex’ files downloaded when clicking on the “source files” button for any country.</p>
+</div>
+<div id="advanced-controls" class="section level2">
+<h2>Advanced Controls</h2>
+<p>Advanced controls allow you to screen out the smallest and largest buildings prior to calculating populations and to distribute population numbers based on building area rather than building counts (the default). These advanced settings apply to the “Aggregate” tab and the “Disaggregate” tab.</p>
+<div id="size-thresholds-for-buildings" class="section level3">
+<h3>Size Thresholds for Buildings</h3>
+<p>You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.</p>
+<p>Some building footprints are so small that they are unlikely to be residential structures. These building footprints could be sheds, outbuildings, animal pens, or other small structures. You can use the slider to define a threshold for the minimum building footprint area that you would like to assign population numbers to. The peanutButter app will then remove building footprints smaller than your threshold prior to calculating populations.</p>
+<p>On the other hand, there are some building footprints that are so large that they are unlikely to be residential structures. These building footprints could be stadiums, industrial buildings, or even solar panel fields. You can use the slider to define a threshold for the maximum building footprint area that you would like to assign population numbers to. The peanutButter app will then remove building footprints larger than your threshold prior to calculating populations.</p>
+</div>
+<div id="unit-of-analysis" class="section level3">
+<h3>Unit of Analysis</h3>
+<p>The population can be estimated based on the count of buildings or the total area of buildings. If you change the unit of analysis to “area” rather than “count” then the controls on the “Aggregate” tab will change. The area-based controls require you to define the average number of people per hectare of building footprint area, whereas the count-based controls require you to define the average number of people per building.</p>
+<p>The area-based method will assign a larger portion of the population to very large buildings, whereas the point-based method will assign a larger portion of the population to very small buildings. Because of this, the results of the area-based method may be sensitive to the maximum size threshold that you define for residential buildings and the point-based method may be sensitive to the minimum size threshold that you define for residential buildings.</p>
+</div>
 </div>
 <div id="source-data" class="section level2">
 <h2>Source Data</h2>
@@ -200,7 +215,7 @@ Aggregate tool: The time-point represented by the gridded population estimates i
 </div>
 <div id="recommended-citation" class="section level2">
 <h2>Recommended Citation</h2>
-<p>Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.2.1. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00678</a></p>
+<p>Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a></p>
 </div>
 <div id="license" class="section level2">
 <h2>License</h2>

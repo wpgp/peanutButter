@@ -21,6 +21,9 @@ if(T){
   file.copy('doc/jelly.html','inst/jelly/www/about.html', overwrite=T)
 }
 
+# restart R
+rstudioapi::restartSession()
+
 # install from source
 install.packages(getwd(), repo=NULL, type='source', lib='c:/research/r/library')
 
