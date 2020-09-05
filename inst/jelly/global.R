@@ -47,6 +47,7 @@ buildingRaster <- function(data, mastergrid, type='count'){
   } else if(type=='area') {
     data_summary <- data[, .(A = sum(barea)), by='cellID']
     result[data_summary$cellID] <- data_summary$A
+    result <- result * 0.0001
   }
   return(result)
 }

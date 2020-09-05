@@ -27,6 +27,8 @@ function(input, output, session){
       for(i in names(rv)[!names(rv) %in% c('data_select','bld_min_area','bld_max_area','units_count')]){
         rv[[i]] <- NULL
       }
+      
+      # reset table
       output$table_results <- NULL
       
       # country info
@@ -57,6 +59,8 @@ function(input, output, session){
       updateSliderInput(session, 'hpb_rur', value=rv$country_info$units_rur)
       updateSliderInput(session, 'pres_rur', value=rv$country_info$residential_rur)
       updateSliderInput(session, 'ppa_rur', value=rv$pop_rur / rv$rur_area)
+      
+      updateCheckboxInput(session, 'updated', value=T)
       
       # paths to source files
       rv$path_buildings_readme <- file.path(srcdir, srcfiles[grepl('README.pdf', srcfiles) & grepl('buildings', srcfiles)][1])
@@ -95,10 +99,20 @@ function(input, output, session){
       showNotification(as.character(w), type='warning', duration=20)
     }, 
     error=function(e){
+      
       showNotification(as.character(e), type='error', duration=20)
+      
     }, finally={
       
     })
+  })
+  
+  # observe slider updates
+  observeEvent(input$updated, {
+    if(input$updated){
+      shinyjs::click('submit')
+      updateCheckboxInput(session,'updated',value=F)      
+    }
   })
   
   ##---- building threshold ----##
@@ -123,8 +137,18 @@ function(input, output, session){
       shinyjs::hide('aggregate_controls2')
     }
   })
+  
+  # observe age-sex selection
+  observe({
     
-  ##---- bottom-up ----##
+    # format age-sex selection to column names
+    rv$agesex_select <- agesexLookup(male = input$male_toggle,
+                                     female = input$female_toggle,
+                                     male_select = input$male_select,
+                                     female_select = input$female_select)
+  })
+    
+  ####---- bottom-up ----####
   
   ##---- controls: unit of analysis ----#
   observe({
@@ -176,11 +200,6 @@ function(input, output, session){
                         value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
-    
-    # })
-    # 
-    # # results table
-    # observe({
     
     rv$table <- data.frame(settings=matrix(c(prettyNum(round(rv$pop_total), big.mark=','),
                                              prettyNum(round(input$bld_min_area), big.mark=','),
@@ -260,24 +279,6 @@ function(input, output, session){
     
   })
 
-  
-  
-  # observe age-sex selection (bottom-up)
-  observe({
-    
-    # format age-sex selection to column names
-    rv$agesex_select <- agesexLookup(male = input$male_toggle,
-                                       female = input$female_toggle,
-                                       male_select = input$male_select,
-                                       female_select = input$female_select)
-    
-    # syncronize settings in top-down tab
-    updateCheckboxInput(session, 'male_toggleTD', value=input$male_toggle)
-    updateCheckboxInput(session, 'female_toggleTD', value=input$female_toggle)
-    shinyWidgets::updateSliderTextInput(session, 'male_selectTD', selected=input$male_select)
-    shinyWidgets::updateSliderTextInput(session, 'female_selectTD', selected=input$female_select)
-  })
-  
   ## buttons ##
   
   # download settings button (bottom-up)
@@ -312,7 +313,9 @@ function(input, output, session){
             
             # bottom-up aggregation
             if(input$units_count){
-              x <- aggregator(buildings = buildingRaster(rv$data, raster::raster(rv$path_urban), 'count'),
+              x <- aggregator(buildings = buildingRaster(rv$data, 
+                                                         raster::raster(rv$path_urban), 
+                                                         'count'),
                               urban = raster::raster(rv$path_urban),
                               people_urb = input$pph_urb,
                               units_urb = input$hpb_urb,
@@ -321,7 +324,9 @@ function(input, output, session){
                               units_rur = input$hpb_rur,
                               residential_rur = input$pres_rur)
             } else {
-              x <- aggregator(buildings = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+              x <- aggregator(buildings = buildingRaster(rv$data, 
+                                                         raster::raster(rv$path_urban), 
+                                                         'area'),
                               urban = raster::raster(rv$path_urban),
                               people_urb = input$ppa_urb,
                               units_urb = 1,
@@ -333,7 +338,6 @@ function(input, output, session){
           
             # age-sex adjustment
             if(length(rv$agesex_select) < 36){
-              
               setProgress(value=1, message='Preparing data:', detail='Updating your gridded population estimates to represent the selected age-sex groups...')
               
               x <- demographic(population = x,
@@ -368,7 +372,7 @@ function(input, output, session){
     content = function(file) {
       withProgress({
         
-        if(input$units_countBU){
+        if(input$units_count){
           rv$path_buildings <- file.path(tempdir(), 
                                          paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
           raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'count'),
@@ -376,14 +380,14 @@ function(input, output, session){
         } else {
           rv$path_buildings <- file.path(tempdir(),
                                          paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
-          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area'),
                               filename = rv$path_buildings)
         }
         
         rv$source_files <- c(rv$path_buildings,
                              rv$path_urban,
                              rv$path_buildings_readme)
-        if(length(rv$agesex_selectBU) < 36) {
+        if(length(rv$agesex_select) < 36) {
           rv$source_files <- c(rv$source_files, rv$path_agesex_regions,
                                rv$path_agesex_table,
                                rv$path_agesex_readme)
@@ -397,7 +401,7 @@ function(input, output, session){
       value=1)
     })
   
-  ##---- top-down ----##
+  ####---- top-down ----####
   
   # observe file upload (top-down)
   observeEvent(input$user_json, {
@@ -409,19 +413,6 @@ function(input, output, session){
       shinyjs::enable('raster_buttonTD')
     }
   })  
-  
-  # observe age-sex selection (top-down)
-  observe({
-    rv$agesex_select <- agesexLookup(male = input$male_toggle,
-                                       female = input$female_toggle,
-                                       male_select = input$male_select,
-                                       female_select = input$female_select)
-    
-    updateCheckboxInput(session, 'male_toggleBU', value=input$male_toggle)
-    updateCheckboxInput(session, 'female_toggleBU', value=input$female_toggle)
-    shinyWidgets::updateSliderTextInput(session, 'male_selectBU', selected=input$male_select)
-    shinyWidgets::updateSliderTextInput(session, 'female_selectBU', selected=input$female_select)
-  })
   
   ## buttons ##
 
@@ -449,16 +440,16 @@ function(input, output, session){
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
                               buildings = buildingRaster(data = rv$data, 
                                                          mastergrid = raster::raster(rv$path_urban), 
-                                                         type = ifelse(input$units_count,'count','area'))*0.0001,
+                                                         type = ifelse(input$units_count,'count','area')),
                               popcol = input$popcol)
             
             # age-sex adjustment
-            if(length(rv$agesex_selectBU) < 36){
+            if(length(rv$agesex_select) < 36){
               
               setProgress(value=1, message='Preparing data:', detail='Updating your gridded population estimates to represent the selected age-sex groups...')
               
               x <- demographic(population = x,
-                               group_select = rv$agesex_selectBU,
+                               group_select = rv$agesex_select,
                                regions = raster::raster(rv$path_agesex_regions),
                                proportions = read.csv(rv$path_agesex_table))
               }
@@ -499,19 +490,22 @@ function(input, output, session){
         } else {
           rv$path_buildings <- file.path(tempdir(),
                                          paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
-          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area')*0.0001,
+          raster::writeRaster(x = buildingRaster(rv$data, raster::raster(rv$path_urban), 'area'),
                               filename = rv$path_buildings)
         }
+        
         rv$source_files <- c(rv$path_buildings,
                              rv$path_urban,
                              rv$path_buildings_readme)
-        if(length(rv$agesex_selectBU) < 36) {
+        if(length(rv$agesex_select) < 36) {
           rv$source_files <- c(rv$source_files, rv$path_agesex_regions,
                                rv$path_agesex_table,
                                rv$path_agesex_readme)
         }
+        
         zip::zipr(zipfile = file,
                   files = rv$source_files)
+        
         unlink(rv$path_buildings)
       },
       message='Preparing data:',

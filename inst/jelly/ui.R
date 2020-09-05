@@ -89,7 +89,7 @@ controls_agesex <-
                                                       selected=c('<1', '80+'),
                                                       force_edges=T,
                                                       grid=T)),
-            'Note: The on-screen results in the "Aggregate" tab represent total populations and do not change with your age-sex selection.'
+            icon('exclamation-triangle'), '  The on-screen results in the "Aggregate" tab represent total populations and do not change with your age-sex selection.'
           )
 
 # controls: advanced
@@ -114,22 +114,30 @@ controls_advanced <-
                          label=NULL, 
                          choiceNames = c('Building count','Building area'),
                          choiceValues = c(T,F)),
-            'Note: Changing the unit of analysis will modify the controls in the "Aggregate" tab.'
+            icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls in the "Aggregate" tab.'
           )
 
 
-ui <- fluidPage(
+ui <- tagList(fluidPage(
   
   shinyjs::useShinyjs(),
+  
+  shinyjs::hidden(checkboxInput('updated',NULL,F)),
 
   tags$style(HTML(".navbar-nav {float:none !important;}
                 .navbar-nav > li:nth-child(4){float:right}")),
+  
+  tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
+  
+  # tags$style(HTML('#submit{background-color:#383838; color:white}')),
+  # tags$style(HTML('#raster_buttonBU{background-color:#383838; color:white}')),
+  # tags$style(HTML('#raster_buttonTD{background-color:#383838; color:white}')),
   
   fluidRow(
     
 
     ####-- control panel (left) --####
-    column(width=3, style=paste0('height:calc(100vh); border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
+    column(width=3, style=paste0('height:calc(97vh); border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
        
       fluidRow(
         titlePanel(HTML('<div style="font-family:Helvetica,Arial,sans-serif;
@@ -164,11 +172,11 @@ ui <- fluidPage(
         tabPanel('Aggregate',                      
            h4('Do-It-Yourself Gridded Population Estimates'),
            div(style='width:600px',
-               HTML('The <strong>"aggregate" tool</strong> will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell.<br><br>
-                    Move the sliders on the left panel to adjust settings and then click "Update Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
-                    When you are satisfied that the settings and the results are reasonable, use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created by applying your settings to a high resolution map of building footprints.<br><br>
+               HTML('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints.<br><br>
+                    Move the sliders on the left panel to adjust settings and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
+                    When you are satisfied that the settings and the results are reasonable, use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>
                     See the "About" tab for details about the method and source data.<br><br>')),
-           actionButton('submit',strong('Retrieve/Update Results'), style='width:405px'),br(),br(),
+           actionButton('submit',strong('Refresh Results'), style='width:405px'),br(),br(),
            tableOutput('table_results'),
            downloadButton('raster_buttonBU', strong('Gridded Population Estimates'), style='width:405px'),br(),br(),
            downloadButton('table_buttonBU', 'Settings', style='width:200px'),
@@ -177,7 +185,7 @@ ui <- fluidPage(
         
         tabPanel('Disaggregate',
            h4('Do-It-Yourself Gridded Population Estimates'),
-           div(style='width:600px', HTML('The <strong>"disaggregate" tool</strong> allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br>
+           div(style='width:600px', HTML('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br>
                                          Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon.<br><br>
                                          After you upload your polygons, click the "Gridded population estimates" button and the peanutButter application will disaggregate your population totals into a 100 m grid based on building footprints.<br><br>
                                          See the "About" tab for details about the method and source data.<br><br>')),
@@ -198,9 +206,10 @@ ui <- fluidPage(
             img(src='logoWorldPop.png', 
                 style='height:30px; margin-top:-30px; margin-left:10px'))
         )
-      ),
-      tags$footer(HTML(paste0('<a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter v',packageVersion('peanutButter'),'</a>')),
-                  align = 'right')
+      )
     )
   )
+),
+footer=tags$footer(HTML(paste0('<a href="https://github.com/wpgp/peanutButter" target="_blank">peanutButter v',packageVersion('peanutButter'),'</a>')),
+                    align = 'right')
 )
