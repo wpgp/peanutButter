@@ -96,9 +96,10 @@ function(input, output, session){
       }
       
     }, warning=function(w){
+      
       showNotification(as.character(w), type='warning', duration=20)
-    }, 
-    error=function(e){
+      
+    }, error=function(e){
       
       showNotification(as.character(e), type='error', duration=20)
       
@@ -107,12 +108,21 @@ function(input, output, session){
     })
   })
   
-  # observe slider updates
+  # observe slider updates after initializing new country
   observeEvent(input$updated, {
     if(input$updated){
       shinyjs::click('submit')
       updateCheckboxInput(session,'updated',value=F)      
     }
+  })
+  
+  # observe input sliders
+  observeEvent(c(input$pph_urb,input$hpb_urb,input$pres_urb,input$ppa_urb,
+                 input$pph_rur,input$hpb_rur,input$pres_rur,input$ppa_rur,
+                 input$units_count,input$bld_min_area,input$bld_max_area), {
+    
+    shinyjs::runjs('$("#submit").css("box-shadow","0 0 3px #333333")')
+    shinyjs::enable('submit')
   })
   
   ##---- building threshold ----##
@@ -151,7 +161,7 @@ function(input, output, session){
   ####---- bottom-up ----####
   
   ##---- controls: unit of analysis ----#
-  observe({
+  observeEvent(input$units_count, {
     shinyjs::toggle('pph_urb', condition=input$units_count==T)
     shinyjs::toggle('hpb_urb', condition=input$units_count==T)
     shinyjs::toggle('pres_urb', condition=input$units_count==T)
@@ -160,10 +170,28 @@ function(input, output, session){
     shinyjs::toggle('pres_rur', condition=input$units_count==T)
     shinyjs::toggle('ppa_urb', condition=input$units_count==F)
     shinyjs::toggle('ppa_rur', condition=input$units_count==F)
+    
+    if(input$units_count){
+      updateSliderInput(session, 'pres_urb',
+                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
+      
+      updateSliderInput(session, 'pres_rur',
+                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
+    } else {
+      updateSliderInput(session, 'ppa_urb',
+                        value = rv$pop_urb / rv$urb_area)
+      
+      updateSliderInput(session, 'ppa_rur',
+                        value = rv$pop_rur / rv$rur_area)
+    }
   })
   
   ##---- quick-calculate national population results (bottom-up) ----##
   observeEvent(input$submit, {
+    
+    shinyjs::runjs('$("#submit").css("box-shadow","0 0 0px #333333")')
+    shinyjs::disable('submit')
+    
     if(input$units_count){
       rv$pop_urb <- rv$urb_count * input$pph_urb * input$pres_urb * input$hpb_urb
       
@@ -174,12 +202,6 @@ function(input, output, session){
       
       rv$maxpop_rur <- max(rv$data[bld_urban==0, .N, by=cellID]$N, na.rm=T) *
         input$pres_rur * input$hpb_rur * input$pph_rur
-      
-      updateSliderInput(session, 'ppa_urb',
-                        value = rv$pop_urb / rv$urb_area)
-      
-      updateSliderInput(session, 'ppa_rur',
-                        value = rv$pop_rur / rv$rur_area)
       
     } else {
       
@@ -192,12 +214,6 @@ function(input, output, session){
       
       rv$maxpop_rur <- max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T) * 0.0001 *
         input$ppa_rur 
-      
-      updateSliderInput(session, 'pres_urb',
-                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
-      
-      updateSliderInput(session, 'pres_rur',
-                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     

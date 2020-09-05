@@ -19,7 +19,7 @@ controls_bottomup1 <-
             shinyjs::hidden(
               sliderInput('ppa_urb',
                           label = h5('Mean people per building area (ha)'),
-                          min = 0, max = 1500, value = 0, step = 1))
+                          min = 0, max = 2000, value = 0, step = 1))
             )
 
 controls_bottomup2 <-
@@ -41,7 +41,7 @@ controls_bottomup2 <-
             shinyjs::hidden(
               sliderInput('ppa_rur',
                           label = h5('Mean people per building area (ha)'),
-                          min = 0, max = 1500, value = 0, step = 1)
+                          min = 0, max = 2000, value = 0, step = 1)
             )
           )
 
@@ -90,7 +90,7 @@ controls_agesex <-
                                                       force_edges=T,
                                                       grid=T)),
             conditionalPanel(condition='input.tabs == "Aggregate"',
-              icon('exclamation-triangle'), '  The on-screen results table represents total populations and does not change with your age-sex selection.'
+              icon('exclamation-triangle'), '  The on-screen table of results represents total populations and does not change with your age-sex selection.'
             ),
             conditionalPanel(condition='input.tabs == "Disaggregate"',
               icon('exclamation-triangle'), '  The population totals that you provide (above) must represent total population rather than a specific age-sex group.'
@@ -109,7 +109,7 @@ controls_advanced <-
                          choiceNames = c('Building count','Building area'),
                          choiceValues = c(T,F)),
             conditionalPanel(condition='input.tabs == "Aggregate"',
-                             icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls above for "Urban Settlements" and "Rural Settlements".'
+                             icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls (above) for "Urban Settlements" and "Rural Settlements".'
             ), br(),br(),
             
             strong('Size Thresholds for Buildings'), br(),
@@ -138,20 +138,16 @@ ui <- tagList(fluidPage(
   
   tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
   
-  # tags$style(HTML('#submit{background-color:#383838; color:white}')),
-  # tags$style(HTML('#raster_buttonBU{background-color:#383838; color:white}')),
-  # tags$style(HTML('#raster_buttonTD{background-color:#383838; color:white}')),
-  
   fluidRow(
     
 
     ####-- control panel (left) --####
-    column(width=3, style=paste0('height:calc(97vh); border: 1px solid ',gray(0.9),'; background:',gray(0.95)),
+    column(width=3, style=paste0('height:calc(97vh); border: 1px solid ',gray(0.9),'; background:#f8f8f8'),
        
       fluidRow(
         titlePanel(HTML('<div style="font-family:Helvetica,Arial,sans-serif;
-                         font-size:20px; padding-left:5px; color:#727272; background:#F2F2F2">
-                         peanutButter (beta)</div>'),
+                         font-size:19px; padding-left:15px; color:#777777; background:#f8f8f8">
+                         peanutButter (beta)<hr></div>'),
                    windowTitle='peanutButter'),
         
         # controls: select country
@@ -163,7 +159,7 @@ ui <- tagList(fluidPage(
       ),
            
       fluidRow(
-        column(width=12, style=paste0('height:calc(83vh); overflow-y:scroll; background:',gray(0.95)),
+        column(width=12, style=paste0('height:calc(82vh); overflow-y:scroll; background:#f8f8f8'),
                
                controls_bottomup1,
                controls_bottomup2,
@@ -183,7 +179,7 @@ ui <- tagList(fluidPage(
            div(style='width:600px',
                HTML(paste0('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints.<br><br>
                     ',icon('info-circle'),'  Move the sliders on the left panel to adjust settings and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
-                    ',icon('info-circle'),'  When you are satisfied that the settings and the results are reasonable, use the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>
+                    ',icon('info-circle'),'  When you are satisfied that the settings and the results are reasonable, click the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>
                     See the "About" tab for details about the method and source data.<br><br>'))),
            actionButton('submit',strong('Refresh Results'), style='width:405px'),br(),br(),
            tableOutput('table_results'),
@@ -195,8 +191,8 @@ ui <- tagList(fluidPage(
         tabPanel('Disaggregate',
            h4('Do-It-Yourself Gridded Population Estimates'),
            div(style='width:600px', HTML(paste0('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints.<br><br>
-                                         ',icon('info-circle'),'  Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon.<br><br>
-                                         ',icon('info-circle'),'  After you upload your polygons, click the "Gridded population estimates" button and the peanutButter application will disaggregate your population totals into a 100 m grid based on your population totals.<br><br>
+                                         ',icon('info-circle'),'  Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon. Adjust other settings as needed using the control panel to the left.<br><br>
+                                         ',icon('info-circle'),'  Click the "Gridded Population Estimates" button and the peanutButter application will use a high resolution map of building footprints to disaggregate your population totals into a 100 m grid.<br><br>
                                          See the "About" tab for details about the method and source data.<br><br>'))),
            downloadButton('raster_buttonTD', strong('Gridded Population Estimates'), style='width:405px'),
            downloadButton('source_buttonTD', 'Source Files', style='width:200px'),

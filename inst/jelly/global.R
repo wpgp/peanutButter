@@ -11,6 +11,7 @@ initialize_country <- sample(country_info$country[!country_info$wopr & !country_
 # country selection list
 select_list <- as.list(country_info$country)
 names(select_list) <- country_info$country_name
+select_list <- select_list[order(names(select_list))]
 
 # maximum file upload size
 options(shiny.maxRequestSize = 50*1024^2)
