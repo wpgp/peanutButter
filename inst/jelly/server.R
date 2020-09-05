@@ -170,8 +170,25 @@ function(input, output, session){
     shinyjs::toggle('pres_rur', condition=input$units_count==T)
     shinyjs::toggle('ppa_urb', condition=input$units_count==F)
     shinyjs::toggle('ppa_rur', condition=input$units_count==F)
+    
+    if(!all(input$ppa_urb==0, input$ppa_rur==0, input$pph_urb==1, input$pph_rur==1, input$hpb_urb==1, input$hpb_rur==1)){
+      if(input$units_count){
+        updateSliderInput(session, 'pres_urb',
+                          value = (rv$urb_area * input$ppa_urb) / (rv$urb_count * input$pph_urb * input$hpb_urb))
+        
+        updateSliderInput(session, 'pres_rur',
+                          value = (rv$rur_area * input$ppa_rur) / (rv$rur_count * input$pph_rur * input$hpb_rur))
+      } else {
+        updateSliderInput(session, 'ppa_urb',
+                          value = (rv$urb_count * input$pph_urb * input$pres_urb * input$hpb_urb) / rv$urb_area)
+        
+        updateSliderInput(session, 'ppa_rur',
+                          value = (rv$rur_count * input$pph_rur * input$pres_rur * input$hpb_rur) / rv$rur_area)
+      }
+    }
   })
   
+
   ##---- quick-calculate national population results (bottom-up) ----##
   observeEvent(input$submit, {
     
@@ -180,23 +197,8 @@ function(input, output, session){
     shinyjs::runjs('$("#submit").css("box-shadow","0 0 0px #333333")')
     shinyjs::disable('submit')
     
-    
     if(input$units_count){
-      updateSliderInput(session, 'pres_urb',
-                        value = rv$pop_urb / (rv$urb_count * input$pph_urb * input$hpb_urb))
       
-      updateSliderInput(session, 'pres_rur',
-                        value = rv$pop_rur / (rv$rur_count * input$pph_rur * input$hpb_rur))
-    } else {
-      updateSliderInput(session, 'ppa_urb',
-                        value = rv$pop_urb / rv$urb_area)
-      
-      updateSliderInput(session, 'ppa_rur',
-                        value = rv$pop_rur / rv$rur_area)
-    }
-    
-    
-    if(input$units_count){
       rv$pop_urb <- rv$urb_count * input$pph_urb * input$pres_urb * input$hpb_urb
       
       rv$pop_rur <- rv$rur_count * input$pph_rur * input$pres_rur * input$hpb_rur
@@ -213,11 +215,9 @@ function(input, output, session){
       
       rv$pop_rur <- rv$rur_area * input$ppa_rur
       
-      rv$maxpop_urb <- max(rv$data[bld_urban==1, .(A = sum(barea)), by=cellID]$A, na.rm=T) * 0.0001 *
-        input$ppa_urb 
-      
-      rv$maxpop_rur <- max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T) * 0.0001 *
-        input$ppa_rur 
+      rv$maxpop_urb <- input$ppa_urb * 0.0001 * max(rv$data[bld_urban==1, .(A = sum(barea)), by=cellID]$A, na.rm=T)
+         
+      rv$maxpop_rur <- input$ppa_rur * 0.0001 * max(rv$data[bld_urban==0, .(A = sum(barea)), by=cellID]$A, na.rm=T)
     }
     rv$pop_total <- rv$pop_urb + rv$pop_rur
     
