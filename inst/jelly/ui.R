@@ -204,7 +204,7 @@ ui <- tagList(fluidPage(
         ),
         
         tabPanel('About',
-                 tags$iframe(style='overflow-y:auto; width:100%; height:calc(97vh - 70px)',
+                 tags$iframe(style='overflow-y:auto; width:100%; height:calc(97vh - 75px)',
                              frameBorder='0',
                              src='about.html')
         ),
