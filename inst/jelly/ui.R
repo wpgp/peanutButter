@@ -144,9 +144,9 @@ ui <- tagList(fluidPage(
     
 
     ####-- control panel (left) --####
-    column(width=3, style=paste0('height:calc(97vh); border: 1px solid ',gray(0.9),'; background:#f8f8f8'),
+    column(width=3, style=paste0('border: 1px solid ',gray(0.9),'; background:#f8f8f8'),
        
-      fluidRow(
+      fluidRow(style='height:150px',
         titlePanel(HTML('<div style="font-family:Helvetica,Arial,sans-serif;
                          font-size:19px; padding-left:15px; color:#777777; background:#f8f8f8">
                          peanutButter (beta)<hr></div>'),
@@ -161,7 +161,7 @@ ui <- tagList(fluidPage(
       ),
            
       fluidRow(
-        column(width=12, style=paste0('height:calc(82vh); overflow-y:scroll; background:#f8f8f8'),
+        column(width=12, style=paste0('height:calc(97vh - 150px); overflow-y:scroll; background:#f8f8f8'),
                
                controls_bottomup1,
                controls_bottomup2,
@@ -204,7 +204,7 @@ ui <- tagList(fluidPage(
         ),
         
         tabPanel('About',
-                 tags$iframe(style='overflow-y:scroll; width:100%; height:calc(89vh)',
+                 tags$iframe(style='overflow-y:scroll; width:100%; height:calc(97vh - 70px)',
                              frameBorder='0',
                              src='about.html')
         ),
