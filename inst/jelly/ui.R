@@ -100,8 +100,7 @@ controls_agesex <-
 # controls: advanced
 controls_advanced <-
   conditionalPanel(condition='input.toggleAdvanced == true',
-    wellPanel(h4('Advanced'),
-              
+    wellPanel(
               strong('Unit of Analysis'), br(),
               'The population can be estimated based on the count of buildings or the total area of buildings.', br(), br(),
               
@@ -167,9 +166,10 @@ ui <- tagList(fluidPage(
                controls_bottomup1,
                controls_bottomup2,
                controls_topdown,
-               controls_agesex,
                checkboxInput('toggleAdvanced', HTML('<strong>Show Advanced Controls</strong>  ',paste0(icon('angle-double-right')))),
-               controls_advanced)
+               controls_advanced,
+               controls_agesex
+               )
         )
       ),
     
