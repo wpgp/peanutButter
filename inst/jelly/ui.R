@@ -10,7 +10,7 @@ controls_bottomup1 <-
             
             sliderInput('hpb_urb',            
                         label = h5('Mean housing units per residential building'),
-                        min = 1, max = 3, value = 0, step = 0.1),
+                        min = 1, max = 3, value = 0, step = 0.02),
             
             sliderInput('pres_urb',
                         label = h5('Proportion building footprints that are residential'),
@@ -32,7 +32,7 @@ controls_bottomup2 <-
             
             sliderInput('hpb_rur',            
                         label = h5('Mean housing units per residential building'),
-                        min = 1, max = 3, value = 0, step = 0.1),
+                        min = 1, max = 3, value = 0, step = 0.02),
             
             sliderInput('pres_rur',
                         label = h5('Proportion building footprints that are residential'),
@@ -108,6 +108,7 @@ controls_advanced <-
                            label=NULL, 
                            choiceNames = c('Building count','Building area'),
                            choiceValues = c(T,F)),
+              
               conditionalPanel(condition='input.tabs == "Aggregate"',
                                icon('exclamation-triangle'), '  Changing the unit of analysis will modify the controls (above) for "Urban Settlements" and "Rural Settlements".'
               ), br(),br(),
@@ -116,12 +117,15 @@ controls_advanced <-
               'You can choose to assume that no people live in the buildings with the smallest and/or largest building footprints.', br(), br(),
               
               'Minimum building footprint area (sq m)', br(),
+              
               sliderInput('bld_min_area', 
-                          label=NULL, min=0, max=10, value=0, step=1),
+                          label=NULL, min=0, max=10, value=0, step=0.1),
               
               'Maximum building footprint area (sq m)', br(),
+              
               sliderInput('bld_max_area', 
-                          label=NULL, min=1e3, max=max_building, value=max_building, step=500), 
+                          label=NULL, min=1e3, max=max_building, value=max_building, step=100), 
+              
               icon('exclamation-triangle'), paste0('  Setting the maximum area to ',max_building,' is equivalent to setting no limit (i.e. no large buildings will be removed).')
               
               
@@ -141,7 +145,6 @@ ui <- tagList(fluidPage(
   tags$style('.irs-bar, .irs-bar-edge, .irs-single, .irs-from, .irs-to, .irs-grid-pol {background-color:darkgrey; border-color:darkgrey; }'),
   
   fluidRow(
-    
 
     ####-- control panel (left) --####
     column(width=3, style=paste0('border: 1px solid ',gray(0.9),'; background:#f8f8f8'),
