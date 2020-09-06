@@ -379,14 +379,14 @@ function(input, output, session){
             
             # bottom-up aggregation
             if(input$units_count){
-              if(input$toggleAdvanced){
-                rv$temp_raster <- buildingRaster(rv$data, 
+              if(any(input$units_count==F, input$bld_min_area>0, input$bld_max_area<max_building)){
+                temp_raster <- buildingRaster(rv$data, 
                                                  raster::raster(rv$path_urban), 
                                                  'count')
               } else {
-                rv$temp_raster <- raster::raster(rv$path_buildings)
+                temp_raster <- raster::raster(rv$path_buildings)
               }
-              x <- aggregator(buildings = rv$temp_raster,
+              x <- aggregator(buildings = temp_raster,
                               urban = raster::raster(rv$path_urban),
                               people_urb = input$pph_urb,
                               units_urb = input$hpb_urb,
@@ -394,6 +394,7 @@ function(input, output, session){
                               people_rur = input$pph_rur,
                               units_rur = input$hpb_rur,
                               residential_rur = input$pres_rur)
+              try(rm(temp_raster));gc()
             } else {
               x <- aggregator(buildings = buildingRaster(rv$data, 
                                                          raster::raster(rv$path_urban), 
@@ -429,7 +430,7 @@ function(input, output, session){
           error=function(e){
             showNotification(as.character(e), type='error', duration=20)
           }, finally={
-            rm(x);gc()
+            try(rm(x)); gc()
           })
       },
       message='Preparing data:',
@@ -443,45 +444,44 @@ function(input, output, session){
     content = function(file) {
       withProgress({
         
-        if(input$toggleAdvanced){
+        if(any(input$units_count==F, input$bld_min_area>0, input$bld_max_area<max_building)){
           if(input$units_count){
-            rv$temp_path <- file.path(tempdir(), 
-                                      paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+            temp_path <- file.path(tempdir(), 
+                                   paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
             raster::writeRaster(x = buildingRaster(rv$data, 
                                                    raster::raster(rv$path_urban), 
                                                    'count'),
-                                filename = rv$temp_path)
+                                filename = temp_path)
             
           } else {
-            rv$temp_path <- file.path(tempdir(),
-                                      paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
+            temp_path <- file.path(tempdir(),
+                                   paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
             raster::writeRaster(x = buildingRaster(rv$data, 
                                                    raster::raster(rv$path_urban), 
                                                    'area'),
-                                filename = rv$temp_path)
+                                filename = temp_path)
           }
         } else {
-          rv$temp_path <- rv$path_buildings
+          temp_path <- rv$path_buildings
         }
         
         if(length(rv$agesex_select)==36) {
-          rv$source_files <- c(rv$temp_path,
-                               rv$path_urban,
-                               rv$path_buildings_readme)  
+          source_files <- c(temp_path,
+                            rv$path_urban,
+                            rv$path_buildings_readme)  
         } else {
-          rv$source_files <- c(rv$temp_path,
-                               rv$path_urban,
-                               rv$path_buildings_readme, 
-                               rv$path_agesex_regions,
-                               rv$path_agesex_table,
-                               rv$path_agesex_readme)
+          source_files <- c(temp_path,
+                            rv$path_urban,
+                            rv$path_buildings_readme, 
+                            rv$path_agesex_regions,
+                            rv$path_agesex_table,
+                            rv$path_agesex_readme)
         }
         
         zip::zipr(zipfile = file,
-                  files = rv$source_files)
+                  files = source_files)
         
-        if(!rv$temp_path == rv$path_buildings) unlink(rv$temp_path)
-        rv$temp_path <- NULL
+        if(!temp_path == rv$path_buildings) unlink(temp_path)
       },
       message='Preparing data:',
       detail='Creating .zip archive with source data...',
@@ -523,17 +523,20 @@ function(input, output, session){
             shinyjs::disable('raster_buttonTD')
             shinyjs::disable('source_buttonTD')
             
-            if(is.null(rv$data)) rv$data <- readRDS(file.path(srcdir,
-                                                              paste0(rv$country_info$country,'_dt_Shape_Area_Urb.rds')))
+            if(any(input$units_count==F, input$bld_min_area>0, input$bld_max_area<max_building)){
+              temp_raster <- buildingRaster(rv$data, 
+                                            raster::raster(rv$path_urban), 
+                                            ifelse(input$units_count,'count','area'))
+            } else {
+              temp_raster <- raster::raster(rv$path_buildings)
+            }
             
             # top-down disaggregation
             x = disaggregator(feature = sf::st_read(input$user_json[,'datapath'], quiet=T), 
-                              buildings = ifelse(input$toggleAdvanced,
-                                                 buildingRaster(rv$data, 
-                                                                raster::raster(rv$path_urban), 
-                                                                ifelse(input$units_count,'count','area')),
-                                                 raster::raster(rv$path_buildings)),
+                              buildings = temp_raster,
                               popcol = input$popcol)
+            
+            try(rm(temp_raster));gc()
             
             # age-sex adjustment
             if(length(rv$agesex_select) < 36){
@@ -558,7 +561,7 @@ function(input, output, session){
             showNotification(as.character(e), type='error', duration=20)
           }, finally={
             shinyjs::reset('user_json')
-            rm(x);gc()
+            try(rm(x));gc()
           })  
         },
         message='Preparing data:',
@@ -574,45 +577,44 @@ function(input, output, session){
     content = function(file) {
       withProgress({
         
-        if(input$toggleAdvanced){
+        if(any(input$units_count==F, input$bld_min_area>0, input$bld_max_area<max_building)){
           if(input$units_count){
-            rv$temp_path <- file.path(tempdir(), 
+            temp_path <- file.path(tempdir(), 
                                       paste0(rv$country_info$country,'_building_count_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
             raster::writeRaster(x = buildingRaster(rv$data, 
                                                    raster::raster(rv$path_urban), 
                                                    'count'),
-                                filename = rv$temp_path)
+                                filename = temp_path)
             
           } else {
-            rv$temp_path <- file.path(tempdir(),
+            temp_path <- file.path(tempdir(),
                                       paste0(rv$country_info$country,'_building_area_',format(Sys.time(), "%Y%m%d%H%M"),'.tif'))
             raster::writeRaster(x = buildingRaster(rv$data, 
                                                    raster::raster(rv$path_urban), 
                                                    'area'),
-                                filename = rv$temp_path)
+                                filename = temp_path)
           }
         } else {
-          rv$temp_path <- rv$path_buildings
+          temp_path <- rv$path_buildings
         }
         
         if(length(rv$agesex_select)==36) {
-          rv$source_files <- c(rv$temp_path,
-                               rv$path_urban,
-                               rv$path_buildings_readme)
+          source_files <- c(temp_path,
+                            rv$path_urban,
+                            rv$path_buildings_readme)
         } else {
-          rv$source_files <- c(rv$temp_path,
-                               rv$path_urban,
-                               rv$path_buildings_readme, 
-                               rv$path_agesex_regions,
-                               rv$path_agesex_table,
-                               rv$path_agesex_readme)
+          source_files <- c(temp_path,
+                            rv$path_urban,
+                            rv$path_buildings_readme, 
+                            rv$path_agesex_regions,
+                            rv$path_agesex_table,
+                            rv$path_agesex_readme)
         }
         
         zip::zipr(zipfile = file,
-                  files = rv$source_files)
+                  files = rsource_files)
         
-        if(!rv$temp_path == rv$path_buildings) unlink(rv$temp_path)
-        rv$temp_path <- NULL
+        if(!temp_path == rv$path_buildings) unlink(temp_path)
       },
       message='Preparing data:',
       detail='Creating .zip archive with source data...',
