@@ -161,7 +161,7 @@ ui <- tagList(fluidPage(
       ),
            
       fluidRow(
-        column(width=12, style=paste0('height:calc(97vh - 150px); overflow-y:scroll; background:#f8f8f8'),
+        column(width=12, style=paste0('height:calc(96vh - 150px); overflow-y:auto; background:#f8f8f8'),
                
                controls_bottomup1,
                controls_bottomup2,
@@ -178,7 +178,7 @@ ui <- tagList(fluidPage(
       
       navbarPage(title=NULL, id='tabs',
 
-        tabPanel('Aggregate',                      
+        tabPanel('Aggregate', style='height:calc(96vh - 75px); overflow-y:auto; ',                      
            h4('Do-It-Yourself Gridded Population Estimates'),
            div(style='width:600px',
                HTML(paste0('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints.<br><br>
@@ -204,7 +204,7 @@ ui <- tagList(fluidPage(
         ),
         
         tabPanel('About',
-                 tags$iframe(style='overflow-y:scroll; width:100%; height:calc(97vh - 70px)',
+                 tags$iframe(style='overflow-y:auto; width:100%; height:calc(96vh - 70px)',
                              frameBorder='0',
                              src='about.html')
         ),
