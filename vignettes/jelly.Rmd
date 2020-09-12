@@ -27,9 +27,7 @@ The peanutButter application has two tools that can be used to produce gridded p
 The prefered approach will depend on the information that you have available:  
 
 - Use the aggregate tool if you have estimates of people per building for urban and rural areas.  
-- Use the disaggregate tool if you have estimates of total population in each administrative unit.
-
-Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
+- Use the disaggregate tool if you have your own polygons (e.g. administrative units) with estimates of total population in each.
 
 ### Advantages  
 - The peanut butter method is quick and easy to implement in situations where detailed population estimates are not currently available.  
@@ -38,6 +36,8 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 ### Disadvantages
 - This method is not objective or driven by population data (i.e. household surveys). It relies on your subjective estimates of population characteristics.  
 - There are no estimates of uncertainty provided by this method. You will have no objective basis for determing the accuracy of the estimates produced.  
+
+Code for the *peanutButter* R package is openly available from WorldPop on GitHub: <a href="https://github.com/wpgp/peanutButter" target="_blank">https://github.com/wpgp/peanutButter</a>.
 
 ## Quick Start: Aggregate Tool
 1. Use the sliders to explore population parameters until you find a combination that produces reasonable estimates (shown in the 'Results' table) of total population, urban population, and rural population for the country as a whole. 
@@ -49,7 +49,7 @@ Code for the *peanutButter* R package is openly available from WorldPop on GitHu
 4. (optional) Use the "Settings" and/or "Source Files" button(s) to save the input data.
 
 ## Quick Start: Disaggregate Tool
-1. Upload a GeoJson file containing polygons and their associated population totals, by clicking on the "Browse" button and selecting your GeoJson file. Ensure that you have the correct country selected.
+1. Upload a GeoJson file containing polygons and their associated population totals. Click the "Browse" button to select your GeoJson file and use the drop down list to select the column with your population totals. Ensure that you have the correct country selected.
 
 2. Adjust the age-sex sliders to select the demographic group(s) that you would like your gridded population estimates to represent. 
 
@@ -70,7 +70,7 @@ The aggregate tool requires you to provide estimates of three population charact
 
 These three parameters will be multiplied together to estimate people per building footprint.
 
-Areas have been pre-classified as 'urban' based on two simple rules that are consistent across all countries. A ~100 meter grid cell is classified as 'urban' if it is part of a grouping of contiguous cells with: 1) 1,500 or more cells, and; 2) 5,000 or more buildings (Dooley and Tatem 2020). All grid cells containing building centroids that do not meet the 'urban' criteria, are classified as 'rural'.
+Areas have been pre-classified as 'urban' based on two simple rules that are consistent across all countries. A ~100 meter grid cell is classified as 'urban' if it is part of a grouping of contiguous cells with: 1) 1,500 or more cells containing at least one building, and; 2) 5,000 or more total buildings (Dooley and Tatem 2020). All grid cells containing building centroids that do not meet the 'urban' criteria, are classified as 'rural'.
 
 The population is estimated using the following formula:  
 
@@ -98,7 +98,7 @@ This parameter defines the average number of people in a housing unit and it can
 This parameter defines the average number of housing units per residential building. This number would be expected to be near 1 for rural areas and slightly higher in urban areas.
 
 **Proportion residential buildings**  
-This parameter defines the proportion of buildings that are residential (total building counts from Dooley and Tatem 2020). Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represent more than one building.
+This parameter defines the proportion of building footprints that represent residential structures out of the total counts of building footprints from Dooley and Tatem (2020). Some buildings are non-residential like factories, shops, barns, and sheds. In addition, there are some erroneous building footprints that do not represent buildings and others that may represent more than one building.
 
 ### Default Values
 
@@ -108,7 +108,9 @@ We provide moderately informative default values for population parameters, but 
 
 2. Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.  
 
-3. Adjust the proportion of buildings that are residential until the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming the same proportion of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
+3. With the other parameters fixed at their default values, we defined the proportion of building footprints that are residential so that the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming equal proportions of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
+
+4. For the advanced controls, the default value for average number of people per hectare of building footprint area was defined so that the total populations in urban and rural areas matched those derived from the default values described above.
 
 ## More Info: Disaggregate Tool
 
