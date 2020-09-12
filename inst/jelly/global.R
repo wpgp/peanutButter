@@ -26,6 +26,7 @@ fileNames <- function(country, path=srcdir){
   count_file <- ifelse(any(grepl('_count.tif', i)), i[grepl('_count.tif', i)], NA)
   area_file <- ifelse(any(grepl('_total_area.tif', i)), i[grepl('_total_area.tif', i)], NA)
   urban_file <- ifelse(any(grepl('_urban.tif', i)), i[grepl('_urban.tif', i)], NA)
+  year_file <- ifelse(any(grepl('_imagery_year.tif', i)), i[grepl('_imagery_year.tif', i)], NA)
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
   data_file <- ifelse(any(grepl('_dt_Shape_Area_Urb.rds', i)), i[grepl('_dt_Shape_Area_Urb.rds', i)], NA)
@@ -37,6 +38,7 @@ fileNames <- function(country, path=srcdir){
   return(list(count = count_file, 
               area = area_file,
               urban = urban_file,
+              year = year_file,
               regions = regions_file,
               agesex = agesex_file,
               data = data_file))

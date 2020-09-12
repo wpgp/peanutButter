@@ -191,7 +191,8 @@ ui <- tagList(fluidPage(
            tableOutput('table_results'),
            downloadButton('raster_buttonBU', strong('Gridded Population Estimates'), style='width:405px'),br(),br(),
            downloadButton('table_buttonBU', 'Settings', style='width:200px'),
-           downloadButton('source_buttonBU', 'Source Files', style='width:200px')
+           downloadButton('source_buttonBU', 'Source Files', style='width:200px'),br(),br(),
+           div(style='font-size:11px', htmlOutput('yeartextBU'))
         ),
         
         tabPanel('Disaggregate',
@@ -200,8 +201,8 @@ ui <- tagList(fluidPage(
                                          ',icon('info-circle'),'  Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon. Adjust other settings as needed using the control panel to the left.<br><br>
                                          ',icon('info-circle'),'  Click the "Gridded Population Estimates" button and the peanutButter application will use a high resolution map of building footprints to disaggregate your population totals into a 100 m grid.<br><br>'))),
            downloadButton('raster_buttonTD', strong('Gridded Population Estimates'), style='width:405px'),
-           downloadButton('source_buttonTD', 'Source Files', style='width:200px'),
-           br(),br()
+           downloadButton('source_buttonTD', 'Source Files', style='width:200px'),br(),br(),
+           div(style='font-size:11px', htmlOutput('yeartextTD'))
         ),
         
         tabPanel('About',

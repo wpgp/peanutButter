@@ -8,7 +8,7 @@ License: GNU GPLv3
 Imports: data.table, fasterize, raster, shiny, shinyjs, shinyWidgets, sp, zip
 Suggest: 
 Description: An R package to create gridded popuation estimates from building footprints using the peanut butter method.
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)

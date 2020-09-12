@@ -12,7 +12,7 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-5 September 2020  
+12 September 2020  
 
 ## Overview
 
@@ -176,7 +176,7 @@ There are also two source datasets that provide the proportion of population in 
 The time period associated with gridded population estimates produced by peanutButter depends on several factors. The spatial distribution of the population across the country depends on the spatial distribution of building footprints. The age-sex breakdown depends on the source demographic data. The population totals depend on the population data that you provide. 
 
 **Building footprints**  
-The satellite imagery used to create the building footprints is from <a href='http://www.digitalglobe.com/products/mosaics', target='_blank'>Maxar's Vivid imagery mosaics</a>. The exact date depends on the specific satellite image used in the mosaic at a given location. The average mosaic image is less than 20 months old (Ecopia.AI and Maxar Technologies 2020). 
+The satellite imagery used to create the building footprints is from <a href='http://www.digitalglobe.com/products/mosaics', target='_blank'>Maxar's Vivid imagery mosaics</a>. The exact date depends on the specific satellite image used in the mosaic at a given location. The average mosaic image is less than 20 months old (Ecopia.AI and Maxar Technologies 2020). When you select a country, a footnote will provide the percentage coverage of building footprints in the country that were mapped based on satellite imagery from 2019, 2018, 2017, 2016, and 2015 or earlier.  You can also click the "Source Files" button to download a map (geotiff raster) of imagery years for building footprints across the country.
 
 **Demographic data**  
 The demographic data (WorldPop et al. 2018) describing age-sex proportions and their spatial distribution are based on projections that represent the year 2020, but they do not account for potential effects of population displacement and migration.
@@ -203,7 +203,7 @@ Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N,
 
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa. Ecopia.AI and Maxar Technologies. 
 
-Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. WorldPop Research Group, University of Southampton. Source of building footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(c) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00666" target="_blank">doi:10.5258/SOTON/WP00666</a>  
+Dooley CA, Boo G, Leasure DR, and Tatem AJ. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.1. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00677" target="_blank">doi:10.5258/SOTON/WP00677</a>
 
 Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 <a href="https://dx.doi.org/10.1038/sdata.2017.89" target="_blank">doi:10.1038/sdata.2017.89</a>  
 

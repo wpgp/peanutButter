@@ -77,6 +77,9 @@ function(input, output, session){
       rv$path_urban <- file.path(srcdir, fileNames(rv$country_info$country, srcdir)[['urban']])
       if(!file.exists(rv$path_urban)) stop(paste(rv$country_info$country,'"urban" source file not available.'), call.=F)
       
+      rv$path_year <- file.path(srcdir, fileNames(rv$country_info$country, srcdir)[['year']])
+      if(!file.exists(rv$path_year)) warning(paste(rv$country_info$country,'"imagery year" source file not available.'), call.=F)
+      
       rv$path_agesex_regions <- file.path(srcdir,fileNames(rv$country_info$country, srcdir)[['regions']])
       if(!file.exists(rv$path_agesex_regions)) stop(paste(rv$country_info$country,'"regions" source file not available.'), call.=F)
       
@@ -113,6 +116,11 @@ function(input, output, session){
     })
   })
   
+  # year of footprints text
+  output$yeartextTD <- output$yeartextBU <- renderText({
+    paste0('* Building footprints for ', rv$country_info$country_name, ' (', rv$country_info$country, ') were based on satellite imagery from 2019 (', round(rv$country_info$year2019*100),'%), 2018 (', round(rv$country_info$year2018*100),'%), 2017 (', round(rv$country_info$year2017*100),'%), 2016 (', round(rv$country_info$year2016*100),'%), 2015 or earlier (', round(rv$country_info$year2015pre*100),'%). <br>Click "Source Files" to download a map of imagery years for building footprints.')
+  })
+
   # observe slider updates after initializing new country
   observeEvent(input$updated, {
     if(input$updated){
@@ -468,10 +476,12 @@ function(input, output, session){
         if(length(rv$agesex_select)==36) {
           source_files <- c(temp_path,
                             rv$path_urban,
+                            rv$path_year,
                             rv$path_buildings_readme)  
         } else {
           source_files <- c(temp_path,
                             rv$path_urban,
+                            rv$path_year,
                             rv$path_buildings_readme, 
                             rv$path_agesex_regions,
                             rv$path_agesex_table,
@@ -601,10 +611,12 @@ function(input, output, session){
         if(length(rv$agesex_select)==36) {
           source_files <- c(temp_path,
                             rv$path_urban,
+                            rv$path_year,
                             rv$path_buildings_readme)
         } else {
           source_files <- c(temp_path,
                             rv$path_urban,
+                            rv$path_year,
                             rv$path_buildings_readme, 
                             rv$path_agesex_regions,
                             rv$path_agesex_table,

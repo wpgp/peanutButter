@@ -6,6 +6,8 @@ setwd(file.path(dirname(rstudioapi::getSourceEditorContext()$path),'..'))
 
 # package
 library(peanutButter, lib='c:/research/r/library')
+library(wopr, lib='c:/research/r/library')
+library(data.table)
 
 # source directory
 srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
@@ -20,7 +22,8 @@ for(i in 1:length(files)){
 }  
 # country_list <- sort(unique(c(country_list,as.character(peanutButter:::country_info$country))))
 country_list <- sort(unique(country_list))
-country_list <- country_list[-which(country_list %in% c('XXX'))]
+
+country_list <- unique(country_list[-which(country_list %in% c('XXX','Thumbs.db','checks','bf'))])
 
 # default settings
 defaults <- read.csv('data-raw/defaults.csv',stringsAsFactors=F)
@@ -33,6 +36,7 @@ fileNames <- function(country, path=srcdir){
   count_file <- ifelse(any(grepl('_count.tif', i)), i[grepl('_count.tif', i)], NA)
   area_file <- ifelse(any(grepl('_total_area.tif', i)), i[grepl('_total_area.tif', i)], NA)
   urban_file <- ifelse(any(grepl('_urban.tif', i)), i[grepl('_urban.tif', i)], NA)
+  year_file <- ifelse(any(grepl('_imagery_year.tif', i)), i[grepl('_imagery_year.tif', i)], NA)
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
   data_file <- ifelse(any(grepl('_dt_Shape_Area_Urb.rds', i)), i[grepl('_dt_Shape_Area_Urb.rds', i)], NA)
@@ -44,6 +48,7 @@ fileNames <- function(country, path=srcdir){
   return(list(count = count_file, 
               area = area_file,
               urban = urban_file,
+              year = year_file,
               regions = regions_file,
               agesex = agesex_file,
               data = data_file))
@@ -52,6 +57,7 @@ fileNames <- function(country, path=srcdir){
 # check files exist
 for(country in country_list){
   type.exists <- fileNames(country)[['urban']] %in% files
+  year.exists <- fileNames(country)[['year']] %in% files
   data.exists <- fileNames(country)[['data']] %in% files
   regions.exists <- fileNames(country)[['regions']] %in% files
   agesex.exists <- fileNames(country)[['agesex']] %in% files
@@ -67,7 +73,7 @@ country_info <- data.frame(country = as.character(country_list),
                            country_name = defaults[country_list,'country_name'],
                            population = defaults[country_list,'population'])
 row.names(country_info) <- country_list
-country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area')] <- NA
+country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area','year2019','year2018','year2017','year2016','year2015pre')] <- NA
 
 # refresh_countries <- c()
 # 
@@ -81,8 +87,10 @@ country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_a
 
 # building counts
 for(country in country_list){
+  
+  cat(paste0(country,', '))
+  
   if(any(is.na(country_info[country,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area')]))){
-    cat(paste0(country,', '))
     
     # load data
     dat <- readRDS(file.path(srcdir,fileNames(country)[['data']]))
@@ -99,6 +107,18 @@ for(country in country_list){
       country_info[country,'urb_area'] <- sum(dat[bld_urban==1]$barea) * 0.0001
       country_info[country,'rur_area'] <- sum(dat[bld_urban==0]$barea) * 0.0001
     }
+  }
+  if(any(is.na(country_info[country,c('year2019','year2018','year2017','year2016','year2015pre')]))){
+    
+    year <- raster::raster(file.path(srcdir, fileNames(country)[['year']]))
+    
+    pixel_count <- sum(!is.na(year[]))
+    
+    country_info[country,'year2019'] <- sum(year[]==2019, na.rm=T) / pixel_count
+    country_info[country,'year2018'] <- sum(year[]==2018, na.rm=T) / pixel_count
+    country_info[country,'year2017'] <- sum(year[]==2017, na.rm=T) / pixel_count
+    country_info[country,'year2016'] <- sum(year[]==2016, na.rm=T) / pixel_count
+    country_info[country,'year2015pre'] <- sum(year[]<=2015, na.rm=T) / pixel_count
   }
 }
 

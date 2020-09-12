@@ -33,6 +33,5 @@ library(peanutButter, lib='c:/research/r/library')
 citation('peanutButter')
 
 # run app
-srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
-srcdir <- 'e:/peanutButter'
+srcdir <- 'E:/peanutButter'
 peanutButter::jelly(srcdir)
