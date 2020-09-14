@@ -192,7 +192,8 @@ ui <- tagList(fluidPage(
            downloadButton('raster_buttonBU', strong('Gridded Population Estimates'), style='width:405px'),br(),br(),
            downloadButton('table_buttonBU', 'Settings', style='width:200px'),
            downloadButton('source_buttonBU', 'Source Files', style='width:200px'),br(),br(),
-           div(style='font-size:11px', htmlOutput('yeartextBU'))
+           div(style='font-size:11px', 
+               br(),htmlOutput('yeartextBU'))
         ),
         
         tabPanel('Disaggregate',
@@ -202,7 +203,8 @@ ui <- tagList(fluidPage(
                                          ',icon('info-circle'),'  Click the "Gridded Population Estimates" button and the peanutButter application will use a high resolution map of building footprints to disaggregate your population totals into a 100 m grid.<br><br>'))),
            downloadButton('raster_buttonTD', strong('Gridded Population Estimates'), style='width:405px'),
            downloadButton('source_buttonTD', 'Source Files', style='width:200px'),br(),br(),
-           div(style='font-size:11px', htmlOutput('yeartextTD'))
+           div(style='font-size:11px', 
+               br(),htmlOutput('yeartextTD'))
         ),
         
         tabPanel('About',
