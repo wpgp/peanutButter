@@ -10,8 +10,7 @@ library(wopr, lib='c:/research/r/library')
 library(data.table)
 
 # source directory
-srcdir <- '//worldpop.files.soton.ac.uk/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
-srcdir <- 'e:/peanutButter'
+srcdir <- 'E:/worldpop/Projects/WP517763_GRID3/Working/git/peanutButter'
 
 # country list
 files <- list.files(srcdir)

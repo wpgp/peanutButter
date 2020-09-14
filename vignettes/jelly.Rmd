@@ -12,7 +12,7 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-12 September 2020  
+14 September 2020  
 
 ## Overview
 
@@ -104,11 +104,11 @@ This parameter defines the proportion of building footprints that represent resi
 
 We provide moderately informative default values for population parameters, but we strongly urge users to modify the defaults based on a thorough investigation of available data sources. Our process for selecting default values was:  
 
-1. Look up average household sizes (<a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>). We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit. 
+1. We defined <i>mean people per housing unit</i> based on <a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">UN 2019</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">UN 2017</a>. We assumed that household sizes were equal in urban and rural areas. If no estimate was availabe, we assumed an average of 5 people per housing unit. 
 
-2. Assume there was an average of 1.1 housing units per building in urban areas and 1 housing unit per building in rural areas.  
+2. Assume there was an average of 1.1 <i>housing units per residential building</i> in urban areas and 1 <i>housing unit per residential building</i> in rural areas.  
 
-3. With the other parameters fixed at their default values, we defined the proportion of building footprints that are residential so that the total population matched the <a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank estimates</a>, assuming equal proportions of residential buildings for urban and rural areas. For countries where population estimates were available from the <a href="https://wopr.worldpop.org" target="_blank">WorldPop Open Population Repository</a>, we used those total populations instead.
+3. With the other parameters fixed at their default values, we defined the <i>proportion of building footprints that are residential</i> so that the national population total matched the estimate for the year 2020 from the <a href="https://population.un.org/wpp/" target="_blank">United Nations World Population Prospects (2019)</a> using the <a href="https://population.un.org/wpp/DefinitionOfProjectionVariants/" target="_blank">medium-variant projections</a>.
 
 4. For the advanced controls, the default value for average number of people per hectare of building footprint area was defined so that the total populations in urban and rural areas matched those derived from the default values described above.
 
@@ -173,7 +173,7 @@ There are also two source datasets that provide the proportion of population in 
 1. A spreadsheet with age-sex proportions for each region,  
 2. A region ID for every 100 m grid cell.  
 
-## Year of Outputs  
+## Year of Population Estimates  
 
 The time period associated with gridded population estimates produced by peanutButter depends on several factors. The spatial distribution of the population across the country depends on the spatial distribution of building footprints. The age-sex breakdown depends on the source demographic data. The population totals depend on the population data that you provide. 
 
@@ -184,7 +184,7 @@ The satellite imagery used to create the building footprints is from <a href='ht
 The demographic data (WorldPop et al. 2018) describing age-sex proportions and their spatial distribution are based on projections that represent the year 2020, but they do not account for potential effects of population displacement and migration.
 
 **Population data**  
-Aggregate tool: The time-point represented by the gridded population estimates is influenced by the date of your settings for "people per housing unit", "housing units per residential building", and "proportion of buildings that are residential". The date reflected by our default values is usually 2018-2019. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
+Aggregate tool: The time-point represented by the gridded population estimates is influenced by the date of your settings for "people per housing unit", "housing units per residential building", and "proportion of buildings that are residential". The date reflected by our default population totals is 2020. For more information, refer to our sources described in the sub-section "Default Values" from [More Info: Bottom-up].  
 
 Disaggregate tool: The time-point of the gridded population estimates is influenced by the date of the population totals in your uploaded geojson file.  
 
