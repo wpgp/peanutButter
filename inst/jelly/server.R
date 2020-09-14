@@ -118,8 +118,8 @@ function(input, output, session){
   
   # year of footprints text
   output$yeartextBU <- renderText({
-    paste0('* Building footprints for ', rv$country_info$country_name, ' were based on satellite imagery from 2019 (', round(rv$country_info$year2019*100),'%), 2018 (', round(rv$country_info$year2018*100),'%), 2017 (', round(rv$country_info$year2017*100),'%), 2016 (', round(rv$country_info$year2016*100),'%), 2015 or earlier (', round(rv$country_info$year2015pre*100),'%) (Ecopia.AI, Maxar 2020; <a href="',paste0('https://wopr.worldpop.org/?',rv$country_info$country,'/Buildings'),'" target="_blank">Dooley et al. 2020</a>).<br>',
-           '* Default "Population Total" is from ',ifelse(rv$country_info$wopr, 
+    paste0('*  Building footprints for ', rv$country_info$country_name, ' were based on satellite imagery from 2019 (', round(rv$country_info$year2019*100),'%), 2018 (', round(rv$country_info$year2018*100),'%), 2017 (', round(rv$country_info$year2017*100),'%), 2016 (', round(rv$country_info$year2016*100),'%), 2015 or earlier (', round(rv$country_info$year2015pre*100),'%) (Ecopia.AI, Maxar 2020; <a href="',paste0('https://wopr.worldpop.org/?',rv$country_info$country,'/Buildings'),'" target="_blank">Dooley et al. 2020</a>).<br>',
+           '** Default "Population Total" is from ',ifelse(rv$country_info$wopr, 
                                                           paste0('<a href="https://wopr.worldpop.org/?',input$data_select,'/Population" target="_blank">WorldPop Open Population Repository</a>'),
                                                           '<a href="https://data.worldbank.org/indicator/sp.pop.totl" target="_blank">WorldBank (2019)</a>'),
            ', and defaults for "Mean people per housing unit" are from <a href="https://population.un.org/Household/index.html#/countries/728" target="_blank">United Nations (2019)</a> or <a href="https://www.un.org/en/development/desa/population/publications/pdf/ageing/household_size_and_composition_around_the_world_2017_data_booklet.pdf" target="_blank">United Nations (2017)</a>. See "About" tab for more info.')
