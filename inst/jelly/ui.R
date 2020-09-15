@@ -184,8 +184,8 @@ ui <- tagList(fluidPage(
         tabPanel('Aggregate', style='height:calc(97vh - 75px); overflow-y:auto; ',                      
            h4('Do-It-Yourself Gridded Population Estimates'),
            div(style='width:600px',
-               HTML(paste0('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints. See the "About" tab for details.<br><br>
-                    ',icon('info-circle'),'  Move the sliders on the left panel to adjust settings and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
+               HTML(paste0('The "aggregate" tool will apply your estimates of people per building to every building and then aggregate buildings to estimate population size for each ~100 m grid cell using a high resolution map of building footprints<sup>1</sup>. See the "About" tab for details.<br><br>
+                    ',icon('info-circle'),'  Move the sliders on the left panel to adjust settings<sup>2</sup> and then click "Refresh Results" to calculate a summary of the population estimates that will appear in the table below.<br><br>
                     ',icon('info-circle'),'  When you are satisfied that the settings and the results are reasonable, click the "Gridded Population Estimates" button to download a 100 meter population grid (geotiff raster, WGS84) created using your settings.<br><br>'))),
            actionButton('submit',strong('Refresh Results'), style='width:405px'),br(),br(),
            tableOutput('table_results'),
@@ -198,7 +198,7 @@ ui <- tagList(fluidPage(
         
         tabPanel('Disaggregate',
            h4('Do-It-Yourself Gridded Population Estimates'),
-           div(style='width:600px', HTML(paste0('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints. See the "About" tab for details.<br><br>
+           div(style='width:600px', HTML(paste0('The "disaggregate" tool allows you to disaggregate your own population totals from administrative units (or other polygons) into gridded population estimates based on a high resolution map of building footprints<sup>1</sup>. See the "About" tab for details.<br><br>
                                          ',icon('info-circle'),'  Provide a polygon shapefile (GeoJson format) that contains the total population for each polygon. Adjust other settings as needed using the control panel to the left.<br><br>
                                          ',icon('info-circle'),'  Click the "Gridded Population Estimates" button and the peanutButter application will use a high resolution map of building footprints to disaggregate your population totals into a 100 m grid.<br><br>'))),
            downloadButton('raster_buttonTD', strong('Gridded Population Estimates'), style='width:405px'),
