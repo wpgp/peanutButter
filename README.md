@@ -3,7 +3,7 @@
 WorldPop Research Group  
 University of Southampton
 
-5 September 2020
+14 September 2020
 
 ## Introduction
 
@@ -59,26 +59,40 @@ You can run the application locally from your R console, but you will first need
 peanutButter::jelly(srcdir="c:/local_source_directory")
 ```
 
-## Contributing
-The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Maxar Technologies and Ecopia.AI (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group. 
+## Version History
 
-## Suggested Citation
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.2.1. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00678</a>
+<strong>Version 0.3.0</strong><br>
+Minor version update on 14 September 2020 to include advanced controls for filtering out buildings based on their area and to distribute population based on building area or building count. Modified default values to match population totals for the year 2020 from the United Nations World Population Prospects (2019; medium-variant projections).
+
+<strong>Version 0.2.1</strong><br>
+Patch on 9 July 2020 to include building footprints from additional countries for a total of 51 countries.
+
+<strong>Version 0.2.0</strong><br>
+Minor version update on 3 June 2020 to change terminology from "bottom-up" to "aggregate" and from "top-down" to "disaggregate".
+
+<strong>Version 0.1.0</strong><br>
+Initial beta release on 27 May 2020.
+
+## Contributing
+The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
+
+## Recommended Citation 
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
 
 ## License
-GNU General Public License v3.0 (GNU GPLv3)  
+You are free to redistribute and modify the peanutButter software under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public License v3.0 (GNU GPLv3)</a>. The source code is openly available on <a href="https://github.com/wpgp/peanutButter" target="_blank">GitHub</a>.  
 
-## References
+The source data for each country is available from the "Source Files" button in the application and the license terms for those datasets are included in the documentation with each download.
+  
+## References  
 
 Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N, Nilsen K, Pistolesi L, Adamo S, Mills J, Nieves JJ, Chamberlain H, Bondarenko M, Lloyd C, Ves N, Koper P,  Yetman G, Gaughan A, Stevens F, Linard C, James W, Sorichetta A, and Tatem AJ. In prep. Population structure by age and sex: a multi-temporal subnational perspective.
 
-Ecopia.AI and Maxar Technologies. 2020. Digitize Africa.  
+Ecopia.AI and Maxar Technologies. 2020. Digitize Africa. Ecopia.AI and Maxar Technologies. 
 
-Dooley, C. A. and Tatem, A.J. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.0. University of Southampton: Southampton, UK. Source of building Footprints "Ecopia Vector Maps Powered by Maxar Satellite Imagery"(C) 2020. https://dx.doi.org/10.5258/SOTON/WP00666  
+Dooley CA, Boo G, Leasure DR, and Tatem AJ. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.1. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00677" target="_blank">doi:10.5258/SOTON/WP00677</a>
 
-Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 https://dx.doi.org/10.1038/sdata.2017.89  
+Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 <a href="https://dx.doi.org/10.1038/sdata.2017.89" target="_blank">doi:10.1038/sdata.2017.89</a>  
 
 WorldPop (www.worldpop.org - School of Geography and Environmental Science, University of Southampton; Department of Geography and Geosciences, University of Louisville; Departement de Geographie, Universite de Namur) and Center for International Earth Science Information Network (CIESIN), Columbia University (2018). Global High Resolution Population Denominators Project - Funded by the Bill and Melinda Gates Foundation (OPP1134076). 
-  
-  
-  
+
