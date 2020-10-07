@@ -13,9 +13,6 @@ The _peanutButter_ web application is available online from the <a href="https:/
 
 Code for the _peanutButter_ package is openly available on GitHub: <a href='https://github.com/wpgp/peanutButter' target='_blank'>https://github.com/wpgp/peanutButter</a>.
 
-**Recommended citation:**  
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.2.1. WorldPop Research Group, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00678</a>
-
 ## Installation
 
 First, start a new R session. Then, install the _peanutButter_ R package from WorldPop on GitHub:
