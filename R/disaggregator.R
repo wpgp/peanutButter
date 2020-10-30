@@ -44,7 +44,7 @@ disaggregator <- function(feature, buildings, popcol=NULL){
   units <- fasterize::fasterize(feature, buildings, 'id')
   
   # building zonal sum
-  bldgzonal <- raster::zonal(buildings, units, sum)
+  bldgzonal <- raster::zonal(buildings, units, 'sum')
   colnames(bldgzonal) <- c('id','buildings')
   row.names(bldgzonal) <- bldgzonal[,'id']
   
