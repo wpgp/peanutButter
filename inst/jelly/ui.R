@@ -217,7 +217,7 @@ ui <- tagList(fluidPage(
           a(href='https://www.worldpop.org', target='_blank', 
             style='padding:0px',
             img(src='https://www.worldpop.org/resources/wp_logo/wp_logotype_grey75.png', 
-                style='height:23px; margin-top:-30px; margin-left:10px'))
+                style='height:25px; margin-top:-30px; margin-left:10px'))
         )
       )
     )
