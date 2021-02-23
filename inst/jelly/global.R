@@ -20,22 +20,21 @@ options(shiny.maxRequestSize = 50*1024^2)
 max_building <- 10e3
 
 # function to get source file names
-fileNames <- function(country, path=srcdir){
-  i <- list.files(path)
-  i <- i[grepl(paste0(country,'_'), i)]
+fileNames <- function(country, srcfiles=list.files(srcdir)){
+  i <- srcfiles[grepl(paste0(country,'_'), srcfiles)]
   count_file <- ifelse(any(grepl('_count.tif', i)), i[grepl('_count.tif', i)], NA)
   area_file <- ifelse(any(grepl('_total_area.tif', i)), i[grepl('_total_area.tif', i)], NA)
   urban_file <- ifelse(any(grepl('_urban.tif', i)), i[grepl('_urban.tif', i)], NA)
   year_file <- ifelse(any(grepl('_imagery_year.tif', i)), i[grepl('_imagery_year.tif', i)], NA)
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
-  data_file <- ifelse(any(grepl('_dt_Shape_Area_Urb.rds', i)), i[grepl('_dt_Shape_Area_Urb.rds', i)], NA)
-  
+  data_file <- ifelse(any(grepl('_datatable.rds', i)), i[grepl('_datatable.rds', i)], NA)
+
   if(any(is.na(i))){
     stop(paste0('Source files missing for ',country,': ',names(which(is.na(i)))))
   }
-  
-  return(list(count = count_file, 
+
+  return(list(count = count_file,
               area = area_file,
               urban = urban_file,
               year = year_file,
@@ -47,9 +46,9 @@ fileNames <- function(country, path=srcdir){
 
 # building raster function
 buildingRaster <- function(data, mastergrid, type='count'){
-  
+
   result <- raster::raster(mastergrid)
-  
+
   if(type=='count'){
     data_summary <- data[, .N, by='cellID']
     result[data_summary$cellID] <- data_summary$N

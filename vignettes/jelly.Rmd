@@ -16,7 +16,7 @@ University of Southampton
 
 ## Overview
 
-The *peanutButter* web application allows you to produce gridded population estimates using your own estimates of people per building. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings extracted from Maxar's <a href="https://www.digitalglobe.com/products/mosaics" target="_blank">Vivid Imagery Mosaic</a> (Ecopia.AI and Maxar Technologies 2020, Dooley and Tatem 2020).
+The *peanutButter* web application allows you to produce gridded population estimates using your own estimates of people per building. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings extracted from Maxar's <a href="https://www.digitalglobe.com/products/mosaics" target="_blank">Vivid Imagery Mosaic</a> (Ecopia.AI and Maxar Technologies 2020; Dooley et al 2020, 2021).
 
 ```{r, echo=F, out.width="80%", fig.cap='Applying a user-defined estimate of 5.9 people per building to create gridded population estimates from building footprints in this urban area (darker red = more people).', out.extra='style="border:0px"'}
 knitr::include_graphics(path='images/peanutButter_overview2.png')
@@ -70,7 +70,7 @@ The aggregate tool requires you to provide estimates of three population charact
 
 These three parameters will be multiplied together to estimate people per building footprint.
 
-Areas have been pre-classified as 'urban' based on two simple rules that are consistent across all countries. A ~100 meter grid cell is classified as 'urban' if it is part of a grouping of contiguous cells with: 1) 1,500 or more cells containing at least one building, and; 2) 5,000 or more total buildings (Dooley and Tatem 2020). All grid cells containing building centroids that do not meet the 'urban' criteria, are classified as 'rural'.
+Areas have been pre-classified as 'urban' based on two simple rules that are consistent across all countries. A ~100 meter grid cell is classified as 'urban' if it is part of a grouping of contiguous cells with: 1) 1,500 or more cells containing at least one building, and; 2) 5,000 or more total buildings (Dooley et al 2020). All grid cells containing building centroids that do not meet the 'urban' criteria, are classified as 'rural'.
 
 The population is estimated using the following formula:  
 
@@ -163,7 +163,7 @@ The area-based method will assign a larger portion of the population to very lar
 
 In the peanutButter app, there are several source datasets working behind the scenes that you can download using the "Download Source" button.  
 
-There are two data sets describing building patterns (Dooley and Tatem 2020) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
+There are two data sets describing building patterns (Dooley et al 2020) that were derived from building footprints (Ecopia.AI and Maxar Technologies 2020):  
 
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
@@ -206,7 +206,7 @@ Initial beta release on 27 May 2020.
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
 
 ## Recommended Citation 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2020. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
 
 ## License
 You are free to redistribute and modify the peanutButter software under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public License v3.0 (GNU GPLv3)</a>. The source code is openly available on <a href="https://github.com/wpgp/peanutButter" target="_blank">GitHub</a>.  
@@ -220,6 +220,8 @@ Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N,
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa. Ecopia.AI and Maxar Technologies. 
 
 Dooley CA, Boo G, Leasure DR, and Tatem AJ. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.1. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00677" target="_blank">doi:10.5258/SOTON/WP00677</a>
+
+Dooley CA, Leasure DR, Boo G, and Tatem AJ. 2021. Gridded maps of building patterns throughout sub-Saharan Africa, version 2.0. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00712" target="_blank">doi:10.5258/SOTON/WP00712</a>
 
 Pezzulo C, Hornby GM, Sorichetta A, Gaughan AE, Linard C, Bird TJ, Kerr D, Lloyd CT, Tatem AJ. 2017. Sub-national mapping of population pyramids and dependency ratios in Africa and Asia. Sci. Data 4:170089 <a href="https://dx.doi.org/10.1038/sdata.2017.89" target="_blank">doi:10.1038/sdata.2017.89</a>  
 

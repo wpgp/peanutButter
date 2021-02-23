@@ -16,9 +16,9 @@ srcdir <- 'E:/worldpop/Projects/WP519893101_Polio/Working/git/peanutButter'
 files <- list.files(srcdir)
 country_list <- c()
 for(i in 1:length(files)){
-  country_list[i] <- unlist(strsplit(x = files[i], 
+  country_list[i] <- unlist(strsplit(x = files[i],
                                      split = '_'))[1]
-}  
+}
 # country_list <- sort(unique(c(country_list,as.character(peanutButter:::country_info$country))))
 country_list <- sort(unique(country_list))
 
@@ -38,13 +38,13 @@ fileNames <- function(country, path=srcdir){
   year_file <- ifelse(any(grepl('_imagery_year.tif', i)), i[grepl('_imagery_year.tif', i)], NA)
   regions_file <- ifelse(any(grepl('_regions.tif', i)), i[grepl('_regions.tif', i)], NA)
   agesex_file <- ifelse(any(grepl('_table.csv', i)), i[grepl('_table.csv', i)], NA)
-  data_file <- ifelse(any(grepl('_dt_Shape_Area_Urb.rds', i)), i[grepl('_dt_Shape_Area_Urb.rds', i)], NA)
-  
+  data_file <- ifelse(any(grepl('_datatable.rds', i)), i[grepl('_datatable.rds', i)], NA)
+
   if(any(is.na(i))){
     stop(paste0('Source files missing for ',country,': ',names(which(is.na(i)))))
   }
-  
-  return(list(count = count_file, 
+
+  return(list(count = count_file,
               area = area_file,
               urban = urban_file,
               year = year_file,
@@ -60,10 +60,11 @@ for(country in country_list){
   data.exists <- fileNames(country)[['data']] %in% files
   regions.exists <- fileNames(country)[['regions']] %in% files
   agesex.exists <- fileNames(country)[['agesex']] %in% files
-  
+
   # drop country if missing files
   if(!all(type.exists, data.exists, regions.exists, agesex.exists)){
     country_list <- country_list[-which(country_list==country)]
+    warning(paste('Data missing for', country))
   }
 }
 
@@ -72,10 +73,10 @@ country_info <- data.frame(country = as.character(country_list),
                            country_name = defaults[country_list,'country_name'],
                            population = defaults[country_list,'population'])
 row.names(country_info) <- country_list
-country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area','year2019','year2018','year2017','year2016','year2015pre')] <- NA
+country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area','year2020','year2019','year2018','year2017','year2016','year2015pre')] <- NA
 
 # refresh_countries <- c()
-# 
+#
 # i <- peanutButter:::country_info
 # if(length(refresh_countries) > 0) {
 #   i <- i[-which(row.names(i) %in% refresh_countries),]
@@ -86,15 +87,15 @@ country_info[,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_a
 
 # building counts
 for(country in country_list){
-  
+
   cat(paste0(country,', '))
-  
+
   if(any(is.na(country_info[country,c('bld_count','urb_count','rur_count','bld_area','urb_area','rur_area')]))){
-    
+
     # load data
     dat <- readRDS(file.path(srcdir,fileNames(country)[['data']]))
     urban <- raster::raster(file.path(srcdir,fileNames(country)[['urban']]))
-    
+
     # building counts
     if(any(is.na(country_info[country,c('bld_count','urb_count','rur_count')]))){
       country_info[country,'bld_count'] <- nrow(dat)
@@ -107,12 +108,13 @@ for(country in country_list){
       country_info[country,'rur_area'] <- sum(dat[bld_urban==0]$barea) * 0.0001
     }
   }
-  if(any(is.na(country_info[country,c('year2019','year2018','year2017','year2016','year2015pre')]))){
-    
+  if(any(is.na(country_info[country,c('year2020','year2019','year2018','year2017','year2016','year2015pre')]))){
+
     year <- raster::raster(file.path(srcdir, fileNames(country)[['year']]))
-    
+
     pixel_count <- sum(!is.na(year[]))
-    
+
+    country_info[country,'year2020'] <- sum(year[]==2020, na.rm=T) / pixel_count
     country_info[country,'year2019'] <- sum(year[]==2019, na.rm=T) / pixel_count
     country_info[country,'year2018'] <- sum(year[]==2018, na.rm=T) / pixel_count
     country_info[country,'year2017'] <- sum(year[]==2017, na.rm=T) / pixel_count
@@ -125,7 +127,7 @@ for(country in country_list){
 for(country in country_list){
   i <- ifelse(country %in% defaults$country, country, 'DEF')
   for(parm in c('people_urb','units_urb','residential_urb','people_rur','units_rur','residential_rur')){
-    country_info[country,parm] <- defaults[i,parm]      
+    country_info[country,parm] <- defaults[i,parm]
   }
   country_info[country,c('residential_urb','residential_rur')] <- with(country_info[country,], min(1,defaults[country,'population'] / (urb_count*units_urb*people_urb + rur_count*units_rur*people_rur)))
   country_info[country,c('density_urb')] <- with(country_info[country,], (urb_count*people_urb*units_urb*residential_urb) / urb_area)
