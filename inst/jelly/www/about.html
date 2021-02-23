@@ -48,7 +48,7 @@
 
 <p>WorldPop Research Group<br />
 University of Southampton</p>
-<p>14 September 2020</p>
+<p>23 February 2021</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
 <p>The <em>peanutButter</em> web application allows you to produce gridded population estimates using your own estimates of people per building. This is a quick and simple approach that utilizes high resolution maps of building footprints, assuming that the same number of people live in each building across entire regions or settlement types (e.g. urban and rural). WorldPop partners with Maxar Technologies, Ecopia.AI, and the Bill and Melinda Gates Foundation for recent maps of buildings extracted from Maxar's <a href="https://www.digitalglobe.com/products/mosaics" target="_blank">Vivid Imagery Mosaic</a> (Ecopia.AI and Maxar Technologies 2020; Dooley et al 2020, 2021).</p>
@@ -203,7 +203,7 @@ This parameter defines the proportion of building footprints that represent resi
 </li>
 <li>A classification of each ~100 m grid cell as urban or rural.</li>
 </ol>
-<p>There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:</p>
+<p>There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al 2019). The age-sex source files include:</p>
 <ol style="list-style-type: decimal">
 <li>A spreadsheet with age-sex proportions for each region,<br />
 </li>
@@ -223,6 +223,8 @@ Aggregate tool: The time-point represented by the gridded population estimates i
 </div>
 <div id="version-history" class="section level2">
 <h2>Version History</h2>
+<p><strong>Version 0.3.2</strong><br> Patch on 22 February 2021 to update the building footprints for 21 countries: BDI, BEN, BFA, BWA, CAF, CMR, COG, DJI, ESH, GHA, GIN, GMB, LSO, MWI, NAM, NER, SSD, TCD, TZA, UGA, and ZMB.</p>
+<p><strong>Version 0.3.1</strong><br> Patch on 30 January 2021 to update the WorldPop logo and to fix a glitch in the source data for Eritrea.</p>
 <p><strong>Version 0.3.0</strong><br> Minor version update on 14 September 2020 to include advanced controls for filtering out buildings based on their area and to distribute population based on building area or building count. Modified default values to match population totals for the year 2020 from the United Nations World Population Prospects (2019; medium-variant projections).</p>
 <p><strong>Version 0.2.1</strong><br> Patch on 9 July 2020 to include building footprints from additional countries for a total of 51 countries.</p>
 <p><strong>Version 0.2.0</strong><br> Minor version update on 3 June 2020 to change terminology from &quot;bottom-up&quot; to &quot;aggregate&quot; and from &quot;top-down&quot; to &quot;disaggregate&quot;.</p>
@@ -234,7 +236,7 @@ Aggregate tool: The time-point represented by the gridded population estimates i
 </div>
 <div id="recommended-citation" class="section level2">
 <h2>Recommended Citation</h2>
-<p>Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a></p>
+<p>Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.2. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a></p>
 </div>
 <div id="license" class="section level2">
 <h2>License</h2>
@@ -243,7 +245,7 @@ Aggregate tool: The time-point represented by the gridded population estimates i
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p>Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N, Nilsen K, Pistolesi L, Adamo S, Mills J, Nieves JJ, Chamberlain H, Bondarenko M, Lloyd C, Ves N, Koper P, Yetman G, Gaughan A, Stevens F, Linard C, James W, Sorichetta A, and Tatem AJ. In prep. Population structure by age and sex: a multi-temporal subnational perspective.</p>
+<p>Carioli A, Tejedor-Garavito N, Nilsen K, Pezzulo C, Hanspal S, Hilber T, Nieves JJ, Hornby G, Kerr D, Chamberlain H, Ves N, Bondarenko M, Lloyd C, Pistolesi L, Yetman G, Adamo S, Mills J, Gaughan A, Stevens F, James W, Linard C, Sorichetta A, Tatem AJ. 2019. Adolescent fertility: A multi-temporal sub-national perspective across low and middle-income countries. Population Association of America. <a href="http://paa2019.populationassociation.org/uploads/192031" target="_blank">http://paa2019.populationassociation.org/uploads/192031</a></p>
 <p>Ecopia.AI and Maxar Technologies. 2020. Digitize Africa. Ecopia.AI and Maxar Technologies.</p>
 <p>Dooley CA, Boo G, Leasure DR, and Tatem AJ. 2020. Gridded maps of building patterns throughout sub-Saharan Africa, version 1.1. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00677" target="_blank">doi:10.5258/SOTON/WP00677</a></p>
 <p>Dooley CA, Leasure DR, Boo G, and Tatem AJ. 2021. Gridded maps of building patterns throughout sub-Saharan Africa, version 2.0. WorldPop, University of Southampton. Source of building footprints: Ecopia Vector Maps Powered by Maxar Satellite Imagery (C) 2020. <a href="https://dx.doi.org/10.5258/SOTON/WP00712" target="_blank">doi:10.5258/SOTON/WP00712</a></p>

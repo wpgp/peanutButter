@@ -12,7 +12,7 @@ vignette: >
 WorldPop Research Group  
 University of Southampton  
 
-14 September 2020  
+23 February 2021  
 
 ## Overview
 
@@ -168,7 +168,7 @@ There are two data sets describing building patterns (Dooley et al 2020) that we
 1. The count of buildings in each ~100 m grid cell across the country,  
 2. A classification of each ~100 m grid cell as urban or rural.
 
-There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al in prep). The age-sex source files include:  
+There are also two source datasets that provide the proportion of population in each demographic group for every ~100 m grid cell (WorldPop et al 2018, Pezullo et al 2017, Carioli et al 2019). The age-sex source files include:  
 
 1. A spreadsheet with age-sex proportions for each region,  
 2. A region ID for every 100 m grid cell.  
@@ -190,6 +190,12 @@ Disaggregate tool: The time-point of the gridded population estimates is influen
 
 ## Version History
 
+<strong>Version 0.3.2</strong><br>
+Patch on 22 February 2021 to update the building footprints for 21 countries: BDI, BEN, BFA, BWA, CAF, CMR, COG, DJI, ESH, GHA, GIN, GMB, LSO, MWI, NAM, NER, SSD, TCD, TZA, UGA, and ZMB.
+
+<strong>Version 0.3.1</strong><br>
+Patch on 30 January 2021 to update the WorldPop logo and to fix a glitch in the source data for Eritrea.
+
 <strong>Version 0.3.0</strong><br>
 Minor version update on 14 September 2020 to include advanced controls for filtering out buildings based on their area and to distribute population based on building area or building count. Modified default values to match population totals for the year 2020 from the United Nations World Population Prospects (2019; medium-variant projections).
 
@@ -206,7 +212,7 @@ Initial beta release on 27 May 2020.
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
 
 ## Recommended Citation 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.0. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.2. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
 
 ## License
 You are free to redistribute and modify the peanutButter software under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public License v3.0 (GNU GPLv3)</a>. The source code is openly available on <a href="https://github.com/wpgp/peanutButter" target="_blank">GitHub</a>.  
@@ -215,7 +221,7 @@ The source data for each country is available from the "Source Files" button in 
   
 ## References  
 
-Carioli A, Pezzulo C, Hanspal S, Hilber T, Hornby G, Kerr D, Tejedor-Garavito N, Nilsen K, Pistolesi L, Adamo S, Mills J, Nieves JJ, Chamberlain H, Bondarenko M, Lloyd C, Ves N, Koper P,  Yetman G, Gaughan A, Stevens F, Linard C, James W, Sorichetta A, and Tatem AJ. In prep. Population structure by age and sex: a multi-temporal subnational perspective.
+Carioli A, Tejedor-Garavito N, Nilsen K, Pezzulo C, Hanspal S, Hilber T, Nieves JJ, Hornby G, Kerr D, Chamberlain H, Ves N, Bondarenko M, Lloyd C, Pistolesi L, Yetman G, Adamo S, Mills J, Gaughan A, Stevens F, James W, Linard C, Sorichetta A, Tatem AJ. 2019. Adolescent fertility: A multi-temporal sub-national perspective across low and middle-income countries. Population Association of America. <a href="http://paa2019.populationassociation.org/uploads/192031" target="_blank">http://paa2019.populationassociation.org/uploads/192031</a>
 
 Ecopia.AI and Maxar Technologies. 2020. Digitize Africa. Ecopia.AI and Maxar Technologies. 
 
