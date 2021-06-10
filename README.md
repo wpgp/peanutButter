@@ -59,6 +59,12 @@ peanutButter::jelly(srcdir="c:/local_source_directory")
 
 ## Version History
 
+<strong>Version 1.0.0</strong><br> 10 June 2021. Testing period ended and progressed to non-beta version 1 release.
+
+<strong>Version 0.3.2</strong><br> Patch on 22 February 2021 to update the building footprints for 21 countries: BDI, BEN, BFA, BWA, CAF, CMR, COG, DJI, ESH, GHA, GIN, GMB, LSO, MWI, NAM, NER, SSD, TCD, TZA, UGA, and ZMB.
+
+<strong>Version 0.3.1</strong><br> Patch on 30 January 2021 to update the WorldPop logo and to fix a glitch in the source data for Eritrea.
+
 <strong>Version 0.3.0</strong><br> Minor version update on 14 September 2020 to include advanced controls for filtering out buildings based on their area and to distribute population based on building area or building count. Modified default values to match population totals for the year 2020 from the United Nations World Population Prospects (2019; medium-variant projections).
 
 <strong>Version 0.2.1</strong><br> Patch on 9 July 2020 to include building footprints from additional countries for a total of 51 countries.
