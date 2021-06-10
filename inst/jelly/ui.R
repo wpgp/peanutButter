@@ -152,7 +152,7 @@ ui <- tagList(fluidPage(
       fluidRow(style='height:150px',
         titlePanel(HTML('<div style="font-family:Helvetica,Arial,sans-serif;
                          font-size:19px; padding-left:15px; color:#777777; background:#f8f8f8">
-                         peanutButter (beta)<hr></div>'),
+                         peanutButter<hr></div>'),
                    windowTitle='peanutButter'),
         
         # controls: select country
