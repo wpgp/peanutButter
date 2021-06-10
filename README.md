@@ -73,7 +73,7 @@ The *peanutButter* R package was developed by the WorldPop Research Group within
 
 ## Recommended Citation
 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 1.0.0. WorldPop, University of Southampton. <doi:10.5258/SOTON/WP00717>
+Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 1.0.0. WorldPop, University of Southampton. doi: 10.5258/SOTON/WP00717. <https://github.com/wpgp/peanutButter>
 
 ## License
 
