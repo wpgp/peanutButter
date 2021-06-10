@@ -190,6 +190,9 @@ Disaggregate tool: The time-point of the gridded population estimates is influen
 
 ## Version History
 
+<strong>Version 1.0.0</strong><br>
+10 June 2021. Testing period ended and progressed to non-beta version 1 release.
+
 <strong>Version 0.3.2</strong><br>
 Patch on 22 February 2021 to update the building footprints for 21 countries: BDI, BEN, BFA, BWA, CAF, CMR, COG, DJI, ESH, GHA, GIN, GMB, LSO, MWI, NAM, NER, SSD, TCD, TZA, UGA, and ZMB.
 
@@ -212,7 +215,10 @@ Initial beta release on 27 May 2020.
 The _peanutButter_ R package was developed by the WorldPop Research Group within the Department of Geography and Environmental Science at the University of Southampton. Funding was provided by the Bill and Melinda Gates Foundation (INV-002697). Ecopia.AI and Maxar Technologies (2020) provided high resolution building footprints based on recent satellite imagery. Gridded age-sex data were provided by the WorldPop Global High Resolution Population Denominators Project led by Alessandro Sorichetta with funding from the Bill and Melinda Gates Foundation (OPP1134076). Development of the _peanutButter_ R package was led by Doug Leasure. Claire Dooley developed the source rasters of building counts and urban/rural settlements. Maksym Bondarenko maintains WorldPop's Shiny server. Professor Andy Tatem provides oversight of the WorldPop Research Group.   
 
 ## Recommended Citation 
-Leasure DR, Dooley CA, Bondarenko M, Tatem AJ. 2021. peanutButter: An R package to produce rapid-response gridded population estimates from building footprints, version 0.3.2. WorldPop, University of Southampton. <a href="https://github.com/wpgp/peanutButter" target="_blank">doi:10.5258/SOTON/WP00681</a>
+```{r, echo=F, message=F, warning=F, results='asis'}
+cat(readCitationFile('../inst/CITATION', meta=read.dcf('../DESCRIPTION', all=T))$textVersion)
+```
+
 
 ## License
 You are free to redistribute and modify the peanutButter software under the terms of the <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public License v3.0 (GNU GPLv3)</a>. The source code is openly available on <a href="https://github.com/wpgp/peanutButter" target="_blank">GitHub</a>.  
